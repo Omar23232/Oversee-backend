@@ -18,3 +18,4 @@ env/
 
 # Environment variables
 .env
+Oversee_backend/db.sqlite3
