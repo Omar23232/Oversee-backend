@@ -1,0 +1,103 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Monitoring Dashboard</title>
+    <!-- CSS -->
+    <link rel="stylesheet" href="{% static 'login/css/base.css' %}" />
+    <link rel="stylesheet" href="{% static 'login/css/dashboard.css' %}" />
+    <!-- JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script defer src="{% static 'login/js/script.js' %}"></script>
+</head>
+
+<body>
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="logo">MONITORING.</div>
+        <nav>
+            <ul>
+                <li class="active"><a href="index.html">Dashboard</a></li>
+                <li><a href="devices.html">Devices</a></li>
+                <li><a href="alerts.html">Alerts</a></li>
+                <li><a href="#">Settings</a></li>
+                <li><a href="#">Logs</a></li>
+            </ul>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <header class="top-bar">
+            <div class="filter-section">
+                <label>Filter Period</label>
+                <select>
+                <option>Today</option>
+                <option>This Week</option>
+                <option>This Month</option>
+        </select>
+            </div>
+            <div class="search-section">
+                <input type="text" placeholder="Search here..." />
+            </div>
+            <div class="user-section">
+                <img src="https://via.placeholder.com/40" alt="User" class="user-img" />
+                <span class="user-name">Hi, Samantha</span>
+            </div>
+        </header>
+
+        <section class="content-area">
+            <h2>Performance Metrics :</h2>
+            <div class="cards-grid">
+                <!-- Memory Usage -->
+                <div class="card metric-card">
+                    <h3>Memory Usage</h3>
+                    <div class="chart-box">
+                        <canvas id="memoryChart"></canvas>
+                        <div class="chart-value">81%</div>
+                    </div>
+                </div>
+
+                <!-- Load Average -->
+                <div class="card metric-card">
+                    <h3>Load Average</h3>
+                    <p>0.39 / 1min</p>
+                    <p>0.31 / 5min</p>
+                    <p>0.29 / 15min</p>
+                </div>
+
+                <!-- CPU Usage -->
+                <div class="card metric-card">
+                    <h3>CPU Usage</h3>
+                    <div class="chart-box">
+                        <canvas id="cpuChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Uptime -->
+                <div class="card metric-card">
+                    <h3>Uptime</h3>
+                    <div class="uptime-box">
+                        <span>0</span> : <span>5</span> : <span>45</span>
+                    </div>
+                </div>
+
+                <!-- Temperature -->
+                <div class="card metric-card">
+                    <h3>Temperature</h3>
+                    <div class="chart-box">
+                        <canvas id="tempChart"></canvas>
+                    </div>
+                    <p class="temp-status">45 C<br/>normal</p>
+                </div>
+            </div>
+
+            <!-- Here is the Update Charts button -->
+            <button id="updateChartsBtn">Update Charts</button>
+        </section>
+    </main>
+</body>
+
+</html>
