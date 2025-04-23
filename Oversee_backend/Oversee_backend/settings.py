@@ -49,6 +49,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    # 'login.middleware.InternalNavMiddleware',
 ]
 
 ROOT_URLCONF = 'Oversee_backend.urls'
@@ -125,3 +126,7 @@ STATIC_URL = '/static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')] # For global static files
+
+
+LOGOUT_REDIRECT_URL = '/' # Redirect to login page after logout
+LOGIN_URL = '/' # Redirect to login page if not logged in 

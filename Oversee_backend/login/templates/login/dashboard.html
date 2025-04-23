@@ -1,4 +1,6 @@
 {% load static %}
+{% block content %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,8 +8,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Monitoring Dashboard</title>
     <!-- CSS -->
-    <link rel="stylesheet" href="{% static 'login/css/base.css' %}" />
-    <link rel="stylesheet" href="{% static 'login/css/dashboard.css' %}" />
+    {% comment %} <link rel="stylesheet" href="{% static 'login/css/base.css' %}" /> {% endcomment %}
+    {% comment %} <link rel="stylesheet" href="{% static 'login/css/dashboard.css' %}" /> {% endcomment %}
     <!-- JavaScript -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script defer src="{% static 'login/js/script.js' %}"></script>
@@ -15,18 +17,7 @@
 
 <body>
     <!-- Sidebar -->
-    <aside class="sidebar">
-        <div class="logo">MONITORING.</div>
-        <nav>
-            <ul>
-                <li class="active"><a href="index.html">Dashboard</a></li>
-                <li><a href="devices.html">Devices</a></li>
-                <li><a href="alerts.html">Alerts</a></li>
-                <li><a href="#">Settings</a></li>
-                <li><a href="#">Logs</a></li>
-            </ul>
-        </nav>
-    </aside>
+    {% include 'login/partials/sidebar.html' %}
 
     <!-- Main Content -->
     <main class="main-content">
@@ -101,3 +92,4 @@
 </body>
 
 </html>
+{% endblock %}

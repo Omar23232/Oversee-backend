@@ -336,3 +336,17 @@ thead tr {
     color: white;
     font-weight: bold;
 }
+
+
+/* In dashboard.css */
+.sidebar form.logout-form {
+    margin-top: 50px;
+}
+
+.sidebar form button {
+    background: none;
+    border: none;
+    color: #e74c3c;
+    cursor: pointer;
+    font-size: inherit;
+}

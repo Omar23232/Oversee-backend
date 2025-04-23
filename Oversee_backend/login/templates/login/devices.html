@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+{% load static %}
+{% block content %}
+
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Devices</title>
+    {% comment %} <link rel="stylesheet" href="{% static 'login/css/dashboard.css' %}" /> {% endcomment %}
+</head>
+
+<body>
+    <!-- Sidebar -->
+    {% include 'login/partials/sidebar.html' %}
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <header class="top-bar">
+            <div class="search-section">
+                <label>Administrator Name</label>
+                <input type="text" placeholder="Enter Administrator Name..." />
+                <label>Administrator ID</label>
+                <input type="text" placeholder="Enter Administrator ID..." />
+                <label>Start Date</label>
+                <input type="date" />
+                <label>End Date</label>
+                <input type="date" />
+            </div>
+            <div class="user-section">
+                <img src="https://via.placeholder.com/40" alt="User" class="user-img" />
+                <span class="user-name">Hi, Samantha</span>
+            </div>
+        </header>
+
+        <section class="content-area">
+            <h2>Devices Information</h2>
+            <table class="alerts-table">
+                <thead>
+                    <tr>
+                        <th>Hostname</th>
+                        <th>Uptime</th>
+                        <th>System Description</th>
+                        <th>Device Location</th>
+                        <th>Interface Status</th>
+                        <th>Contact Info</th>
+                    </tr>
+                </thead>
+                <tbody id="devicesTableBody">
+                </tbody>
+            </table>
+            <br>
+            <button id="updatedevicesBtn">Update Alerts</button>
+        </section>
+    </main>
+
+    <script>
+        const deviceData = [{
+            hostname: "Router-1",
+            uptime: "5 Days",
+            systemDescription: "Cisco IOS XE 17.3.3",
+            location: "Data Center #1",
+            status: "Gig0/1 - Up",
+            contact: "admin@example.com"
+        }, {
+            hostname: "Switch-2",
+            uptime: "3 Days",
+            systemDescription: "Cisco IOS 15.2",
+            location: "Office Floor #2",
+            status: "Eth0/24 - Down",
+            contact: "network@example.com"
+        }, {
+            hostname: "PC-1",
+            uptime: "12 hours",
+            systemDescription: "Windows 10 Pro",
+            location: "Office #4",
+            status: "LAN - Up",
+            contact: "user@example.com"
+        }];
+
+        function updateDevicesTable() {
+            const tableBody = document.getElementById("devicesTableBody");
+            tableBody.innerHTML = ""; 
+
+            deviceData.forEach(device => {
+                const row = document.createElement("tr");
+                row.innerHTML = `
+          <td>${device.hostname}</td>
+          <td>${device.uptime}</td>
+          <td>${device.systemDescription}</td>
+          <td>${device.location}</td>
+          <td>${device.status}</td>
+          <td>${device.contact}</td>
+        `;
+                tableBody.appendChild(row);
+            });
+        }
+        const updateBtn = document.getElementById("updatedevicesBtn");
+        if (updateBtn) {
+            updateBtn.addEventListener("click", () => {
+                if (deviceData.length > 0) {
+                    deviceData[0].severity = "High";
+                    deviceData[0].date = "2025-03-20";
+                }
+                updatedevicesTable();
+            });
+        }
+        document.addEventListener("DOMContentLoaded", () => {
+            updateDevicesTable();
+        });
+    </script>
+</body>
+
+</html>
+{% endblock %}
