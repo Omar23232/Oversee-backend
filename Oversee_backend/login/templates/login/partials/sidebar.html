@@ -1,0 +1,32 @@
+{% load static %}
+{% block content %}
+<!-- Sidebar -->
+ 
+<link rel="stylesheet" href="{% static 'login/css/dashboard.css' %}" />
+<aside class="sidebar">
+    <div class="logo">MONITORING.</div>
+    <nav>
+        <ul>
+            <li class="{% if active_tab == 'dashboard' %}active{% endif %}">
+                <a href="{% url 'dashboard' %}"></i> Dashboard
+                </a>
+              </li>
+            <li class="{% if active_tab == 'devices' %}active{% endif %}">
+                <a href="{% url 'devices' %}">Devices</a>
+            </li>
+            <li class="{% if active_tab == 'alerts' %}active{% endif %}">
+                <a href="{% url 'alerts' %}">Alerts</a>
+            </li>
+            <li><a href="#">Settings</a></li>
+            <li><a href="#">Logs</a></li>
+            <li>
+                <form action="{% url 'logout' %}" method="post" style="display: inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="logout-link"> Logout
+                    </button>
+                </form>
+            </li>
+        </ul>
+    </nav>
+</aside>
+{%endblock %}

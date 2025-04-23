@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+{% load static %}
+{% block content %}
+
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Alerts</title>
+    {% comment %} <link rel="stylesheet" href="{% static 'login/css/dashboard.css' %}" /> {% endcomment %}
+</head>
+
+<body>
+    <!-- Sidebar -->
+    {% include 'login/partials/sidebar.html' %}
+    
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Top Bar -->
+        <header class="top-bar">
+            <div class="search-section">
+                <label>Administrator Name</label>
+                <input type="text" placeholder="Enter Administrator Name..." />
+                <label>Administrator ID</label>
+                <input type="text" placeholder="Enter Administrator ID..." />
+                <label>Start Date</label>
+                <input type="date" />
+                <label>End Date</label>
+                <input type="date" />
+                <label>Filter Period</label>
+                <select>
+          <option>Today</option>
+          <option>This Week</option>
+          <option>This Month</option>
+        </select>
+            </div>
+            <div class="user-section">
+                <img src="https://via.placeholder.com/40" alt="User" class="user-img" />
+                <span class="user-name">Hi, Samantha</span>
+            </div>
+        </header>
+
+        <section class="content-area">
+            <h2>Alerts</h2>
+            <table class="alerts-table">
+                <thead>
+                    <tr>
+                        <th>Alert Name</th>
+                        <th>Severity</th>
+                        <th>Date</th>
+                        <th>Device</th>
+                        <th>How to Send</th>
+                    </tr>
+                </thead>
+                <tbody id="alertsTableBody">
+                    <!-- Rows will be injected here by JavaScript -->
+                </tbody>
+            </table>
+            <br>
+            <!-- Optional: a button to demonstrate how to update data dynamically -->
+            <button id="updateAlertsBtn">Update Alerts</button>
+        </section>
+    </main>
+
+    <script>
+        // 1) Our array of alert objects
+        const alertsData = [{
+            name: "Attack Detected",
+            severity: "Critical",
+            date: "2020-08-19",
+            device: "Router-1",
+            sendMethod: "Email"
+        }, {
+            name: "Link Down",
+            severity: "Critical",
+            date: "2020-08-19",
+            device: "Switch-2",
+            sendMethod: "SMS"
+        }, {
+            name: "High CPU Usage",
+            severity: "Warning",
+            date: "2020-08-19",
+            device: "Firewall-1",
+            sendMethod: "Email"
+        }];
+
+        // 2) A function to render (or re-render) the table from alertsData
+        function updateAlertsTable() {
+            const tableBody = document.getElementById("alertsTableBody");
+            tableBody.innerHTML = ""; // Clear existing rows
+
+            alertsData.forEach(alert => {
+                const row = document.createElement("tr");
+                row.innerHTML = `
+          <td>${alert.name}</td>
+          <td>${alert.severity}</td>
+          <td>${alert.date}</td>
+          <td>${alert.device}</td>
+          <td>${alert.sendMethod}</td>
+        `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        // 3) Run once on page load
+        document.addEventListener("DOMContentLoaded", () => {
+            updateAlertsTable();
+
+            // 4) Example: A button to modify the data at runtime
+            const updateBtn = document.getElementById("updateAlertsBtn");
+            if (updateBtn) {
+                updateBtn.addEventListener("click", () => {
+                    // Just an example: change the severity of the first alert
+                    if (alertsData.length > 0) {
+                        alertsData[0].severity = "High";
+                        alertsData[0].date = "2025-03-20";
+                    }
+                    // Re-render the table to show new data
+                    updateAlertsTable();
+                });
+            }
+        });
+    </script>
+</body>
+
+</html>
+{% endblock %}
+<!-- This is the end of the alerts.html file -->

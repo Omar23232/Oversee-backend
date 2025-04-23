@@ -21,4 +21,11 @@ def login_view(request):
 
 @login_required  # Ensures only logged-in users can access
 def dashboard_view(request):
-    return render(request, 'login/dashboard.html')
+    return render(request, 'login/dashboard.html', {'active_tab': 'dashboard'})
+@login_required
+def devices_view(request):
+    return render(request, 'login/devices.html', {'active_tab': 'devices'})
+
+@login_required
+def alerts_view(request):
+    return render(request, 'login/alerts.html', {'active_tab': 'alerts'})
