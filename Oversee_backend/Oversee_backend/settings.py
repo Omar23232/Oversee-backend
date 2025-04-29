@@ -78,8 +78,12 @@ WSGI_APPLICATION = 'Oversee_backend.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'oversee_db',          # Database name you created
+        'USER': 'oversee_user',        # Your dedicated user
+        'PASSWORD': 'password',    # Password you set
+        'HOST': 'localhost',           # Or '127.0.0.1'
+        'PORT': '5432',                # Default PostgreSQL port
     }
 }
 
