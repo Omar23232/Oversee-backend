@@ -15,6 +15,7 @@
     <script defer src="{% static 'login/js/script.js' %}"></script>
 </head>
 
+
 <body>
     <!-- Sidebar -->
     {% include 'login/partials/sidebar.html' %}
@@ -42,14 +43,28 @@
         <section class="content-area">
             <h2>Performance Metrics :</h2>
             <div class="cards-grid">
-                <!-- Memory Usage -->
-                <div class="card metric-card">
-                    <h3>Memory Usage</h3>
-                    <div class="chart-box">
-                        <canvas id="memoryChart"></canvas>
-                        <div class="chart-value">81%</div>
-                    </div>
+        <!-- Memory Usage -->
+        <div class="card metric-card">
+            <h3>Memory Usage</h3>
+            <div class="chart-box">
+                <canvas id="memoryChart"></canvas>
+                <div class="chart-value">
+                    {% if current_memory %}
+                        {{ used_percentage }}%
+                    {% else %}
+                        N/A
+                    {% endif %}
                 </div>
+            </div>
+            <div class="memory-details">
+                {% if current_memory %}
+                    <p>Total: {{ current_memory.total_memory|filesizeformat }}</p>
+                    <p>Used: {{ current_memory.used_memory|filesizeformat }}</p>
+                    <p>Free: {{ current_memory.free_memory|filesizeformat }}</p>
+                    <p>id: {{ current_memory.id|filesizeformat }}</p>
+                {% endif %}
+            </div>
+        </div>
 
                 <!-- Load Average -->
                 <div class="card metric-card">
