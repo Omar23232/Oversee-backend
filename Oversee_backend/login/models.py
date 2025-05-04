@@ -16,3 +16,18 @@ class DeviceMemory(models.Model):
 
     def __str__(self):
         return f"{self.device_ip} - {self.name} at {self.timestamp}"
+    
+    
+class DeviceCPU(models.Model):
+    device_ip = models.GenericIPAddressField()
+    five_seconds = models.FloatField()
+    one_minute = models.FloatField()
+    five_minutes = models.FloatField()
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-timestamp']
+        verbose_name = 'CPU Usage'
+
+    def __str__(self):
+        return f"{self.device_ip} - {self.five_seconds}% at {self.timestamp}"
