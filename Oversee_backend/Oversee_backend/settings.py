@@ -134,3 +134,5 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')] # For global static files
 
 LOGOUT_REDIRECT_URL = '/' # Redirect to login page after logout
 LOGIN_URL = '/' # Redirect to login page if not logged in 
+
+STATIC_ROOT = BASE_DIR / 'staticfiles'  

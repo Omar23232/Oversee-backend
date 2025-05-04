@@ -12,7 +12,7 @@
     {% comment %} <link rel="stylesheet" href="{% static 'login/css/dashboard.css' %}" /> {% endcomment %}
     <!-- JavaScript -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script defer src="{% static 'login/js/script.js' %}"></script>
+    <script src="{% static 'login/js/script.js' %}?v={{ now|date:'U' }}"></script>
 </head>
 
 
@@ -79,6 +79,12 @@
                     <h3>CPU Usage</h3>
                     <div class="chart-box">
                         <canvas id="cpuChart"></canvas>
+                    </div>
+                    <div class="cpu-details">
+                        <p>5s: <span id="cpu-5s">0%</span></p>
+                        <p>1m: <span id="cpu-1m">0%</span></p>
+                        <p>5m: <span id="cpu-5m">0%</span></p>
+                        <p class="update-time" id="cpu-timestamp">-</p>
                     </div>
                 </div>
 

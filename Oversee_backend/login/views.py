@@ -9,6 +9,8 @@ from django.utils import timezone
 import logging
 from login.services.network_client import fetch_and_store_memory_stats
 from django.conf import settings
+from .models import DeviceCPU
+from .services.cpu_client import fetch_and_store_cpu_stats
 # Create your views here.
 
 def login_view(request):
@@ -53,7 +55,8 @@ def alerts_view(request):
     return render(request, 'login/alerts.html', {'active_tab': 'alerts'})
 
 
-
+ # API endpoint to fetch memory statistics
+ 
 @login_required
 def memory_stats_api(request):
     try:
@@ -86,3 +89,27 @@ def memory_stats_api(request):
             'status': 'error',
             'message': str(e)
         }, status=500)
+        
+        
+# api endpoint to fetch CPU statistics
+
+@login_required
+def cpu_stats_api(request):
+    try:
+        latest_stat = DeviceCPU.objects.order_by('-timestamp').first()
+        
+        if not latest_stat or (timezone.now() - latest_stat.timestamp).total_seconds() > 2:
+            fetch_and_store_cpu_stats()
+            latest_stat = DeviceCPU.objects.order_by('-timestamp').first()
+        
+        data = {
+            'five_seconds': latest_stat.five_seconds,
+            'one_minute': latest_stat.one_minute,
+            'five_minutes': latest_stat.five_minutes,
+            'timestamp': latest_stat.timestamp.strftime("%H:%M:%S"),
+            'status': 'success'
+        }
+        return JsonResponse(data)
+    
+    except Exception as e:
+        return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
