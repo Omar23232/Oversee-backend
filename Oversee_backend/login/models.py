@@ -31,3 +31,19 @@ class DeviceCPU(models.Model):
 
     def __str__(self):
         return f"{self.device_ip} - {self.five_seconds}% at {self.timestamp}"
+
+
+# models.py
+from django.db import models
+
+class ExecutedCommand(models.Model):
+    device_ip = models.GenericIPAddressField()
+    command = models.TextField()
+    output = models.JSONField()
+    timestamp = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        ordering = ['-timestamp']
+
+    def __str__(self):
+        return f"{self.device_ip} - {self.command[:50]}..."
