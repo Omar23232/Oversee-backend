@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from login.models import DeviceMemory
+from login.models import DeviceMemory,ExecutedCommand
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.utils import timezone
@@ -10,7 +10,9 @@ import logging
 from login.services.network_client import fetch_and_store_memory_stats
 from django.conf import settings
 from .models import DeviceCPU
-from .services.cpu_client import fetch_and_store_cpu_stats
+from login.services.cpu_client import fetch_and_store_cpu_stats
+from login.services.execute_command import CiscoCommandExecutor
+
 # Create your views here.
 
 def login_view(request):
@@ -113,3 +115,16 @@ def cpu_stats_api(request):
     
     except Exception as e:
         return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
+    
+    
+    
+@login_required
+def uptime_api(request):
+    executor = CiscoCommandExecutor()
+    result = executor.execute("show version | include uptime")  # Fixed command
+    
+    return JsonResponse({
+        'status': result['status'],
+        'output': result.get('output', ''),
+        'timestamp': timezone.now().strftime("%H:%M:%S")
+    })

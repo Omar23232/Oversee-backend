@@ -52,25 +52,7 @@ document.addEventListener("DOMContentLoaded", function() {
             });
         }
 
-        // Temperature (Bar Chart)
-        const tempCanvas = document.getElementById("tempChart");
-        if (tempCanvas) {
-            tempChart = new Chart(tempCanvas, {
-                type: "bar",
-                data: {
-                    labels: ["10 AM", "11 AM", "12 PM", "1 PM", "2 PM"],
-                    datasets: [{
-                        label: "Temperature (°C)",
-                        data: [42, 44, 45, 43, 46],
-                        backgroundColor: "#ffce54",
-                    }, ],
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                },
-            });
-        }
+        
     }
 
     // 2) Fetch and update memory data
@@ -116,15 +98,32 @@ document.addEventListener("DOMContentLoaded", function() {
             });
     }
 
+    function pollUptime() {
+        fetch('/uptime-api/')
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    document.getElementById('uptime-output').innerHTML = `
+                        <pre>${JSON.stringify(data.output, null, 2)}</pre>
+                        <small>Last checked: ${data.timestamp}</small>
+                    `;
+                }
+            })
+            .catch(console.error);
+    }
+
     // 3) Start polling (every 3 seconds)
     function startPolling() {
     
     // Initial loads
     fetchMemoryStats();
-    setInterval(fetchMemoryStats, 5000); // Memory every 20s
+    setInterval(fetchMemoryStats, 20000); // Memory every 20s
 
     updateCPUStats();
-    setInterval(updateCPUStats, 5000);    // CPU every 3s
+    setInterval(updateCPUStats, 20000);    // CPU every 3s
+
+    pollUptime();
+    setInterval(pollUptime, 50000); // Uptime every 50s
 }
 
     // Initialize everything

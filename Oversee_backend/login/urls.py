@@ -11,5 +11,6 @@ urlpatterns = [
     path('logout/', LogoutView.as_view(next_page='login'), name='logout'),
     path('memory-stats/', views.memory_stats_api, name='memory-stats'),
     path('cpu-stats/', views.cpu_stats_api, name='cpu-stats'),
+    path('uptime-api/', views.uptime_api, name='uptime-api'),
     
     ]
