@@ -99,17 +99,18 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     function pollUptime() {
-        fetch('/uptime-api/')
-            .then(response => response.json())
-            .then(data => {
-                if (data.status === 'success') {
-                    document.getElementById('uptime-output').innerHTML = `
-                        <pre>${JSON.stringify(data.output, null, 2)}</pre>
-                        <small>Last checked: ${data.timestamp}</small>
-                    `;
-                }
-            })
-            .catch(console.error);
+    fetch('/uptime-api/')
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success' && typeof data.output === 'object') {
+                document.getElementById('uptime-days').textContent = data.output.days ?? '-';
+                document.getElementById('uptime-hours').textContent = data.output.hours ?? '-';
+                document.getElementById('uptime-minutes').textContent = data.output.minutes ?? '-';
+                document.getElementById('uptime-seconds').textContent = data.output.seconds ?? '-';
+                document.getElementById('uptime-timestamp').textContent = `Last checked: ${data.timestamp}`;
+            }
+        })
+        .catch(console.error);
     }
 
     // 3) Start polling (every 3 seconds)

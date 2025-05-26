@@ -93,9 +93,13 @@
                 <!-- Uptime -->
                 <div class="card metric-card">
                     <h3><i class="bi bi-clock-history me-2"></i>System Uptime</h3>
-                    <div id="uptime-output">
-                        <!-- Will show "Uptime is..." -->
-                    </div>
+                    <ul id="uptime-list" class="list-unstyled mb-1">
+                        <li><strong>Days:</strong> <span id="uptime-days">-</span></li>
+                        <li><strong>Hours:</strong> <span id="uptime-hours">-</span></li>
+                        <li><strong>Minutes:</strong> <span id="uptime-minutes">-</span></li>
+                        <li><strong>Seconds:</strong> <span id="uptime-seconds">-</span></li>
+                    </ul>
+                    <small class="text-muted" id="uptime-timestamp">Last checked: -</small>
                 </div>
 
                 <!-- Temperature -->
