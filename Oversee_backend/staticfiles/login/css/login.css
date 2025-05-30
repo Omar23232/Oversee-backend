@@ -97,3 +97,18 @@ button:hover {
     left: 0;
     width: 100%;
 }
+
+
+.sidebar {
+    width: 250px;
+    background: #cfb286;
+    min-height: 100vh;
+    box-shadow: 2px 0 5px rgba(0,0,0,0.07);
+    padding: 20px 0;
+}
+
+.table-container {
+    flex: 1;
+    padding: 40px;
+    margin-left: 0;
+}

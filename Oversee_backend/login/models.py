@@ -33,8 +33,6 @@ class DeviceCPU(models.Model):
         return f"{self.device_ip} - {self.five_seconds}% at {self.timestamp}"
 
 
-# models.py
-from django.db import models
 
 class ExecutedCommand(models.Model):
     device_ip = models.GenericIPAddressField()
@@ -47,3 +45,21 @@ class ExecutedCommand(models.Model):
 
     def __str__(self):
         return f"{self.device_ip} - {self.command[:50]}..."
+    
+
+class InterfaceStatus(models.Model):
+    device_ip = models.GenericIPAddressField()
+    name = models.CharField(max_length=100)
+    oper_status = models.CharField(max_length=20)  # up/down
+    last_change = models.DateTimeField()
+    mac_address = models.CharField(max_length=17)
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-timestamp']
+        indexes = [
+            models.Index(fields=['name', '-timestamp']),
+        ]
+
+    def __str__(self):
+        return f"{self.name} - {self.oper_status}"
