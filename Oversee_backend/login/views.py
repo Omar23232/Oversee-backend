@@ -161,5 +161,4 @@ def interfaces_view(request):
     interfaces = InterfaceStatus.objects.filter(device_ip="192.168.47.131").order_by('name', '-timestamp')
     return render(request, 'login/interfaces.html', {
         'active_tab': 'devices',
-        'interfaces': interfaces,
     })

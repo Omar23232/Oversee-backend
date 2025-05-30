@@ -128,14 +128,6 @@ document.addEventListener("DOMContentLoaded", function() {
         .catch(console.error);
 }
 
-    const btn = document.getElementById('show-interfaces-btn');
-    if (btn) {
-        btn.addEventListener('click', function() {
-            window.location.href = '/interfaces/';
-        });
-    }
-
-
     function updateInterfaceDisplay(interfaces) {
     const container = document.getElementById('interface-status-container');
     container.innerHTML = interfaces.map(intf => `
@@ -147,8 +139,15 @@ document.addEventListener("DOMContentLoaded", function() {
         </div>
     `).join('');
 }
+    // event listener to the button
+    const btn = document.getElementById('show-interfaces-btn');
+        if (btn) {
+            btn.addEventListener('click', function() {
+                window.location.href = '/interfaces/';
+            });
+        }
 
-    // 3) Start polling (every 3 seconds)
+    //  Start polling 
     function startPolling() {
     
     // Initial loads

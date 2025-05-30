@@ -189,29 +189,6 @@ body {
 }
 
 
-/* Tables */
-
-table {
-    width: 100%;
-    height: 100%;
-    border-collapse: collapse;
-    background: rgb(245, 235, 214);
-    ;
-}
-
-th,
-td {
-    padding: 12px;
-    border-bottom: 1px solid #e0e0e0;
-    text-align: left;
-    font-size: 0.95rem;
-}
-
-thead tr {
-    background: rgb(245, 235, 214);
-}
-
-
 /* Scrollbar */
 
 .main-content::-webkit-scrollbar {
