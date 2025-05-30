@@ -102,16 +102,21 @@
                     <small class="text-muted" id="uptime-timestamp">Last checked: -</small>
                 </div>
 
-                <!-- Temperature -->
-                <div class="card metric-card">
-                    <h3>Temperature</h3>
-                    <div class="chart-box">
-                        <canvas id="tempChart"></canvas>
-                    </div>
-                    <p class="temp-status">45 C<br/>normal</p>
-                </div>
-            </div>
 
+                <!-- interface summary -->
+                <div class="card metric-card" id="interface-summary-card">
+                    <h3>Interfaces Status</h3>
+                    <p>Up: <span id="interfaces-up-count">-</span></p>
+                    <p>Down: <span id="interfaces-down-count">-</span></p>
+                    <button class="btn btn-primary" id="show-interfaces-btn">Show More Details</button>
+                </div>
+
+                {% comment %} <!-- interface status -->
+                <div id="interface-status-container" class="interface-grid">
+                    <!-- Cards will be inserted here by JavaScript -->
+                </div> {% endcomment %}
+
+                
             
         </section>
     </main>

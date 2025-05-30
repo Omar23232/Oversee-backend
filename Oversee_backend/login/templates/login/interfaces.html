@@ -1,0 +1,37 @@
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Status</th>
+            <th>MAC</th>
+            <th>Last Change</th>
+        </tr>
+    </thead>
+    <tbody id="interfaces-table-body">
+        <!-- Will be filled by JS -->
+    </tbody>
+</table>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    fetch('/interface-api/')
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success' && Array.isArray(data.interfaces)) {
+                const tbody = document.getElementById('interfaces-table-body');
+                tbody.innerHTML = data.interfaces.map(intf => `
+                    <tr>
+                        <td>${intf.name}</td>
+                        <td>${intf.status}</td>
+                        <td>${intf.mac}</td>
+                        <td>${intf.last_change}</td>
+                    </tr>
+                `).join('');
+            } else {
+                document.getElementById('interfaces-table-body').innerHTML = '<tr><td colspan="4">No data available</td></tr>';
+            }
+        })
+        .catch(() => {
+            document.getElementById('interfaces-table-body').innerHTML = '<tr><td colspan="4">Error loading data</td></tr>';
+        });
+});
+</script>

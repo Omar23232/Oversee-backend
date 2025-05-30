@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from login.models import DeviceMemory,ExecutedCommand
+from login.models import DeviceMemory,ExecutedCommand, InterfaceStatus
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.utils import timezone
@@ -12,6 +12,7 @@ from django.conf import settings
 from .models import DeviceCPU
 from login.services.cpu_client import fetch_and_store_cpu_stats
 from login.services.execute_command import CiscoCommandExecutor
+from login.services.interface_client import InterfaceMonitor
 
 # Create your views here.
 
@@ -127,4 +128,38 @@ def uptime_api(request):
         'status': result['status'],
         'output': result.get('output', ''),
         'timestamp': timezone.now().strftime("%H:%M:%S")
+    })
+
+
+# Api endpoint to get interface status of the device
+@login_required
+def interface_api(request):
+    monitor = InterfaceMonitor()
+    result = monitor.fetch_interfaces()
+    
+    if result['status'] == 'success':
+        # Get latest status for all interfaces
+        interfaces = InterfaceStatus.objects.filter(
+            device_ip="192.168.47.131"
+        ).distinct('name').order_by('name', '-timestamp')
+        
+        return JsonResponse({
+            'status': 'success',
+            'interfaces': [
+                {
+                    'name': i.name,
+                    'status': i.oper_status,
+                    'last_change': i.last_change,
+                    'mac': i.mac_address
+                } for i in interfaces
+            ]
+        })
+    return JsonResponse(result, status=500)
+
+@login_required
+def interfaces_view(request):
+    interfaces = InterfaceStatus.objects.filter(device_ip="192.168.47.131").order_by('name', '-timestamp')
+    return render(request, 'login/interfaces.html', {
+        'active_tab': 'devices',
+        'interfaces': interfaces,
     })

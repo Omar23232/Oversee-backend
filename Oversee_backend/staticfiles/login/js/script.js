@@ -97,7 +97,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 }
             });
     }
-
+    // 3) Fetch and update uptime data
     function pollUptime() {
     fetch('/uptime-api/')
         .then(response => response.json())
@@ -113,18 +113,56 @@ document.addEventListener("DOMContentLoaded", function() {
         .catch(console.error);
     }
 
+    // 4) Polling for interface states
+    function pollInterfaceStates() {
+    fetch('/interface-api/')
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success' && Array.isArray(data.interfaces)) {
+                const upCount = data.interfaces.filter(i => i.status === 'up').length;
+                const downCount = data.interfaces.filter(i => i.status === 'lower-layer-down').length;
+                document.getElementById('interfaces-up-count').textContent = upCount;
+                document.getElementById('interfaces-down-count').textContent = downCount;
+            }
+        })
+        .catch(console.error);
+}
+
+    const btn = document.getElementById('show-interfaces-btn');
+    if (btn) {
+        btn.addEventListener('click', function() {
+            window.location.href = '/interfaces/';
+        });
+    }
+
+
+    function updateInterfaceDisplay(interfaces) {
+    const container = document.getElementById('interface-status-container');
+    container.innerHTML = interfaces.map(intf => `
+        <div class="card metric-card interface-card">
+            <h4>${intf.name}</h4>
+            <p>Status: <span class="status-badge ${intf.status === 'up' ? 'status-up' : 'status-down'}">${intf.status}</span></p>
+            <p>MAC: <span>${intf.mac}</span></p>
+            <small>Last change: ${intf.last_change}</small>
+        </div>
+    `).join('');
+}
+
     // 3) Start polling (every 3 seconds)
     function startPolling() {
     
     // Initial loads
     fetchMemoryStats();
-    setInterval(fetchMemoryStats, 20000); // Memory every 20s
+    setInterval(fetchMemoryStats, 60000); // Memory every 20s
 
     updateCPUStats();
-    setInterval(updateCPUStats, 20000);    // CPU every 3s
+    setInterval(updateCPUStats, 60000);    // CPU every 3s
 
     pollUptime();
-    setInterval(pollUptime, 50000); // Uptime every 50s
+    setInterval(pollUptime, 60000); // Uptime every 50s
+
+    pollInterfaceStates(); // Initial call
+    setInterval(pollInterfaceStates, 50000);
 }
 
     // Initialize everything
