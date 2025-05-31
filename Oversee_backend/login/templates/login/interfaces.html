@@ -3,61 +3,76 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Interfaces</title>
-    <link rel="stylesheet" href="{% static 'login/css/dashboard.css' %}" />
+    <link rel="stylesheet" href="{% static 'login/css/sidebar.css' %}" />
     <link rel="stylesheet" href="{% static 'login/css/interfaces.css' %}">
 </head>
 
-
-
-<body
-<div class="layout-container">
+<body>
     {% include 'login/partials/sidebar.html' %}
-    <div class="table-container">
-        <h2>Interfaces Detailed</h2>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Status</th>
-                    <th>MAC</th>
-                    <th>Last Change</th>
-                </tr>
-            </thead>
-            <tbody id="interfaces-table-body">
-                <!-- Will be filled by JS -->
-            </tbody>
-        </table>
-    </div>
-</div>
-</body>
+    
+    <main class="main-content">
+        <div class="content-area">
+            <h2>Interfaces Detailed</h2>
+            <div class="table-container">
+                <div id="loading-overlay" class="loading-overlay" style="display: none;">
+                    <div class="spinner"></div>
+                </div>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Status</th>
+                            <th>MAC</th>
+                            <th>Last Change</th>
+                        </tr>
+                    </thead>
+                    <tbody id="interfaces-table-body">
+                        <!-- Will be filled by JS -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
 
-<script>
-document.addEventListener("DOMContentLoaded", function() {
-    fetch('/interface-api/')
-        .then(response => response.json())
-        .then(data => {
-            if (data.status === 'success' && Array.isArray(data.interfaces)) {
-                const tbody = document.getElementById('interfaces-table-body');
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const loadingOverlay = document.getElementById('loading-overlay');
+        loadingOverlay.style.display = 'flex';
+
+        fetch('/interface-api/')
+            .then(response => response.json())
+            .then(data => {
+                loadingOverlay.style.display = 'none';
+                if (data.status === 'success' && Array.isArray(data.interfaces)) {
+                    const tbody = document.getElementById('interfaces-table-body');
+                    if (data.interfaces.length === 0) {
+                        tbody.innerHTML = '<tr><td colspan="4" class="empty-row">No interfaces found</td></tr>';
+                        return;
+                    }
                     tbody.innerHTML = data.interfaces.map(intf => `
                         <tr>
-                            <td>${intf.name}</td>
-                            <td class="status-${intf.status.replace(/_/g, '-').toLowerCase()}">${intf.status}</td>
-                            <td>${intf.mac}</td>
-                            <td>${intf.last_change}</td>
+                            <td data-label="Name">${intf.name}</td>
+                            <td data-label="Status" class="status-${intf.status.replace(/_/g, '-').toLowerCase()}">${intf.status}</td>
+                            <td data-label="MAC">${intf.mac}</td>
+                            <td data-label="Last Change">${intf.last_change}</td>
                         </tr>
                     `).join('');
-            } else if (data.status === 'error') {
-                document.getElementById('interfaces-table-body').innerHTML = `<tr><td colspan="4">${data.message}</td></tr>`;
-            } else {
-                document.getElementById('interfaces-table-body').innerHTML = '<tr><td colspan="4">No data available</td></tr>';
-            }
-        })
-        .catch(() => {
-            document.getElementById('interfaces-table-body').innerHTML = '<tr><td colspan="4">Error loading data</td></tr>';
-        });
-});
-</script>
-
+                } else if (data.status === 'error') {
+                    document.getElementById('interfaces-table-body').innerHTML = 
+                        `<tr><td colspan="4" class="empty-row">${data.message || 'Error loading interfaces'}</td></tr>`;
+                } else {
+                    document.getElementById('interfaces-table-body').innerHTML = 
+                        '<tr><td colspan="4" class="empty-row">No data available</td></tr>';
+                }
+            })
+            .catch(() => {
+                loadingOverlay.style.display = 'none';
+                document.getElementById('interfaces-table-body').innerHTML = 
+                    '<tr><td colspan="4" class="empty-row">Error loading interfaces</td></tr>';
+            });
+    });
+    </script>
 </body>
 </html>
