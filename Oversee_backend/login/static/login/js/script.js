@@ -183,12 +183,7 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     }
 
-    function updateTempChart(newDataArray) {
-        if (tempChart) {
-            tempChart.data.datasets[0].data = newDataArray;
-            tempChart.update();
-        }
-    }
+    
 
     // Add to your existing code
    
