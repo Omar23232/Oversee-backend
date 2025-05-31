@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+{% load static %}
+{% block content %}
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Alert Thresholds</title>
+    <link rel="stylesheet" href="{% static 'login/css/dashboard.css' %}" />
+    <link rel="stylesheet" href="{% static 'login/css/thresholds.css' %}" />
+    <link rel="stylesheet" href="{% static 'login/css/sidebar.css' %}" />
+</head>
+
+<body>
+    <!-- Sidebar -->
+    {% include 'login/partials/sidebar.html' %}
+    
+    <!-- Main Content -->
+    <main class="main-content">
+        <header class="top-bar">
+            <div class="search-section">
+                <h2>Alert Thresholds Configuration</h2>
+            </div>
+        </header>
+
+        <div class="content-area">
+            <div class="threshold-card">
+                <h3>Add New Threshold</h3>
+                <form id="thresholdForm">
+                    <div class="form-group">
+                        <label for="metric">Metric</label>
+                        <select id="metric" required>
+                            <option value="memory">Memory Usage</option>
+                            <option value="cpu_5s">CPU Usage (5 Seconds)</option>
+                            <option value="cpu_1m">CPU Usage (1 Minute)</option>
+                            <option value="cpu_5m">CPU Usage (5 Minutes)</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="threshold-value">Threshold Value (%)</label>
+                        <input type="number" id="threshold-value" min="1" max="100" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="severity">Severity</label>
+                        <select id="severity" required>
+                            <option value="warning">Warning</option>
+                            <option value="critical">Critical</option>
+                            <option value="emergency">Emergency</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="submit" class="btn-primary">Save Threshold</button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="threshold-card">
+                <h3>Current Thresholds</h3>
+                <table class="thresholds-table">
+                    <thead>
+                        <tr>
+                            <th>Metric</th>
+                            <th>Threshold Value</th>
+                            <th>Severity</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="thresholdsTableBody">
+                        <!-- Will be populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <script src="{% static 'login/js/thresholds.js' %}"></script>
+</body>
+</html>
+{% endblock %}

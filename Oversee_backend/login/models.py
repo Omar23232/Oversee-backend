@@ -64,7 +64,7 @@ class InterfaceStatus(models.Model):
     def __str__(self):
         return f"{self.name} - {self.oper_status}"
     
-    # This model is used to store device information
+# This model is used to store device information
 class DeviceInfo(models.Model):
     hostname = models.CharField(max_length=100)
     uptime = models.CharField(max_length=100)
@@ -79,3 +79,34 @@ class DeviceInfo(models.Model):
 
     def __str__(self):
         return f"{self.hostname} - {self.device_ip}"
+    
+    
+# this model is used to store network thresholds for alerts
+class NetworkThreshold(models.Model):
+    METRIC_CHOICES = [
+        ('memory', 'Memory Usage'),
+        ('cpu_5s', 'CPU 5 Seconds'),
+        ('cpu_1m', 'CPU 1 Minute'),
+        ('cpu_5m', 'CPU 5 Minutes')
+    ]
+    
+    SEVERITY_CHOICES = [
+        ('warning', 'Warning'),
+        ('critical', 'Critical'),
+        ('emergency', 'Emergency')
+    ]
+    
+    metric = models.CharField(max_length=20, choices=METRIC_CHOICES)
+    threshold_value = models.FloatField()
+    severity = models.CharField(max_length=10, choices=SEVERITY_CHOICES)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+# this model is used to store network alerts
+class NetworkAlert(models.Model):
+    device_ip = models.CharField(max_length=15)
+    metric_name = models.CharField(max_length=50)
+    metric_value = models.FloatField()
+    threshold_value = models.FloatField()
+    severity = models.CharField(max_length=10)
+    created_at = models.DateTimeField(auto_now_add=True)
+    is_acknowledged = models.BooleanField(default=False)
