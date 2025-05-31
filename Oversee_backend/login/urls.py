@@ -14,6 +14,8 @@ urlpatterns = [
     path('cpu-stats/', views.cpu_stats_api, name='cpu-stats'),
     path('uptime-api/', views.uptime_api, name='uptime-api'),
     path('interface-api/', views.interface_api, name='interface-api'),
-    path('interfaces/', views.interfaces_view, name='interfaces')
+    path('interfaces/', views.interfaces_view, name='interfaces'),
+    path('add-device-auto/', views.add_device_auto, name='add_device_auto'),
+    path('add-device-manual/', views.add_device_manual, name='add_device_manual'),
     
     ]

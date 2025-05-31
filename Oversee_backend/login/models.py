@@ -63,3 +63,19 @@ class InterfaceStatus(models.Model):
 
     def __str__(self):
         return f"{self.name} - {self.oper_status}"
+    
+    # This model is used to store device information
+class DeviceInfo(models.Model):
+    hostname = models.CharField(max_length=100)
+    uptime = models.CharField(max_length=100)
+    system_description = models.TextField()
+    location = models.CharField(max_length=200)
+    status = models.CharField(max_length=50)
+    device_ip = models.GenericIPAddressField()  # Added this instead of contact
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-timestamp']
+
+    def __str__(self):
+        return f"{self.hostname} - {self.device_ip}"
