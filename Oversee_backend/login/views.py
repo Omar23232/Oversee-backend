@@ -9,7 +9,7 @@ from django.utils import timezone
 import logging
 from login.services.network_client import fetch_and_store_memory_stats
 from django.conf import settings
-from .models import DeviceCPU
+from .models import DeviceCPU, DeviceInfo
 from login.services.cpu_client import fetch_and_store_cpu_stats
 from login.services.execute_command import CiscoCommandExecutor
 from login.services.interface_client import InterfaceMonitor
@@ -162,3 +162,33 @@ def interfaces_view(request):
     return render(request, 'login/interfaces.html', {
         'active_tab': 'devices',
     })
+    
+    
+    
+    
+@login_required
+def devices_view(request):
+    devices = DeviceInfo.objects.all()
+    return render(request, 'login/devices.html', {
+        'active_tab': 'devices',
+        'devices': devices
+    })
+
+@login_required
+def add_device_auto(request):
+    # Placeholder for automatic device addition
+    return redirect('devices')
+
+@login_required
+def add_device_manual(request):
+    if request.method == 'POST':
+        device = DeviceInfo.objects.create(
+            hostname=request.POST['hostname'],
+            uptime="New Device",
+            system_description=request.POST['system_description'],
+            location=request.POST['location'],
+            status=request.POST['status'],
+            device_ip=request.POST['device_ip']
+        )
+        return redirect('devices')
+    return render(request, 'login/partials/add-device-manual.html', {'active_tab': 'devices'})
