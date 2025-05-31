@@ -152,13 +152,13 @@ document.addEventListener("DOMContentLoaded", function() {
     
     // Initial loads
     fetchMemoryStats();
-    setInterval(fetchMemoryStats, 60000); // Memory every 20s
+    setInterval(fetchMemoryStats, 1200000); // Memory every 20s
 
     updateCPUStats();
-    setInterval(updateCPUStats, 60000);    // CPU every 3s
+    setInterval(updateCPUStats, 1200000);    // CPU every 3s
 
     pollUptime();
-    setInterval(pollUptime, 60000); // Uptime every 50s
+    setInterval(pollUptime, 1200000); // Uptime every 50s
 
     pollInterfaceStates(); // Initial call
     setInterval(pollInterfaceStates, 50000);

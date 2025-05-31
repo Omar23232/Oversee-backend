@@ -6,55 +6,47 @@
 
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Devices</title>
-    <link rel="stylesheet" href="{% static 'login/css/dashboard.css' %}" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />    <title>Devices</title>
     <link rel="stylesheet" href="{% static 'login/css/devices.css' %}" />
-    
-    {% comment %} <link rel="stylesheet" href="{% static 'login/css/dashboard.css' %}" /> {% endcomment %}
+    <link rel="stylesheet" href="{% static 'login/css/sidebar.css' %}" />
+    <link rel="stylesheet" href="{% static 'login/css/dashboard.css' %}" />
 </head>
 
-<body>
-    <!-- Sidebar -->
-    {% include 'login/partials/sidebar.html' %}
+<body>    {% include 'login/partials/sidebar.html' %}
 
-    <!-- Main Content -->
     <main class="main-content">
-        <header class="top-bar">
-            <div class="search-section">
-                <label>Administrator Name</label>
-                <input type="text" placeholder="Enter Administrator Name..." />
-                <label>Administrator ID</label>
-                <input type="text" placeholder="Enter Administrator ID..." />
-                <label>Start Date</label>
-                <input type="date" />
-                <label>End Date</label>
-                <input type="date" />
-            </div>
-            <div class="user-section">
-                <img src="https://via.placeholder.com/40" alt="User" class="user-img" />
-                <span class="user-name">Hi, Samantha</span>
-            </div>
-        </header>
-
         <section class="content-area">
-            <h2>Devices Information</h2>
-            <table class="alerts-table">
-                <thead>
-                    <tr>
-                        <th>Hostname</th>
-                        <th>Uptime</th>
-                        <th>System Description</th>
-                        <th>Device Location</th>
-                        <th>Interface Status</th>
-                        <th>Contact Info</th>
-                    </tr>
-                </thead>
-                <tbody id="devicesTableBody">
-                </tbody>
-            </table>
-            <br>
-            <button id="updatedevicesBtn">Update Alerts</button>
+            <h2 id="devices-heading" tabindex="0">Devices Information</h2>
+
+            <div class="table-container" role="region" aria-labelledby="devices-heading">
+                <div id="loading-overlay" class="loading-overlay" style="display: none;">
+                    <div class="spinner" role="status" aria-label="Loading devices data"></div>
+                </div>
+
+                <table class="devices-table" aria-label="Network devices table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Hostname</th>
+                            <th scope="col">Uptime</th>
+                            <th scope="col">System Description</th>
+                            <th scope="col">Device Location</th>
+                            <th scope="col">Interface Status</th>
+                            <th scope="col">Contact Info</th>
+                        </tr>
+                    </thead>
+                    <tbody id="devicesTableBody">
+                        <!-- Will be filled by JS -->
+                    </tbody>
+                </table>
+
+                <div id="empty-state" class="empty-state" style="display: none;">
+                    <p>No devices found</p>
+                </div>
+            </div>
+
+            <button id="updatedevicesBtn" type="button" aria-label="Update devices information">
+                Update Devices
+            </button>
         </section>
     </main>
 
@@ -82,35 +74,72 @@
             contact: "user@example.com"
         }];
 
-        function updateDevicesTable() {
-            const tableBody = document.getElementById("devicesTableBody");
-            tableBody.innerHTML = ""; 
+        function showLoading(show) {
+            document.getElementById('loading-overlay').style.display = show ? 'flex' : 'none';
+        }
 
-            deviceData.forEach(device => {
-                const row = document.createElement("tr");
-                row.innerHTML = `
-          <td>${device.hostname}</td>
-          <td>${device.uptime}</td>
-          <td>${device.systemDescription}</td>
-          <td>${device.location}</td>
-          <td>${device.status}</td>
-          <td>${device.contact}</td>
-        `;
-                tableBody.appendChild(row);
-            });
+        function showEmptyState(show) {
+            document.getElementById('empty-state').style.display = show ? 'block' : 'none';
         }
-        const updateBtn = document.getElementById("updatedevicesBtn");
-        if (updateBtn) {
-            updateBtn.addEventListener("click", () => {
-                if (deviceData.length > 0) {
-                    deviceData[0].severity = "High";
-                    deviceData[0].date = "2025-03-20";
+
+        function updateDevicesTable() {
+            showLoading(true);
+            showEmptyState(false);
+
+            // Simulate API call delay
+            setTimeout(() => {
+                const tableBody = document.getElementById("devicesTableBody");
+                tableBody.innerHTML = "";
+
+                if (deviceData.length === 0) {
+                    showEmptyState(true);
+                    showLoading(false);
+                    return;
                 }
-                updatedevicesTable();
-            });
+
+                deviceData.forEach(device => {
+                    const row = document.createElement("tr");
+                    row.setAttribute('tabindex', '0');
+                    row.setAttribute('role', 'row');
+
+                    const statusClass = device.status.toLowerCase().includes('up') ? 'status-up' : 'status-down';
+
+                    row.innerHTML = `
+                        <td data-label="Hostname">${device.hostname}</td>
+                        <td data-label="Uptime">${device.uptime}</td>
+                        <td data-label="System Description">${device.systemDescription}</td>
+                        <td data-label="Location">${device.location}</td>
+                        <td data-label="Status" class="${statusClass}">${device.status}</td>
+                        <td data-label="Contact">${device.contact}</td>
+                    `;
+                    tableBody.appendChild(row);
+                });
+
+                showLoading(false);
+            }, 500); // Simulate network delay
         }
-        document.addEventListener("DOMContentLoaded", () => {
-            updateDevicesTable();
+
+        // Initial load
+        document.addEventListener('DOMContentLoaded', updateDevicesTable);
+
+        // Update button click handler
+        document.getElementById('updatedevicesBtn').addEventListener('click', updateDevicesTable);
+
+        // Keyboard navigation
+        document.addEventListener('keydown', function(e) {
+            if (e.target.closest('tr')) {
+                const currentRow = e.target.closest('tr');
+                const rows = Array.from(document.querySelectorAll('#devicesTableBody tr'));
+                const currentIndex = rows.indexOf(currentRow);
+
+                if (e.key === 'ArrowDown' && currentIndex < rows.length - 1) {
+                    rows[currentIndex + 1].focus();
+                    e.preventDefault();
+                } else if (e.key === 'ArrowUp' && currentIndex > 0) {
+                    rows[currentIndex - 1].focus();
+                    e.preventDefault();
+                }
+            }
         });
     </script>
 </body>
