@@ -17,5 +17,8 @@ urlpatterns = [
     path('interfaces/', views.interfaces_view, name='interfaces'),
     path('add-device-auto/', views.add_device_auto, name='add_device_auto'),
     path('add-device-manual/', views.add_device_manual, name='add_device_manual'),
+    path('alerts-api/', views.alerts_api, name='alerts_api'),
+    path('thresholds/', views.thresholds_view, name='thresholds'),
+    path('thresholds-api/', views.thresholds_api, name='thresholds_api'),
     
     ]
