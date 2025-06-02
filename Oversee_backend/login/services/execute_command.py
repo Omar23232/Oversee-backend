@@ -11,8 +11,8 @@ class CiscoCommandExecutor:
     def __init__(self, device_ip="192.168.47.131"):
         self.device_ip = device_ip
         self.base_url = f"https://{device_ip}/webui/rest/execCliCommand"
-        self.csrf_token = "88c35ddc11170c014bed6afcde2d880b50464778"  # Set via set_credentials()
-        self.auth_cookie = "Auth=cisco:1746713736:0:15:4294967295:abbef3dc9e8911e6dd1c3039946c780eb07375a63dee0efbee1e1d06aad072ac83a365c8360edcaf73b468ee9af01925a8b2253222b69cc10a198dff156310c65a8d56a938b36d9c1342c59dc3fca16476de068f8f0ace40eabdd4f5fce25100:7a193c130dfe7496fc0ef3f38913de1b50d88b8c8134a00b63e4b2bfe8d7ce5a; polaris-username=cisco"
+        self.csrf_token = "ed8661689075c87f0bc483a63f6b99026f98b650"  # Set via set_credentials()
+        self.auth_cookie = "Auth=cisco:1748841606:0:15:4294967295:0206e4d2b4959318c1319700ec6205b470f7ef84e8be0e5ebe7ac693610ff4c2b9550a407bcadd1f1b44009840d8d0d89ee47ffb702271bae170fdbbdd1b211e5211c946d7e7240a0f6e9a9e55b752bff15e01e090f6c1b8445e760fb1aa83af:9948d21c50ef4d09b7775b5953bb7f686a3db5e6402fc4a41dbf1175c058a407"
 
     def execute(self, cli_command):
         try:

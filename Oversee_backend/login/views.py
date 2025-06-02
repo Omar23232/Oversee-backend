@@ -14,6 +14,7 @@ from login.services.cpu_client import fetch_and_store_cpu_stats
 from login.services.execute_command import CiscoCommandExecutor
 from login.services.interface_client import InterfaceMonitor
 import json
+from django.shortcuts import render, redirect, get_object_or_404  
 
 # Create your views here.
 
@@ -258,6 +259,25 @@ def thresholds_api(request):
         )
         return JsonResponse({'status': 'success', 'id': threshold.id})
     
+    elif request.method == 'DELETE':
+        try:
+            data = json.loads(request.body)
+            threshold_id = data.get('id')
+            threshold = NetworkThreshold.objects.get(id=threshold_id)
+            threshold.delete()
+            return JsonResponse({'status': 'success'})
+        except NetworkThreshold.DoesNotExist:
+            return JsonResponse({
+                'status': 'error',
+                'message': 'Threshold not found'
+            }, status=404)
+        except Exception as e:
+            return JsonResponse({
+                'status': 'error',
+                'message': str(e)
+            }, status=500)
+    
+    # GET method
     thresholds = NetworkThreshold.objects.all()
     data = [{
         'id': t.id,
@@ -271,3 +291,27 @@ def thresholds_api(request):
 @login_required
 def thresholds_view(request):
     return render(request, 'login/partials/thresholds.html')
+
+
+# view for device command execution
+@login_required
+def device_command_view(request, device_id):
+    device = get_object_or_404(DeviceInfo, id=device_id)
+    return render(request, 'login/partials/device_command.html', {
+        'device': device,
+        'active_tab': 'devices'
+    })
+
+# API endpoint to execute commands on the device
+@login_required
+def execute_command_view(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        command = data.get('command')
+        
+        executor = CiscoCommandExecutor()
+        result = executor.execute(command)
+        
+        return JsonResponse(result)
+    
+    return JsonResponse({'status': 'error', 'message': 'Invalid request method'})
