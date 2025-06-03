@@ -22,5 +22,6 @@ urlpatterns = [
     path('thresholds-api/', views.thresholds_api, name='thresholds_api'),
     path('device/<int:device_id>/command/', views.device_command_view, name='device_command'),
     path('execute-command/', views.execute_command_view, name='execute_command'),
+    path('logs/', views.login_logs_view, name='login_logs'),
     
     ]

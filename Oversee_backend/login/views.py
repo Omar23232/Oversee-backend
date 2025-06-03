@@ -14,20 +14,45 @@ from login.services.cpu_client import fetch_and_store_cpu_stats
 from login.services.execute_command import CiscoCommandExecutor
 from login.services.interface_client import InterfaceMonitor
 import json
-from django.shortcuts import render, redirect, get_object_or_404  
+from django.shortcuts import render, redirect, get_object_or_404
+from login.models import LoginAttempt, UserRole
+from django.core.paginator import Paginator
+from .decorator import role_required
 
-# Create your views here.
+# view for the login page
 
 def login_view(request):
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
+        
+        # Get client info
+        ip_address = request.META.get('REMOTE_ADDR')
+        user_agent = request.META.get('HTTP_USER_AGENT')
+        
         user = authenticate(request, username=username, password=password)
         
         if user is not None:
-            login(request, user)  # Uses Django's built-in login()
-            return redirect('dashboard')  # Ensure 'dashboard' URL name exists
+            login(request, user) # uses django's built-in login function
+            
+            # Log successful login attempt
+            LoginAttempt.objects.create(
+                username=username,
+                ip_address=ip_address,
+                user_agent=user_agent,
+                success=True
+            )
+            
+            return redirect('dashboard')
         else:
+            # Log failed login attempt
+            LoginAttempt.objects.create(
+                username=username,
+                ip_address=ip_address,
+                user_agent=user_agent,
+                success=False
+            )
+            
             messages.error(request, 'Invalid credentials!')
     
     return render(request, 'login/login.html')
@@ -315,3 +340,21 @@ def execute_command_view(request):
         return JsonResponse(result)
     
     return JsonResponse({'status': 'error', 'message': 'Invalid request method'})
+
+
+# view for login logs for admin users
+
+@login_required
+# @role_required(['admin'])
+def login_logs_view(request):
+    login_attempts = LoginAttempt.objects.all()
+    paginator = Paginator(login_attempts, 10)  # Show 10 entries per page
+    
+    page = request.GET.get('page')
+    attempts = paginator.get_page(page)
+    
+    context = {
+        'active_tab': 'logs',
+        'attempts': attempts
+    }
+    return render(request, 'login/logs.html', context)

@@ -1,0 +1,123 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login Logs - Oversee</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+    <link rel="stylesheet" href="{% static 'login/css/dashboard.css' %}" />
+    <link rel="stylesheet" href="{% static 'login/css/logs.css' %}" />
+    <link rel="stylesheet" href="{% static 'login/css/sidebar.css' %}" />
+</head>
+
+<body>
+    <!-- Sidebar -->
+    {% include 'login/partials/sidebar.html' %}
+    
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="content-area">
+            <div class="logs-header">
+                <h2><i class="fas fa-clipboard-list"></i> Login Activity Logs</h2>
+                <div class="header-actions">
+                    <button id="exportLogs" class="btn btn-primary">
+                        <i class="fas fa-download"></i> Export
+                    </button>
+                </div>
+            </div>
+
+            <!-- Filter Panel -->
+            <div class="filter-panel">
+                <button id="toggleFilters" class="btn btn-secondary">
+                    <i class="fas fa-filter"></i> Filters
+                </button>
+                <div id="filterOptions" class="filter-options" hidden>
+                    <div class="filter-group">
+                        <label for="statusFilter">Login Status:</label>
+                        <select id="statusFilter">
+                            <option value="">All Status</option>
+                            <option value="success">Success</option>
+                            <option value="failed">Failed</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label for="dateFilter">Time Range:</label>
+                        <select id="dateFilter">
+                            <option value="24h">Last 24 Hours</option>
+                            <option value="7d">Last 7 Days</option>
+                            <option value="30d">Last 30 Days</option>
+                            <option value="all">All Time</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label for="searchInput">Search Username:</label>
+                        <input type="text" id="searchInput" placeholder="Search by username...">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Logs Table -->
+            <div class="logs-container">
+                {% if attempts %}
+                    <table class="logs-table">
+                        <thead>
+                            <tr>
+                                <th>Timestamp</th>
+                                <th>Username</th>
+                                <th>Status</th>
+                                <th>IP Address</th>
+                                <th>Browser Info</th>
+                                <th>Location</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for attempt in attempts %}
+                                <tr>
+                                    <td>{{ attempt.timestamp|date:"Y-m-d H:i:s" }}</td>
+                                    <td>{{ attempt.username }}</td>
+                                    <td>
+                                        <span class="log-level {% if attempt.success %}log-level-info{% else %}log-level-error{% endif %}">
+                                            {% if attempt.success %}Success{% else %}Failed{% endif %}
+                                        </span>
+                                    </td>
+                                    <td>{{ attempt.ip_address }}</td>
+                                    <td>{{ attempt.user_agent|truncatechars:50 }}</td>
+                                    <td>{{ attempt.location|default:"Unknown" }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+
+                    <!-- Pagination -->
+                    {% if attempts.has_other_pages %}
+                        <div class="pagination">
+                            {% if attempts.has_previous %}
+                                <a href="?page=1" class="btn btn-secondary">&laquo; First</a>
+                                <a href="?page={{ attempts.previous_page_number }}" class="btn btn-secondary">Previous</a>
+                            {% endif %}
+
+                            <span class="current-page">
+                                Page {{ attempts.number }} of {{ attempts.paginator.num_pages }}
+                            </span>
+
+                            {% if attempts.has_next %}
+                                <a href="?page={{ attempts.next_page_number }}" class="btn btn-secondary">Next</a>
+                                <a href="?page={{ attempts.paginator.num_pages }}" class="btn btn-secondary">Last &raquo;</a>
+                            {% endif %}
+                        </div>
+                    {% endif %}
+                {% else %}
+                    <div class="empty-state">
+                        <i class="fas fa-clipboard-check"></i>
+                        <h3>No Login Attempts</h3>
+                        <p>No login attempts have been recorded yet</p>
+                    </div>
+                {% endif %}
+        </div>
+        </div>
+    </main>
+
+    <script src="{% static 'login/js/logs.js' %}"></script>
+</body>
+</html>

@@ -1,4 +1,6 @@
 from django.db import models
+from django.contrib.auth.models import User
+
 
 
 class DeviceMemory(models.Model):
@@ -110,3 +112,37 @@ class NetworkAlert(models.Model):
     severity = models.CharField(max_length=10)
     created_at = models.DateTimeField(auto_now_add=True)
     is_acknowledged = models.BooleanField(default=False)
+    
+
+# This model is used to store user roles
+class UserRole(models.Model):
+    ROLE_CHOICES = (
+        ('admin', 'Administrator'),
+        ('user', 'Normal User')
+    )
+    
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    role = models.CharField(max_length=10, choices=ROLE_CHOICES, default='user')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.user.username} - {self.role}"
+
+
+
+# This model is used to store login attempts
+class LoginAttempt(models.Model):
+    username = models.CharField(max_length=150)
+    ip_address = models.GenericIPAddressField()
+    timestamp = models.DateTimeField(auto_now_add=True)
+    success = models.BooleanField()
+    user_agent = models.TextField(null=True)
+    location = models.CharField(max_length=255, null=True)  # For future use with IP geolocation
+
+    class Meta:
+        ordering = ['-timestamp']
+
+    def __str__(self):
+        status = "Success" if self.success else "Failed"
+        return f"{self.username} - {status} - {self.timestamp}"
+    
