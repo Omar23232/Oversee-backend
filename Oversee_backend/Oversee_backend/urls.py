@@ -21,3 +21,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('login.urls')),
 ]
+
+handler403 = 'login.views.custom_403'

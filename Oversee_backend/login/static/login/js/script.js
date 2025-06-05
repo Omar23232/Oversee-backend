@@ -57,7 +57,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // 2) Fetch and update memory data
     function fetchMemoryStats() {
-        fetch('/memory-stats/')  // Your Django API endpoint
+        fetch('/memory-stats/')  
             .then(response => response.json())
             .then(data => {
                 // Update the chart
@@ -66,8 +66,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 
                 // Update the numeric display
                 document.querySelector('.chart-value').textContent = `${data.used_percentage}%`;
-                
-                // Update the details
+
                 const detailsHTML = `
                     <p>Total: ${formatBytes(data.total)} GB</p>
                     <p>Used: ${formatBytes(data.used)} MB</p>

@@ -345,7 +345,7 @@ def execute_command_view(request):
 # view for login logs for admin users
 
 @login_required
-# @role_required(['admin'])
+@role_required(['admin'])
 def login_logs_view(request):
     # Get the selected log type from query params, default to login logs
     log_type = request.GET.get('log_type', 'login')
@@ -400,3 +400,13 @@ def command_details(request, command_id):
             'status': 'error',
             'message': str(e)
         }, status=500)
+        
+        
+
+# 403 Forbidden view handler
+
+def custom_403(request, exception=None):
+    """
+    Custom 403 Forbidden view
+    """
+    return render(request, 'login/403.html', status=403)
