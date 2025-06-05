@@ -6,33 +6,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />    
     <title>Network Devices - Management Dashboard</title>
     <meta name="description" content="Network devices management dashboard showing device status, information and commands">
+    <link rel="stylesheet" href="{% static 'login/css/dashboard.css' %}" />
     <link rel="stylesheet" href="{% static 'login/css/devices.css' %}" />
     <link rel="stylesheet" href="{% static 'login/css/sidebar.css' %}" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
 </head>
 
 <body>
-    {% include 'login/partials/sidebar.html' %}
-
-    <main class="main-content">
+    {% include 'login/partials/sidebar.html' %}    <main class="main-content">
         <section class="content-area">
             <div class="page-header">
-                <h1 id="devices-heading">Network Devices</h1>
-                <br>
+                <h1 id="devices-heading">
+                    <i class="fas fa-server"></i> Network Devices
+                </h1>
             </div>
 
-            <div class="button-container" role="toolbar" >
-                <a href="{% url 'add_device_auto' %}" 
+            <div class="button-container" role="toolbar" >                <a href="{% url 'add_device_auto' %}" 
                    class="btn btn-primary" 
                    role="button">
-
                     <i class="fas fa-magic" aria-hidden="true"></i>
                     <span>Add Device Automatically</span>
-                </a>
-                <a href="{% url 'add_device_manual' %}" 
+                </a>                <a href="{% url 'add_device_manual' %}" 
                    class="btn btn-secondary"
                    role="button">
-
                     <i class="fas fa-plus" aria-hidden="true"></i>
                     <span>Add Device Manually</span>
                 </a>
