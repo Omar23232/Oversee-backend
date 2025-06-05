@@ -41,12 +41,14 @@ class ExecutedCommand(models.Model):
     command = models.TextField()
     output = models.JSONField()
     timestamp = models.DateTimeField(auto_now_add=True)
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
     
     class Meta:
         ordering = ['-timestamp']
 
     def __str__(self):
-        return f"{self.device_ip} - {self.command[:50]}..."
+        username = self.user.username if self.user else "Unknown"
+        return f"{username} - {self.device_ip} - {self.command[:50]}..."
     
 
 class InterfaceStatus(models.Model):

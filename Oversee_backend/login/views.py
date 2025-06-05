@@ -335,7 +335,7 @@ def execute_command_view(request):
         command = data.get('command')
         
         executor = CiscoCommandExecutor()
-        result = executor.execute(command)
+        result = executor.execute(command, user=request.user)  # Pass user to executor
         
         return JsonResponse(result)
     
@@ -347,14 +347,56 @@ def execute_command_view(request):
 @login_required
 # @role_required(['admin'])
 def login_logs_view(request):
-    login_attempts = LoginAttempt.objects.all()
-    paginator = Paginator(login_attempts, 10)  # Show 10 entries per page
+    # Get the selected log type from query params, default to login logs
+    log_type = request.GET.get('log_type', 'login')
     
-    page = request.GET.get('page')
-    attempts = paginator.get_page(page)
-    
-    context = {
-        'active_tab': 'logs',
-        'attempts': attempts
-    }
+    if log_type == 'commands':
+        # Get command logs
+        logs = ExecutedCommand.objects.all()
+        paginator = Paginator(logs, 10)
+        page = request.GET.get('page')
+        commands = paginator.get_page(page)
+        
+        context = {
+            'active_tab': 'logs',
+            'log_type': 'commands',
+            'commands': commands
+        }
+    else:
+        # Get login logs (default)
+        login_attempts = LoginAttempt.objects.all()
+        paginator = Paginator(login_attempts, 10)
+        page = request.GET.get('page')
+        attempts = paginator.get_page(page)
+        
+        context = {
+            'active_tab': 'logs',
+            'log_type': 'login',
+            'attempts': attempts
+        }
+        
     return render(request, 'login/logs.html', context)
+
+# API endpoint to fetch command details from the logs page 
+@login_required
+def command_details(request, command_id):
+    try:
+        command = ExecutedCommand.objects.get(id=command_id)
+        return JsonResponse({
+            'status': 'success',
+            'command': command.command,
+            'output': command.output,
+            'user': command.user.username if command.user else None,
+            'device_ip': command.device_ip,
+            'timestamp': command.timestamp.strftime("%Y-%m-%d %H:%M:%S")
+        })
+    except ExecutedCommand.DoesNotExist:
+        return JsonResponse({
+            'status': 'error',
+            'message': 'Command not found'
+        }, status=404)
+    except Exception as e:
+        return JsonResponse({
+            'status': 'error',
+            'message': str(e)
+        }, status=500)
