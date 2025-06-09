@@ -209,7 +209,17 @@ def interface_api(request):
                     'name': i.name,
                     'status': i.oper_status,
                     'last_change': i.last_change,
-                    'mac': i.mac_address
+                    'mac': i.mac_address,
+                    # Add bandwidth metrics
+                    'in_bandwidth': round(i.in_bandwidth, 2),
+                    'out_bandwidth': round(i.out_bandwidth, 2),
+                    # Add error metrics
+                    'error_rate': round(i.error_rate, 3),
+                    'packet_loss': round(i.packet_loss, 3),
+                    'in_errors': i.in_errors,
+                    'out_errors': i.out_errors,
+                    'in_discards': i.in_discards,
+                    'out_discards': i.out_discards
                 } for i in interfaces
             ]
         })

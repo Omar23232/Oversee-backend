@@ -11,8 +11,8 @@ class CiscoCommandExecutor:
     def __init__(self, device_ip="192.168.47.131"):
         self.device_ip = device_ip
         self.base_url = f"https://{device_ip}/webui/rest/execCliCommand"
-        self.csrf_token = "921ec2eba25c19f505a7b9bb001bcbce5052b6c6"  # Set via set_credentials()
-        self.auth_cookie = "Auth=cisco:1749099011:0:15:4294967295:4461e9129c3dc83807652c4be4f11b99f26aca0a6ac01f06685794b1b09fb2585ba451c41ff1ea437cfab007343e331e78fef611c92c0e541f553db65941a52de8c7a96eb79c44183dc0bbad59076f61342f77c82c0a837b70e22777ca3a129d:161bdb7e6d5fd93d70d5d91846808bf7dd5d4c8dec3a34c343b2781a7f099a73"
+        self.csrf_token = "51c0056527b9cd8739460670df886d00362b8032"  # Set via set_credentials()
+        self.auth_cookie = "Auth=cisco:1749396158:0:15:4294967295:40e334dabf9b8c2c54739dc9ee0a7391c306e364e1d8a43e79e794c5e8d269c93678a0f8a5962bfd49559b8c362ccff6011fb97ed367fc5124be850cb9598be180a730aec6e39124461f6ed57dc64793864c2ea49eeefee55ba815bbdb40f678:8e482bad38fca341fcc794edf38001eb49f8f429b633b2dcdb0e69993b47100e"
     def execute(self, cli_command, user=None):
         try:
             # Encode command
@@ -53,12 +53,4 @@ class CiscoCommandExecutor:
                 'status': 'error',
                 'message': str(e)
             }
-        
-# if __name__ == "__main__":
-    
-#     executor = CiscoCommandExecutor()
-    
-#     # Execute a command (using default or specify one)
-#     result = executor.execute()  # uses default "show version" command
-#     # OR specify a command:
-#     # result = executor.execute("show interfaces")
+            

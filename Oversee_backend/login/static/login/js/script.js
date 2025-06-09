@@ -118,13 +118,44 @@ document.addEventListener("DOMContentLoaded", function() {
         .then(response => response.json())
         .then(data => {
             if (data.status === 'success' && Array.isArray(data.interfaces)) {
-                const upCount = data.interfaces.filter(i => i.status === 'up').length;
+                // Count up/down interfaces (existing functionality)
+                const upInterfaces = data.interfaces.filter(i => i.status === 'up');
                 const downCount = data.interfaces.filter(i => i.status === 'lower-layer-down').length;
-                document.getElementById('interfaces-up-count').textContent = upCount;
+                document.getElementById('interfaces-up-count').textContent = upInterfaces.length;
                 document.getElementById('interfaces-down-count').textContent = downCount;
+                
+                // Display interface cards for up interfaces only
+                displayInterfaceCards(upInterfaces);
             }
         })
         .catch(console.error);
+    }
+
+    // 5) Display interface cards
+    function displayInterfaceCards(interfaces) {
+    const container = document.getElementById('interface-cards-container');
+    if (!container) return; // Check if container exists
+    
+    // Sort interfaces by name for consistent display
+    const sortedInterfaces = [...interfaces].sort((a, b) => a.name.localeCompare(b.name));
+    
+    container.innerHTML = sortedInterfaces.map(intf => `
+        <div class="card metric-card interface-detail-card">
+            <h4>${intf.name}</h4>
+            <div class="interface-metrics">
+                <div class="bandwidth-section">
+                    <h5>Bandwidth</h5>
+                    <p><i class="bi bi-arrow-down"></i> In: ${intf.in_bandwidth.toFixed(2)} Mbps</p>
+                    <p><i class="bi bi-arrow-up"></i> Out: ${intf.out_bandwidth.toFixed(2)} Mbps</p>
+                </div>
+                <div class="error-section">
+                    <h5>Error Metrics</h5>
+                    <p class="${intf.error_rate > 0.1 ? 'warning-text' : ''}">Error Rate: ${intf.error_rate.toFixed(3)}%</p>
+                    <p class="${intf.packet_loss > 0.5 ? 'warning-text' : ''}">Packet Loss: ${intf.packet_loss.toFixed(3)}%</p>
+                </div>
+            </div>
+        </div>
+    `).join('');
 }
 
     function updateInterfaceDisplay(interfaces) {

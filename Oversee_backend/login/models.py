@@ -57,6 +57,27 @@ class InterfaceStatus(models.Model):
     oper_status = models.CharField(max_length=20)  # up/down
     last_change = models.DateTimeField()
     mac_address = models.CharField(max_length=17)
+    
+    # Bandwidth metrics
+    in_octets = models.BigIntegerField(default=0)
+    out_octets = models.BigIntegerField(default=0)
+    in_bandwidth = models.FloatField(default=0)  # in Mbps
+    out_bandwidth = models.FloatField(default=0)  # in Mbps
+    
+    # Error metrics
+    in_errors = models.IntegerField(default=0)
+    out_errors = models.IntegerField(default=0)
+    in_discards = models.IntegerField(default=0)
+    out_discards = models.IntegerField(default=0)
+    
+    # Packet metrics
+    in_packets = models.BigIntegerField(default=0)
+    out_packets = models.BigIntegerField(default=0)
+    
+    # Calculated metrics
+    error_rate = models.FloatField(default=0)  # percentage
+    packet_loss = models.FloatField(default=0)  # percentage
+    
     timestamp = models.DateTimeField(auto_now_add=True)
 
     class Meta:
