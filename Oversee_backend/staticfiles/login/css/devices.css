@@ -1,3 +1,10 @@
+/* Reset and Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
 /* Content Area */
 .content-area {
     padding: 2rem;
@@ -5,20 +12,32 @@
     margin: 0 auto;
 }
 
+.page-header h1 {
+    color: #694707;
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
 /* Button Container */
 .button-container {
     display: flex;
     gap: 1rem;
-    margin-bottom: 2rem;
+    margin-bottom: 1.5rem;
 }
 
 /* Table Container */
 .table-container {
-    background: white;
-    border-radius: 16px;
-    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    margin-top: 1rem;
     overflow: hidden;
     position: relative;
+    padding: 0;
 }
 
 /* Table Styling */
@@ -26,20 +45,18 @@
     width: 100%;
     border-collapse: separate;
     border-spacing: 0;
-    background: white;
-    margin: 0;
 }
 
 /* Header Styling */
 .devices-table thead th {
-    background: #f8fafc;
-    color: #334155;
+    background: #f1e7d8;
+    color: #694707;
     font-weight: 600;
+    font-size: 0.9rem;
     text-transform: uppercase;
-    font-size: 0.85rem;
     letter-spacing: 0.5px;
-    padding: 1rem 1.5rem;
-    border-bottom: 2px solid #e2e8f0;
+    padding: 1rem 1.2rem;
+    border-bottom: 1px solid #e0d5c5;
     position: sticky;
     top: 0;
     z-index: 10;
@@ -49,35 +66,35 @@
 /* Row Styling */
 .devices-table tbody tr {
     transition: all 0.2s ease;
+    border-bottom: 1px solid #e0e0e0;
 }
 
 .devices-table tbody tr:hover {
-    background: #f8fafc;
+    background: #f7f3ec;
     transform: translateY(-1px);
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
 }
 
 .devices-table td {
-    padding: 1rem 1.5rem;
-    color: #475569;
-    border-bottom: 1px solid #e2e8f0;
+    padding: 1rem 1.2rem;
+    color: #3d2c0a;
     font-size: 0.95rem;
+    border-bottom: 1px solid #e0e0e0;
 }
 
 /* Status Indicators */
 .status-up, .status-down {
     display: inline-flex;
     align-items: center;
-    gap: 0.5rem;
-    padding: 0.375rem 0.75rem;
-    border-radius: 9999px;
+    padding: 0.25rem 0.75rem;
+    border-radius: 12px;
+    font-size: 0.85rem;
     font-weight: 500;
-    font-size: 0.875rem;
 }
 
 .status-up {
-    background: #dcfce7;
-    color: #166534;
+    background: rgba(34, 197, 94, 0.1);
+    color: rgb(21, 128, 61);
 }
 
 .status-up::before {
@@ -90,8 +107,8 @@
 }
 
 .status-down {
-    background: #fee2e2;
-    color: #991b1b;
+    background: rgba(239, 68, 68, 0.1);
+    color: rgb(185, 28, 28);
 }
 
 .status-down::before {
@@ -105,58 +122,70 @@
 
 /* Button Styling */
 .btn {
-    padding: 0.75rem 1.5rem;
-    border-radius: 8px;
-    font-weight: 500;
-    font-size: 0.95rem;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    text-decoration: none;
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: none;
+    text-decoration: none;
+}
+
+.btn i {
+    font-size: 1rem;
 }
 
 .btn-primary {
-    background: #2c3e50;
+    background: #694707;
     color: white;
-    border: none;
 }
 
 .btn-primary:hover {
-    background: #1a365d;
-    transform: translateY(-1px);
+    background: #523204;
 }
 
 .btn-secondary {
     background: #f1e7d8;
-    color: #2c3e50;
-    border: 1px solid #e2e8f0;
+    color: #694707;
 }
 
 .btn-secondary:hover {
-    background: #e2d5c3;
-    transform: translateY(-1px);
+    background: #e5d5bc;
 }
 
 .btn-command {
-    background: #334155;
+    background: #694707;
     color: white;
-    border: none;
     padding: 0.5rem 1rem;
     font-size: 0.875rem;
 }
 
 .btn-command:hover {
-    background: #1e293b;
-    transform: translateY(-1px);
+    background: #523204;
 }
 
 /* Empty State */
 .empty-row {
     text-align: center;
     padding: 3rem !important;
-    color: #64748b;
+    color: #694707;
+}
+
+.empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.empty-state i {
+    font-size: 2rem;
+    color: #cfb286;
+    margin-bottom: 0.5rem;
 }
 
 /* Responsive Design */
@@ -191,7 +220,7 @@
         display: block;
         margin-bottom: 1rem;
         padding: 1rem;
-        background: white;
+        background: #fff;
         border-radius: 8px;
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
     }
@@ -207,7 +236,7 @@
     .devices-table td::before {
         content: attr(data-label);
         font-weight: 600;
-        color: #334155;
+        color: #694707;
     }
     
     .btn-command {
@@ -220,17 +249,13 @@
 /* Accessibility Improvements */
 .btn:focus-visible,
 .devices-table tr:focus-visible {
-    outline: 2px solid #2c3e50;
+    outline: 2px solid #694707;
     outline-offset: 2px;
 }
 
 /* Additional Interactive States */
 .devices-table tbody tr:focus {
-    background: #f8fafc;
+    background: #f7f3ec;
     outline: none;
-}
-
-.devices-table tbody tr:active {
-    transform: translateY(0);
 }
 

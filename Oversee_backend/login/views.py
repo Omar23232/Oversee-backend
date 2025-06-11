@@ -12,6 +12,7 @@ from django.conf import settings
 from .models import DeviceCPU, DeviceInfo, NetworkAlert, NetworkThreshold
 from login.services.cpu_client import fetch_and_store_cpu_stats
 from login.services.execute_command import CiscoCommandExecutor
+from login.services.switch_command_executer import switch_command_executor
 from login.services.interface_client import InterfaceMonitor
 import json
 from django.shortcuts import render, redirect, get_object_or_404
@@ -89,11 +90,17 @@ def alerts_view(request):
  
 @login_required
 def memory_stats_api(request):
+    
+    device = DeviceInfo.objects.filter(device_type='router', hostname='Main Router').first()
+    if device :
+        device_ip = device.device_ip
+    else:
+        return JsonResponse({'status': 'error', 'message': 'Device not found'}, status=404)
     try:
         latest_stat = DeviceMemory.objects.order_by('-timestamp').first()
         
         if not latest_stat or (timezone.now() - latest_stat.timestamp).total_seconds() > 2:
-            fetch_and_store_memory_stats()
+            fetch_and_store_memory_stats(device_ip=device_ip)
             latest_stat = DeviceMemory.objects.order_by('-timestamp').first()
         
         if latest_stat:
@@ -133,11 +140,18 @@ def memory_stats_api(request):
 
 @login_required
 def cpu_stats_api(request):
+    
+    device = DeviceInfo.objects.filter(device_type='router', hostname='Main Router').first()
+    if device :
+        device_ip = device.device_ip
+    else:
+        return JsonResponse({'status': 'error', 'message': 'Device not found'}, status=404)
+    
     try:
         latest_stat = DeviceCPU.objects.order_by('-timestamp').first()
         
         if not latest_stat or (timezone.now() - latest_stat.timestamp).total_seconds() > 2:
-            fetch_and_store_cpu_stats()
+            fetch_and_store_cpu_stats(device_ip=device_ip)
             latest_stat = DeviceCPU.objects.order_by('-timestamp').first()
         
         if latest_stat:
@@ -180,8 +194,16 @@ def cpu_stats_api(request):
     
 @login_required
 def uptime_api(request):
-    executor = CiscoCommandExecutor()
-    result = executor.execute("show version | include uptime")  # Fixed command
+    # Fetch the device IP from the DeviceInfo model
+    device = DeviceInfo.objects.filter(device_type='router', hostname='Main Router').first()
+    if device :
+        device_ip = device.device_ip
+    else:
+        return JsonResponse({'status': 'error', 'message': 'Device not found'}, status=404)
+    
+    # Use the correct command to fetch uptime
+    executor = CiscoCommandExecutor(device_ip=device_ip)
+    result = executor.execute(cli_command="show version | include uptime")  # Fixed command
     
     return JsonResponse({
         'status': result['status'],
@@ -193,7 +215,14 @@ def uptime_api(request):
 # Api endpoint to get interface status of the device
 @login_required
 def interface_api(request):
-    monitor = InterfaceMonitor()
+    
+    device = DeviceInfo.objects.filter(device_type='router', hostname='Main Router').first()
+    if device :
+        device_ip = device.device_ip
+    else:
+        return JsonResponse({'status': 'error', 'message': 'Device not found'}, status=404)
+    
+    monitor = InterfaceMonitor(device_ip=device_ip)
     result = monitor.fetch_interfaces()
     
     if result['status'] == 'success':
@@ -229,7 +258,7 @@ def interface_api(request):
 def interfaces_view(request):
     interfaces = InterfaceStatus.objects.filter(device_ip="192.168.47.131").order_by('name', '-timestamp')
     return render(request, 'login/interfaces.html', {
-        'active_tab': 'devices',
+        'active_tab': 'dashboard',
     })
     
     
@@ -343,10 +372,22 @@ def execute_command_view(request):
     if request.method == 'POST':
         data = json.loads(request.body)
         command = data.get('command')
+        device_ip = data.get('device_ip')
         
-        executor = CiscoCommandExecutor()
-        result = executor.execute(command, user=request.user)  # Pass user to executor
+        if not device_ip :
+            return JsonResponse({'status': 'error', 'message': 'Device IP is required'})
         
+        device = DeviceInfo.objects.filter(device_ip=device_ip).first()
+        device_type = device.device_type if device else None
+        
+        if device_type == 'router':
+            executor = CiscoCommandExecutor(device_ip=device_ip)
+            result = executor.execute(command, user=request.user)  # Pass user to executor
+        elif device_type == 'switch':
+            executor = switch_command_executor(device_ip=device_ip)
+            result = executor.execute(cli_command=command, user=request.user)  # Pass user to executor
+        else:
+            return JsonResponse({'status': 'error', 'message': 'Unsupported device type'})
         return JsonResponse(result)
     
     return JsonResponse({'status': 'error', 'message': 'Invalid request method'})

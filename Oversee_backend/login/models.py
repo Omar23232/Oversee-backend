@@ -96,7 +96,13 @@ class DeviceInfo(models.Model):
     system_description = models.TextField()
     location = models.CharField(max_length=200)
     status = models.CharField(max_length=50)
-    device_ip = models.GenericIPAddressField()  # Added this instead of contact
+    device_ip = models.GenericIPAddressField() 
+    device_type = models.CharField(max_length=50, choices=[
+        ('router', 'Router'),
+        ('switch', 'Switch'),
+        ('pc', 'PC'),
+        ('server', 'Server'),
+    ], default='router')
     timestamp = models.DateTimeField(auto_now_add=True)
 
     class Meta:

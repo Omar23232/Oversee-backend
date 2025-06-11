@@ -8,11 +8,11 @@ from login.models import ExecutedCommand
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
 class CiscoCommandExecutor:
-    def __init__(self, device_ip="192.168.47.131"):
+    def __init__(self, device_ip):
         self.device_ip = device_ip
         self.base_url = f"https://{device_ip}/webui/rest/execCliCommand"
-        self.csrf_token = "51c0056527b9cd8739460670df886d00362b8032"  # Set via set_credentials()
-        self.auth_cookie = "Auth=cisco:1749396158:0:15:4294967295:40e334dabf9b8c2c54739dc9ee0a7391c306e364e1d8a43e79e794c5e8d269c93678a0f8a5962bfd49559b8c362ccff6011fb97ed367fc5124be850cb9598be180a730aec6e39124461f6ed57dc64793864c2ea49eeefee55ba815bbdb40f678:8e482bad38fca341fcc794edf38001eb49f8f429b633b2dcdb0e69993b47100e"
+        self.csrf_token = "94505b1351207e839ebf25e42274cd9021ded781"  # Set via set_credentials()
+        self.auth_cookie = "Auth=cisco:1749586316:0:15:4294967295:6d29169f268c8753fb861ee4bc9b9992b922a0ebcb1e93c32b08ec608a0805bdeca92a1a6347ff0845c4c62dffebd31fea17dab94316d7a87cd29c3d310772ab1c9b0316d212841abf25e98cc8ca84d27da228be947e45208d1f378fb348ab3f:d72fa48fde8c8b2c690156b30c4894012834e50b0e045ffbc141777a8669bab7"
     def execute(self, cli_command, user=None):
         try:
             # Encode command

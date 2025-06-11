@@ -1,3 +1,16 @@
+/* Reset and Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f8f9fa;
+    color: #3d2c0a;
+}
+
 .command-container {
     padding: 2rem;
     max-width: 900px;
@@ -9,27 +22,27 @@
 }
 
 .command-header h2 {
-    color: #2c3e50;
+    color: #694707;
     margin-bottom: 0.5rem;
 }
 
 .device-info {
-    background: #f8fafc;
+    background: #f7f3ec;
     padding: 1rem;
     border-radius: 8px;
-    border: 1px solid #e2e8f0;
+    border: 1px solid #e0d5c5;
 }
 
 .device-info p {
     margin: 0.25rem 0;
-    color: #64748b;
+    color: #3d2c0a;
 }
 
 .command-form-wrapper {
-    background: white;
+    background: #fff;
     padding: 1.5rem;
-    border-radius: 8px;
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
     margin-bottom: 2rem;
 }
 
@@ -40,23 +53,26 @@
 .form-group label {
     display: block;
     margin-bottom: 0.5rem;
-    color: #334155;
+    color: #694707;
     font-weight: 500;
 }
 
 .form-group input {
     width: 100%;
     padding: 0.75rem;
-    border: 1px solid #e2e8f0;
+    border: 1px solid #e0d5c5;
     border-radius: 6px;
     font-family: monospace;
     font-size: 0.95rem;
+    background-color: #fff;
+    color: #3d2c0a;
+    transition: all 0.2s ease;
 }
 
 .form-group input:focus {
     outline: none;
-    border-color: #2c3e50;
-    box-shadow: 0 0 0 3px rgba(44, 62, 80, 0.1);
+    border-color: #694707;
+    box-shadow: 0 0 0 3px rgba(105, 71, 7, 0.1);
 }
 
 .form-actions {
@@ -74,23 +90,23 @@
 }
 
 .btn-execute {
-    background: #2c3e50;
+    background: #694707;
     color: white;
     border: none;
 }
 
 .btn-execute:hover {
-    background: #1a365d;
+    background: #523204;
 }
 
 .btn-cancel {
-    background: #f1f5f9;
-    color: #64748b;
-    border: 1px solid #e2e8f0;
+    background: #f1e7d8;
+    color: #694707;
+    border: 1px solid #e0d5c5;
 }
 
 .btn-cancel:hover {
-    background: #e2e8f0;
+    background: #e5d5bc;
 }
 
 .output-section {
@@ -98,13 +114,13 @@
 }
 
 .output-section h3 {
-    color: #334155;
+    color: #694707;
     margin-bottom: 1rem;
 }
 
 .command-output {
-    background: #1e293b;
-    color: #e2e8f0;
+    background: #3d2c0a;
+    color: #f7f3ec;
     padding: 1.5rem;
     border-radius: 8px;
     font-family: monospace;
@@ -113,7 +129,7 @@
 }
 
 .output-placeholder {
-    color: #64748b;
+    color: #cfb286;
     font-style: italic;
     margin: 0;
 }
@@ -121,6 +137,27 @@
 .loading {
     opacity: 0.7;
     pointer-events: none;
+    position: relative;
+}
+
+.loading::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 50%;
+    border: 2px solid #694707;
+    border-top-color: transparent;
+    animation: spinner 0.8s linear infinite;
+}
+
+@keyframes spinner {
+    to {
+        transform: translate(-50%, -50%) rotate(360deg);
+    }
 }
 
 @media (max-width: 768px) {

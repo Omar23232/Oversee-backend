@@ -28,6 +28,7 @@
             <div class="command-form-wrapper">
                 <form id="commandForm" class="command-form">
                     {% csrf_token %}
+                    <input type="hidden" name="device_ip" value="{{ device.device_ip }}">
                     <div class="form-group">
                         <label for="command">Enter Command:</label>
                         <input type="text" 

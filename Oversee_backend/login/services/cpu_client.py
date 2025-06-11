@@ -6,7 +6,7 @@ from login.models import DeviceCPU
 
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
-def fetch_and_store_cpu_stats(device_ip="192.168.47.131"):
+def fetch_and_store_cpu_stats(device_ip):
     url = f"https://{device_ip}/restconf/data/Cisco-IOS-XE-process-cpu-oper:cpu-usage/cpu-utilization"
     try:
         response = requests.get(

@@ -6,7 +6,7 @@ from login.models import DeviceMemory
 
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
-def fetch_and_store_memory_stats(device_ip="192.168.47.131"):
+def fetch_and_store_memory_stats(device_ip):
     url = f"https://{device_ip}/restconf/data/Cisco-IOS-XE-memory-oper:memory-statistics/memory-statistic=Processor"
     try:
         response = requests.get(

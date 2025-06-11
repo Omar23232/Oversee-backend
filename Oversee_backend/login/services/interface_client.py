@@ -8,7 +8,7 @@ import time
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
 class InterfaceMonitor:
-    def __init__(self, device_ip="192.168.47.131"):
+    def __init__(self, device_ip):
         self.device_ip = device_ip
         self.url = f"https://{device_ip}/restconf/data/ietf-interfaces:interfaces-state"
         # Store previous readings to calculate bandwidth
