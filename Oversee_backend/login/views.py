@@ -398,9 +398,7 @@ def device_details_view(request, device_id):
     device = get_object_or_404(DeviceInfo, id=device_id)
     
     if device.device_type =='router':
-        # Fetch and store memory stats for router
         fetch_and_store_memory_stats(device_ip=device.device_ip)
-        # Fetch and store CPU stats for router
         fetch_and_store_cpu_stats(device_ip=device.device_ip)
     elif device.device_type == 'switch':
         switch_monitor = switch_command_executor(device_ip=device.device_ip)

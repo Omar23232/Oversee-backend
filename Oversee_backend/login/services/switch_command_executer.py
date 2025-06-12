@@ -14,14 +14,14 @@ class switch_command_executor:
         self.base_url = f"http://{device_ip}/level/15/exec/-"
         self.auth = ('cisco', 'cisco')
         
+    # Set the user agent to mimic a web browser
     def _format_command_url(self, command):
-        """Convert a command like 'show version | include uptime' to URL format"""
         parts = command.replace('|', '%7C').split()
         url_path = '/'.join(parts)
         return f"{self.base_url}/{url_path}/CR"
     
+    # Extract the output from the HTML content returned by the switch
     def _extract_output_from_html(self, html_content):
-        """Extract the command output from the HTML response"""
         try:
             soup = BeautifulSoup(html_content, 'html.parser')
             
@@ -131,13 +131,6 @@ class switch_command_executor:
         if result['status'] == 'success':
             try:
                 memory_text = result['output']['raw_output']
-                
-                # First, print the raw output for debugging
-                print(f"Memory raw output: {memory_text}")
-                
-                # Parse the table format based on your actual output
-                # Looking for the "Processor" row which contains memory values
-                # Format: "Processor   13A05020   742622176    63279176   679343000   631335180   628445500"
                 processor_match = re.search(r'Processor\s+\w+\s+(\d+)\s+(\d+)\s+(\d+)', memory_text)
                 
                 if processor_match:
@@ -165,15 +158,14 @@ class switch_command_executor:
                     return {
                         'status': 'success',
                         'output': {
-                            'total': total_memory / (1024 * 1024),  # Convert to MB
-                            'used': used_memory / (1024 * 1024),    # Convert to MB
-                            'free': free_memory / (1024 * 1024),    # Convert to MB
+                            'total': total_memory / (1024 * 1024),  
+                            'used': used_memory / (1024 * 1024),    
+                            'free': free_memory / (1024 * 1024),    
                             'used_percentage': round(used_percentage, 2)
                         }
                     }
                 
-                # If the first pattern doesn't match, try another pattern based on the format
-                # "Head    Total(b)     Used(b)     Free(b)"
+                # If the first pattern didn't match, try an alternative pattern
                 header_match = re.search(r'Head\s+Total\(b\)\s+Used\(b\)\s+Free\(b\)', memory_text)
                 processor_line_match = re.search(r'Processor\s+\w+\s+(\d+)\s+(\d+)\s+(\d+)', memory_text)
                 
@@ -235,7 +227,6 @@ class switch_command_executor:
             try:
                 cpu_text = result['output']['raw_output']
                 
-                # Parse CPU information using regex
                 # Looking for line like: "CPU utilization for five seconds: 12%/5%; one minute: 8%; five minutes: 5%"
                 cpu_match = re.search(r'CPU utilization for five seconds: (\d+)%.*?; one minute: (\d+)%.*?; five minutes: (\d+)%', cpu_text)
                 
