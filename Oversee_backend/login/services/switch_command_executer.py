@@ -77,8 +77,9 @@ class switch_command_executor:
                 'message': str(e)
             }
     
+    #  Get the uptime of the switch
     def get_uptime(self):
-        """Get the uptime of the switch"""
+        
         result = self.execute("show version | include uptime")
         
         if result['status'] == 'success':
@@ -123,53 +124,156 @@ class switch_command_executor:
         
         return result
     
+    # Get memory usage statistics from the switch and store in database
     def get_memory_stats(self):
-        """Get memory usage statistics from the switch"""
         result = self.execute("show memory statistics")
         
         if result['status'] == 'success':
             try:
                 memory_text = result['output']['raw_output']
                 
-                # Parse memory information using regex
-                # Example: "Total: 12345K, Used: 6789K, Free: 5556K"
-                total_match = re.search(r'Total:\s+(\d+)K', memory_text)
-                used_match = re.search(r'Used:\s+(\d+)K', memory_text)
-                free_match = re.search(r'Free:\s+(\d+)K', memory_text)
+                # First, print the raw output for debugging
+                print(f"Memory raw output: {memory_text}")
                 
-                if total_match and used_match and free_match:
-                    total_kb = int(total_match.group(1))
-                    used_kb = int(used_match.group(1))
-                    free_kb = int(free_match.group(1))
-                    
-                    # Convert to MB for consistency with router output
-                    total_mb = total_kb / 1024
-                    used_mb = used_kb / 1024
-                    free_mb = free_kb / 1024
+                # Parse the table format based on your actual output
+                # Looking for the "Processor" row which contains memory values
+                # Format: "Processor   13A05020   742622176    63279176   679343000   631335180   628445500"
+                processor_match = re.search(r'Processor\s+\w+\s+(\d+)\s+(\d+)\s+(\d+)', memory_text)
+                
+                if processor_match:
+                    total_memory = int(processor_match.group(1))
+                    used_memory = int(processor_match.group(2))
+                    free_memory = int(processor_match.group(3))
                     
                     # Calculate percentage
-                    used_percentage = (used_kb / total_kb) * 100
+                    used_percentage = (used_memory / total_memory) * 100 if total_memory > 0 else 0
+                    
+                    # Store in database
+                    from login.models import DeviceMemory
+                    
+                    DeviceMemory.objects.create(
+                        device_ip=self.device_ip,
+                        total_memory=total_memory,
+                        used_memory=used_memory,
+                        free_memory=free_memory,
+                        lowest_usage=used_memory,  # Using current value as initial lowest
+                        highest_usage=used_memory  # Using current value as initial highest
+                    )
+                    
+                    print(f"Successfully stored memory stats: Total={total_memory}, Used={used_memory}, Free={free_memory}")
                     
                     return {
                         'status': 'success',
                         'output': {
-                            'total': total_mb,
-                            'used': used_mb,
-                            'free': free_mb,
+                            'total': total_memory / (1024 * 1024),  # Convert to MB
+                            'used': used_memory / (1024 * 1024),    # Convert to MB
+                            'free': free_memory / (1024 * 1024),    # Convert to MB
                             'used_percentage': round(used_percentage, 2)
+                        }
+                    }
+                
+                # If the first pattern doesn't match, try another pattern based on the format
+                # "Head    Total(b)     Used(b)     Free(b)"
+                header_match = re.search(r'Head\s+Total\(b\)\s+Used\(b\)\s+Free\(b\)', memory_text)
+                processor_line_match = re.search(r'Processor\s+\w+\s+(\d+)\s+(\d+)\s+(\d+)', memory_text)
+                
+                if header_match and processor_line_match:
+                    total_memory = int(processor_line_match.group(1))
+                    used_memory = int(processor_line_match.group(2))
+                    free_memory = int(processor_line_match.group(3))
+                    
+                    # Store in database
+                    from login.models import DeviceMemory
+                    
+                    DeviceMemory.objects.create(
+                        device_ip=self.device_ip,
+                        total_memory=total_memory,
+                        used_memory=used_memory,
+                        free_memory=free_memory,
+                        lowest_usage=used_memory,
+                        highest_usage=used_memory
+                    )
+                    
+                    print(f"Successfully stored memory stats (alt pattern): Total={total_memory}, Used={used_memory}, Free={free_memory}")
+                    
+                    return {
+                        'status': 'success',
+                        'output': {
+                            'total': total_memory / (1024 * 1024),
+                            'used': used_memory / (1024 * 1024),
+                            'free': free_memory / (1024 * 1024),
+                            'used_percentage': round((used_memory / total_memory) * 100, 2)
+                        }
+                    }
+                
+                # Return the raw text if parsing fails
+                print("Failed to parse memory stats, no pattern matched")
+                print("Memory text:", memory_text)
+                return {
+                    'status': 'error',
+                    'message': 'Failed to parse memory statistics',
+                    'raw_output': memory_text
+                }
+                    
+            except Exception as e:
+                print(f"Error in get_memory_stats: {str(e)}")
+                return {
+                    'status': 'error',
+                    'message': f"Error parsing memory stats: {str(e)}"
+                }
+        
+        return result
+    
+    
+    
+    # Get CPU usage statistics from the switch and store in database
+    def get_cpu_stats(self):
+        
+        result = self.execute("show processes cpu sorted")
+        
+        if result['status'] == 'success':
+            try:
+                cpu_text = result['output']['raw_output']
+                
+                # Parse CPU information using regex
+                # Looking for line like: "CPU utilization for five seconds: 12%/5%; one minute: 8%; five minutes: 5%"
+                cpu_match = re.search(r'CPU utilization for five seconds: (\d+)%.*?; one minute: (\d+)%.*?; five minutes: (\d+)%', cpu_text)
+                
+                if cpu_match:
+                    five_seconds = float(cpu_match.group(1))
+                    one_minute = float(cpu_match.group(2))
+                    five_minutes = float(cpu_match.group(3))
+                    
+                    # Store in database
+                    from login.models import DeviceCPU
+                    
+                    DeviceCPU.objects.create(
+                        device_ip=self.device_ip,
+                        five_seconds=five_seconds,
+                        one_minute=one_minute,
+                        five_minutes=five_minutes
+                    )
+                    
+                    return {
+                        'status': 'success',
+                        'output': {
+                            'five_seconds': five_seconds,
+                            'one_minute': one_minute,
+                            'five_minutes': five_minutes
                         }
                     }
                 
                 # Return the raw text if parsing fails
                 return {
-                    'status': 'success',
-                    'output': {'raw': memory_text}
+                    'status': 'error',
+                    'message': 'Failed to parse CPU data',
+                    'raw_output': cpu_text
                 }
                 
             except Exception as e:
                 return {
                     'status': 'error',
-                    'message': f"Error parsing memory stats: {str(e)}"
+                    'message': f"Error parsing CPU stats: {str(e)}"
                 }
         
         return result

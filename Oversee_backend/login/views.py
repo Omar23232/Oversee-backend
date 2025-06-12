@@ -392,7 +392,60 @@ def execute_command_view(request):
     
     return JsonResponse({'status': 'error', 'message': 'Invalid request method'})
 
-
+# View for device details page
+@login_required
+def device_details_view(request, device_id):
+    device = get_object_or_404(DeviceInfo, id=device_id)
+    
+    if device.device_type =='router':
+        # Fetch and store memory stats for router
+        fetch_and_store_memory_stats(device_ip=device.device_ip)
+        # Fetch and store CPU stats for router
+        fetch_and_store_cpu_stats(device_ip=device.device_ip)
+    elif device.device_type == 'switch':
+        switch_monitor = switch_command_executor(device_ip=device.device_ip)
+        switch_monitor.get_memory_stats()
+        switch_monitor.get_cpu_stats()
+    # Get latest metrics for this specific device
+    memory_stats = DeviceMemory.objects.filter(device_ip=device.device_ip).order_by('-timestamp').first()
+    cpu_stats = DeviceCPU.objects.filter(device_ip=device.device_ip).order_by('-timestamp').first()
+    
+    # Calculate memory percentage if available
+    memory_percentage = 0
+    if memory_stats:
+        memory_percentage = round((memory_stats.used_memory / memory_stats.total_memory) * 100, 2)
+    
+    # Get interfaces for this device
+    try:
+        interfaces = InterfaceStatus.objects.filter(
+            device_ip=device.device_ip
+        ).distinct('name').order_by('name', '-timestamp')
+    except:
+        # Handle case where distinct on field is not supported
+        interfaces = []
+        interface_names = set()
+        for interface in InterfaceStatus.objects.filter(
+            device_ip=device.device_ip
+        ).order_by('name', '-timestamp'):
+            if interface.name not in interface_names:
+                interface_names.add(interface.name)
+                interfaces.append(interface)
+    
+    # Get recent alerts for this device
+    alerts = NetworkAlert.objects.filter(
+        device_ip=device.device_ip
+    ).order_by('-created_at')[:5]
+    
+    return render(request, 'login/partials/device_details.html', {
+        'device': device,
+        'memory_stats': memory_stats,
+        'memory_percentage': memory_percentage,
+        'cpu_stats': cpu_stats,
+        'interfaces': interfaces,
+        'alerts': alerts,
+        'active_tab': 'devices'
+    })
+      
 # view for login logs for admin users
 
 @login_required
@@ -452,7 +505,7 @@ def command_details(request, command_id):
             'message': str(e)
         }, status=500)
         
-        
+
 
 # 403 Forbidden view handler
 
@@ -461,3 +514,4 @@ def custom_403(request, exception=None):
     Custom 403 Forbidden view
     """
     return render(request, 'login/403.html', status=403)
+

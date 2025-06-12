@@ -24,5 +24,6 @@ urlpatterns = [
     path('execute-command/', views.execute_command_view, name='execute_command'),
     path('logs/', views.login_logs_view, name='login_logs'),
     path('command-details/<int:command_id>/', views.command_details, name='command_details'),
+    path('devices/<int:device_id>/details/', views.device_details_view, name='device_details'),
     
     ]

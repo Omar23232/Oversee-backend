@@ -51,7 +51,11 @@
                     <tbody id="devicesTableBody">
                         {% for device in devices %}
                         <tr tabindex="0" role="row" class="device-row">
-                            <td data-label="Hostname">{{ device.hostname }}</td>
+                            <td data-label="Hostname">
+                                <a href="{% url 'device_details' device.id %}" class="device-link">
+                                    {{ device.hostname }}
+                                </a>
+                            </td>
                             <td data-label="Uptime" title="{{ device.uptime }}">{{ device.uptime }}</td>
                             <td data-label="System Description" title="{{ device.system_description }}">
                                 {{ device.system_description }}

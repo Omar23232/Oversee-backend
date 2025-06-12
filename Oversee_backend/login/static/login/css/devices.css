@@ -259,3 +259,16 @@
     outline: none;
 }
 
+
+/* Add at the end of the file */
+.device-link {
+    color: #694707;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s ease;
+}
+
+.device-link:hover {
+    color: #523204;
+    text-decoration: underline;
+}
