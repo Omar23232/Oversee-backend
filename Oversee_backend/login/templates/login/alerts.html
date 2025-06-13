@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="{% static 'login/css/dashboard.css' %}" />
     <link rel="stylesheet" href="{% static 'login/css/alerts.css' %}" />
     <link rel="stylesheet" href="{% static 'login/css/sidebar.css' %}" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 
 <body>
@@ -19,39 +20,11 @@
     
     <!-- Main Content -->
     <main class="main-content">
-            <div class="alerts-header">
-                <h2><i class="fas fa-bell"></i> Network Alerts</h2>
-                <button id="configureThresholdsBtn" class="primary-btn" aria-label="Configure Alert Thresholds">
-                    <i class="fas fa-cog"></i> Configure Thresholds
-                </button>
-            </div>
-
-        <div class="alerts-container" role="region" aria-label="Network Alerts">
-            <div id="loadingSpinner" class="loading-spinner" role="status" aria-label="Loading alerts">
-                <div class="spinner"></div>
-            </div>
-
-            <div id="emptyState" class="empty-state">
-                <i class="fas fa-check-circle"></i>
-                <h3>All Clear!</h3>
-                <p>No active alerts at the moment.</p>
-            </div>
-
-            <table class="alerts-table" role="table">
-                <thead>
-                    <tr>
-                        <th scope="col">Alert Name</th>
-                        <th scope="col">Severity</th>
-                        <th scope="col">Date</th>
-                        <th scope="col">Device</th>
-                        <th scope="col">Details</th>
-                        <th scope="col">Actions</th>
-                    </tr>
-                </thead>
-                <tbody id="alertsTableBody">
-                    <!-- Will be populated by JavaScript -->
-                </tbody>
-            </table>
+        <div class="alerts-header">
+            <h2><i class="fas fa-bell"></i> Network Alerts</h2>
+            <button id="configureThresholdsBtn" class="primary-btn" aria-label="Configure Alert Thresholds">
+                <i class="fas fa-cog"></i> Configure Thresholds
+            </button>
         </div>
 
         <!-- Filter Panel -->
@@ -85,6 +58,34 @@
                     </label>
                 </div>
             </div>
+        </div>
+
+        <div class="alerts-container" role="region" aria-label="Network Alerts">
+            <div id="loadingSpinner" class="loading-spinner" role="status" aria-label="Loading alerts">
+                <div class="spinner"></div>
+            </div>
+
+            <div id="emptyState" class="empty-state">
+                <i class="fas fa-check-circle"></i>
+                <h3>All Clear!</h3>
+                <p>No active alerts at the moment.</p>
+            </div>
+
+            <table class="alerts-table" role="table">
+                <thead>
+                    <tr>
+                        <th scope="col">Alert Name</th>
+                        <th scope="col">Severity</th>
+                        <th scope="col">Date</th>
+                        <th scope="col">Device</th>
+                        <th scope="col">Details</th>
+                        <th scope="col">Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="alertsTableBody">
+                    <!-- Will be populated by JavaScript -->
+                </tbody>
+            </table>
         </div>
     </main>
 
