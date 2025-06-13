@@ -41,7 +41,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
 
-    // Add to alerts.js in the DOMContentLoaded function
 const showAcknowledgedCheckbox = document.getElementById('showAcknowledgedCheckbox');
 let showAcknowledged = false;
 
@@ -52,7 +51,7 @@ if (showAcknowledgedCheckbox) {
     });
 }
 
-// Update fetchAlerts function
+// Fetch alerts from the server
 function fetchAlerts() {
     showLoading();
     fetch(`/alerts-api/?show_acknowledged=${showAcknowledged}`)
@@ -168,7 +167,7 @@ function fetchAlerts() {
                 </td>
             `;
 
-            // Add event listeners for the acknowledge button
+            // event listener for acknowledge button
             const acknowledgeBtn = row.querySelector('.acknowledge-btn');
             if (acknowledgeBtn && !alert.is_acknowledged) {
                 acknowledgeBtn.addEventListener('click', () => acknowledgeAlert(alert.id));
@@ -230,9 +229,7 @@ function fetchAlerts() {
             if (name === 'csrftoken') return value;
         }
         return '';
-    }
-
-    function showError(message) {
+    }    function showError(message) {
         const errorDiv = document.createElement('div');
         errorDiv.className = 'alert alert-error';
         errorDiv.role = 'alert';
@@ -242,10 +239,15 @@ function fetchAlerts() {
             <button class="close-btn" aria-label="Close alert">×</button>
         `;
         
-        document.querySelector('.main-content').insertBefore(
-            errorDiv,
-            document.querySelector('.alerts-header')
-        );
+        const mainContent = document.querySelector('.main-content');
+        const alertsHeader = document.querySelector('.alerts-header');
+        
+        if (mainContent && alertsHeader) {
+            mainContent.insertBefore(errorDiv, alertsHeader);
+        } else {
+            // Fallback if elements aren't found
+            document.body.insertBefore(errorDiv, document.body.firstChild);
+        }
 
         // Auto-hide after 5 seconds
         setTimeout(() => {
