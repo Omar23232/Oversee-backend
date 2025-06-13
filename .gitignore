@@ -18,6 +18,8 @@ env/
 # IDE
 .vscode/
 .idea/
+# Collected static files
+staticfiles/
 
 # Environment variables
 .env
