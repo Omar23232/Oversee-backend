@@ -404,6 +404,7 @@ def device_details_view(request, device_id):
         switch_monitor = switch_command_executor(device_ip=device.device_ip)
         switch_monitor.get_memory_stats()
         switch_monitor.get_cpu_stats()
+        switch_monitor.get_interface_stats()
     # Get latest metrics for this specific device
     memory_stats = DeviceMemory.objects.filter(device_ip=device.device_ip).order_by('-timestamp').first()
     cpu_stats = DeviceCPU.objects.filter(device_ip=device.device_ip).order_by('-timestamp').first()

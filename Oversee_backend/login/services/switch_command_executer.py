@@ -268,3 +268,133 @@ class switch_command_executor:
                 }
         
         return result
+    
+    
+    # Get interface statistics from the switch and store in database
+    def get_interface_stats(self):
+        result = self.execute("show interfaces")
+        
+        if result['status'] == 'success':
+            try:
+                interfaces_text = result['output']['raw_output']
+                
+                # Split the output by interface sections
+                # Each interface section starts with the interface name followed by 'is'
+                # Restrict to only GigabitEthernet or Vlan interfaces
+                interface_pattern = r'((GigabitEthernet\d+/\d+|Vlan\d+)) is ([\w/()-]+).*?(?=(?:(GigabitEthernet\d+/\d+|Vlan\d+) is|\Z))'
+                interface_sections = re.findall(interface_pattern, interfaces_text, re.DOTALL)
+                
+                print(f"Found {len(interface_sections)} valid interface sections")
+                
+                # Keep track of successful interfaces processed
+                processed_interfaces = []
+                
+                for section in interface_sections:
+                    try:
+                        interface_name = section[0]  # The interface name is now in index 0
+                        status = section[2].lower()  # Status is now in index 2
+                        interface_text = interface_name + " is " + status  # Beginning of the text
+                        full_section_text = section[3] if len(section) > 3 else ""  # Full section text
+                        
+                        print(f"Processing interface: {interface_name}, status: {status}")
+                        
+                        # Extract MAC address
+                        mac_match = re.search(r'address is ([0-9a-f.]{14})', interface_text)
+                        if not mac_match:
+                            # Try searching in the full text for this interface
+                            mac_match = re.search(r'address is ([0-9a-f.]{14})', full_section_text)
+                        
+                        mac_address = mac_match.group(1).replace('.', '') if mac_match else "00:00:00:00:00:00"
+                        
+                        # Format MAC address with colons
+                        mac_formatted = ':'.join(mac_address[i:i+2] for i in range(0, 12, 2))
+                        
+                        # Extract bandwidth information - Look in full section text
+                        in_rate_match = re.search(r'(\d+) minute input rate (\d+) bits/sec', full_section_text)
+                        out_rate_match = re.search(r'(\d+) minute output rate (\d+) bits/sec', full_section_text)
+                        
+                        in_bandwidth = float(in_rate_match.group(2)) / 1000000 if in_rate_match else 0  # Convert to Mbps
+                        out_bandwidth = float(out_rate_match.group(2)) / 1000000 if out_rate_match else 0  # Convert to Mbps
+                        
+                        # Extract packet statistics
+                        in_packets_match = re.search(r'(\d+) packets input', full_section_text)
+                        out_packets_match = re.search(r'(\d+) packets output', full_section_text)
+                        
+                        in_packets = int(in_packets_match.group(1)) if in_packets_match else 0
+                        out_packets = int(out_packets_match.group(1)) if out_packets_match else 0
+                        
+                        # Extract error statistics
+                        in_errors_match = re.search(r'(\d+) input errors', full_section_text)
+                        out_errors_match = re.search(r'(\d+) output errors', full_section_text)
+                        
+                        in_errors = int(in_errors_match.group(1)) if in_errors_match else 0
+                        out_errors = int(out_errors_match.group(1)) if out_errors_match else 0
+                        
+                        # Calculate error rate - define total_errors first
+                        total_errors = in_errors + out_errors
+                        total_packets = in_packets + out_packets
+                        error_rate = (total_errors / total_packets * 100) if total_packets > 0 else 0
+                        
+                        # Extract discards if available
+                        in_discards_match = re.search(r'Input queue: (\d+)/\d+/\d+/\d+', full_section_text)
+                        in_discards = int(in_discards_match.group(1)) if in_discards_match else 0
+                        
+                        out_discards_match = re.search(r'Total output drops: (\d+)', full_section_text)
+                        out_discards = int(out_discards_match.group(1)) if out_discards_match else 0
+                        
+                        # Calculate packet loss
+                        packet_loss = ((in_discards + out_discards) / total_packets * 100) if total_packets > 0 else 0
+                        
+                        # Use current time as last_change
+                        last_change = timezone.now()
+                        
+                        # Store in the database
+                        from login.models import InterfaceStatus
+                        
+                        InterfaceStatus.objects.create(
+                            device_ip=self.device_ip,
+                            name=interface_name,
+                            oper_status="up" if "up" in status else "down",
+                            last_change=last_change,
+                            mac_address=mac_formatted,
+                            in_bandwidth=in_bandwidth,
+                            out_bandwidth=out_bandwidth,
+                            in_errors=in_errors,
+                            out_errors=out_errors,
+                            in_discards=in_discards,
+                            out_discards=out_discards,
+                            in_packets=in_packets,
+                            out_packets=out_packets,
+                            error_rate=error_rate,
+                            packet_loss=packet_loss
+                        )
+                        
+                        processed_interfaces.append({
+                            'name': interface_name,
+                            'status': "up" if "up" in status else "down",
+                            'mac': mac_formatted,
+                            'in_bandwidth': round(in_bandwidth, 2),
+                            'out_bandwidth': round(out_bandwidth, 2),
+                            'error_rate': round(error_rate, 3),
+                            'packet_loss': round(packet_loss, 3)
+                        })
+                        
+                    except Exception as e:
+                        print(f"Error processing interface {interface_name}: {str(e)}")
+                        continue
+                
+                print(f"Successfully processed {len(processed_interfaces)} interfaces")
+                return {
+                    'status': 'success',
+                    'interfaces': processed_interfaces,  # Use 'interfaces' key for consistency
+                    'output': processed_interfaces  # Keep 'output' for backward compatibility
+                }
+                    
+            except Exception as e:
+                print(f"Error in get_interface_stats: {str(e)}")
+                return {
+                    'status': 'error',
+                    'message': f"Error parsing interface stats: {str(e)}"
+                }
+        
+        return result
