@@ -1,0 +1,52 @@
+{% load static %}
+{% block content %}
+<aside class="sidebar">
+    <div class="logo">MONITORING.</div>
+    <nav>
+        <ul>
+            <li class="{% if active_tab == 'dashboard' %}active{% endif %}">
+                <a href="{% url 'dashboard' %}">
+                    <i class="fas fa-chart-line"></i>
+                    Dashboard
+                </a>
+            </li>
+            <li class="{% if active_tab == 'devices' %}active{% endif %}">
+                <a href="{% url 'devices' %}">
+                    <i class="fas fa-server"></i>
+                    Devices
+                </a>
+            </li>
+            <li class="{% if active_tab == 'alerts' %}active{% endif %}">
+                <a href="{% url 'alerts' %}">
+                    <i class="fas fa-bell"></i>
+                    Alerts
+                </a>
+            </li>
+            <li class="{% if active_tab == 'settings' %}active{% endif %}">
+                <a href="#">
+                    <i class="fas fa-cog"></i>
+                    Settings
+                </a>
+            </li>
+            <li class="{% if active_tab == 'logs' %}active{% endif %}">
+                <a href="{% url 'login_logs' %}">
+                    <i class="fas fa-clipboard-list"></i>
+                    Logs
+                </a>
+            </li>
+            <li>
+                <form action="{% url 'logout' %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="logout-link">
+                        <i class="fas fa-sign-out-alt"></i>
+                        Logout
+                    </button>
+                </form>
+            </li>
+        </ul>
+    </nav>
+</aside>
+
+<!-- Add Font Awesome for icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+{% endblock %}

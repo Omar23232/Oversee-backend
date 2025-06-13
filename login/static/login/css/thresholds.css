@@ -1,0 +1,144 @@
+/* Content Area */
+.content-area {
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Threshold Card */
+.threshold-card {
+    background: #6A9AB026;
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+}
+
+.threshold-card h3 {
+    color: #464255;
+    font-size: 1.2rem;
+    margin-bottom: 1.5rem;
+    font-weight: 600;
+}
+
+/* Form Styling */
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #464255;
+    font-weight: 500;
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    background-color: white;
+    color: #464255;
+    font-size: 1rem;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: #464255;
+    box-shadow: 0 0 0 3px rgba(105, 71, 7, 0.1);
+}
+
+/* Button Styling */
+.form-actions {
+    margin-top: 2rem;
+}
+
+.btn-primary {
+    background-color: #001F3F;
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.btn-primary:hover {
+    background-color: #021b35;
+}
+
+/* Table Styling */
+.thresholds-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin-top: 1rem;
+}
+
+.thresholds-table th {
+    text-align: left;
+    padding: 1rem;
+    background: #6A9AB026;
+    color: #001F3F;
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+}
+
+.thresholds-table td {
+    padding: 1rem;
+    border-bottom: 1px solid #e2e8f0;
+    color: #2c3e50;
+}
+
+/* Severity Indicators */
+.severity-warning {
+    color: #001F3F;
+    font-weight: 500;
+}
+
+.severity-critical {
+    color: #dc2626;
+    font-weight: 500;
+}
+
+.severity-emergency {
+    color: #991b1b;
+    font-weight: 700;
+}
+
+/* Delete Button */
+.delete-btn {
+    background: #ef4444;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.delete-btn:hover {
+    background: #dc2626;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .content-area {
+        padding: 1rem;
+    }
+
+    .threshold-card {
+        padding: 1rem;
+    }
+
+    .thresholds-table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+}

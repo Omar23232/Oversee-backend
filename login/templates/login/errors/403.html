@@ -1,0 +1,80 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Access Denied - Oversee</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+    <link rel="stylesheet" href="{% static 'login/css/dashboard.css' %}" />
+    <link rel="stylesheet" href="{% static 'login/css/sidebar.css' %}" />
+    <style>
+        .forbidden-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 3rem 1rem;
+            text-align: center;
+            height: 70vh;
+        }
+        
+        .forbidden-icon {
+            font-size: 5rem;
+            color: #e53e3e;
+            margin-bottom: 1.5rem;
+        }
+        
+        .forbidden-title {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: #2d3748;
+        }
+        
+        .forbidden-message {
+            max-width: 500px;
+            margin-bottom: 2rem;
+            color: #4a5568;
+            line-height: 1.5;
+        }
+        
+        .go-back-btn {
+            background-color: #001F3F;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .go-back-btn:hover {
+            background-color: #021322;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Sidebar -->
+    {% include 'login/partials/sidebar.html' %}
+    
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="forbidden-container">
+            <i class="fas fa-exclamation-triangle forbidden-icon"></i>
+            <h1 class="forbidden-title">Access Denied</h1>
+            <p class="forbidden-message">
+                You don't have permission to access this page. This area is restricted to users with higher privilege levels.
+            </p>
+            <a href="{% url 'dashboard' %}" class="go-back-btn">
+                <i class="fas fa-arrow-left"></i> Return to Dashboard
+            </a>
+        </div>
+    </main>
+</body>
+</html>

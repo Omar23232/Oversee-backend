@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+{% load static %}
+{% block content %}
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Network Alerts - Oversee</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+    <link rel="stylesheet" href="{% static 'login/css/dashboard.css' %}" />
+    <link rel="stylesheet" href="{% static 'login/css/alerts.css' %}" />
+    <link rel="stylesheet" href="{% static 'login/css/sidebar.css' %}" />
+</head>
+
+<body>
+    <!-- Sidebar -->
+    {% include 'login/partials/sidebar.html' %}
+    
+    <!-- Main Content -->
+    <main class="main-content">
+            <div class="alerts-header">
+                <h2><i class="fas fa-bell"></i> Network Alerts</h2>
+                <button id="configureThresholdsBtn" class="primary-btn" aria-label="Configure Alert Thresholds">
+                    <i class="fas fa-cog"></i> Configure Thresholds
+                </button>
+            </div>
+
+        <div class="alerts-container" role="region" aria-label="Network Alerts">
+            <div id="loadingSpinner" class="loading-spinner" role="status" aria-label="Loading alerts">
+                <div class="spinner"></div>
+            </div>
+
+            <div id="emptyState" class="empty-state">
+                <i class="fas fa-check-circle"></i>
+                <h3>All Clear!</h3>
+                <p>No active alerts at the moment.</p>
+            </div>
+
+            <table class="alerts-table" role="table">
+                <thead>
+                    <tr>
+                        <th scope="col">Alert Name</th>
+                        <th scope="col">Severity</th>
+                        <th scope="col">Date</th>
+                        <th scope="col">Device</th>
+                        <th scope="col">Details</th>
+                        <th scope="col">Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="alertsTableBody">
+                    <!-- Will be populated by JavaScript -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Filter Panel -->
+      <div class="filter-panel rounded-xl shadow-md p-4 bg-white max-w-md mx-auto">
+    <button id="toggleFilters" class="secondary-btn flex items-center gap-2 text-blue-600 font-semibold px-4 py-2 rounded-md border border-blue-600 hover:bg-blue-50 transition-all duration-200" aria-expanded="false">
+        <i class="fas fa-filter"></i> 
+        <span>Show Filters</span>
+    </button>
+    
+    <div id="filterOptions" class="filter-options mt-4 space-y-4 hidden">
+        <div class="filter-group">
+            <label for="severityFilter" class="block text-sm font-medium text-gray-700 mb-1">Severity:</label>
+            <select id="severityFilter" class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" aria-label="Filter by severity">
+                <option value="">All</option>
+                <option value="critical">Critical</option>
+                <option value="warning">Warning</option>
+                <option value="info">Info</option>
+            </select>
+        </div>
+
+        <div class="filter-group">
+            <label for="dateFilter" class="block text-sm font-medium text-gray-700 mb-1">Time Range:</label>
+            <select id="dateFilter" class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" aria-label="Filter by time range">
+                <option value="24h">Last 24 Hours</option>
+                <option value="7d">Last 7 Days</option>
+                <option value="30d">Last 30 Days</option>
+                <option value="all">All Time</option>
+            </select>
+        </div>
+    </div>
+</div>
+
+    </main>
+
+    <script src="{% static 'login/js/alerts.js' %}"></script>
+</body>
+</html>
+{% endblock %}
+<!-- This is the end of the alerts.html file -->

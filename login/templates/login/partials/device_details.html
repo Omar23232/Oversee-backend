@@ -1,0 +1,191 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ device.hostname }} - Device Details</title>
+    <link rel="stylesheet" href="{% static 'login/css/sidebar.css' %}" />
+    <link rel="stylesheet" href="{% static 'login/css/devices.css' %}" />
+    <link rel="stylesheet" href="{% static 'login/css/device_details.css' %}" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    {% include 'login/partials/sidebar.html' %}
+    
+    <main class="main-content">
+        <div class="content-area">
+            <div class="page-header">
+                <h1 id="device-details-heading">
+                    <i class="fas fa-server"></i> {{ device.hostname }}
+                    <span class="device-type-badge">{{ device.get_device_type_display }}</span>
+                </h1>
+                <div class="header-actions">
+                    <a href="{% url 'device_command' device.id %}" class="btn btn-primary">
+                        <i class="fas fa-terminal"></i> Execute Command
+                    </a>
+                    <a href="{% url 'devices' %}" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left"></i> Back to Devices
+                    </a>
+                </div>
+            </div>
+
+            <div class="device-overview">
+                <div class="device-info-card">
+                    <h2>Device Information</h2>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <span class="info-label">IP Address</span>
+                            <span class="info-value">{{ device.device_ip }}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Status</span>
+                            <span class="info-value status-{{ device.status|lower }}">{{ device.status }}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Location</span>
+                            <span class="info-value">{{ device.location }}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Uptime</span>
+                            <span class="info-value" id="uptime-value">{{ device.uptime }}</span>
+                        </div>
+                        <div class="info-item full-width">
+                            <span class="info-label">System Description</span>
+                            <span class="info-value">{{ device.system_description }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="metrics-grid">
+                <!-- Memory Usage Card -->
+                <div class="metric-card">
+                    <h2>Memory Usage</h2>
+                    <div class="chart-container">
+                        <canvas id="memoryChart"></canvas>
+                        <div class="chart-center-value">
+                            <span id="memory-percentage">{{ memory_percentage }}%</span>
+                        </div>
+                    </div>
+                    <div class="metric-details">
+                        {% if memory_stats %}
+                        <div class="metric-item">
+                            <span class="metric-label">Total</span>
+                            <span class="metric-value">{{ memory_stats.total_memory|filesizeformat }}</span>
+                        </div>
+                        <div class="metric-item">
+                            <span class="metric-label">Used</span>
+                            <span class="metric-value">{{ memory_stats.used_memory|filesizeformat }}</span>
+                        </div>
+                        <div class="metric-item">
+                            <span class="metric-label">Free</span>
+                            <span class="metric-value">{{ memory_stats.free_memory|filesizeformat }}</span>
+                        </div>
+                        <div class="metric-item">
+                            <span class="metric-label">Last Updated</span>
+                            <span class="metric-value">{{ memory_stats.timestamp|time:"H:i:s" }}</span>
+                        </div>
+                        {% else %}
+                        <p class="no-data">No memory data available</p>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- CPU Usage Card -->
+                <div class="metric-card">
+                    <h2>CPU Usage</h2>
+                    <div class="chart-container">
+                        <canvas id="cpuChart"></canvas>
+                    </div>
+                    <div class="metric-details">
+                        {% if cpu_stats %}
+                        <div class="metric-item">
+                            <span class="metric-label">5 Seconds</span>
+                            <span class="metric-value">{{ cpu_stats.five_seconds }}%</span>
+                        </div>
+                        <div class="metric-item">
+                            <span class="metric-label">1 Minute</span>
+                            <span class="metric-value">{{ cpu_stats.one_minute }}%</span>
+                        </div>
+                        <div class="metric-item">
+                            <span class="metric-label">5 Minutes</span>
+                            <span class="metric-value">{{ cpu_stats.five_minutes }}%</span>
+                        </div>
+                        <div class="metric-item">
+                            <span class="metric-label">Last Updated</span>
+                            <span class="metric-value">{{ cpu_stats.timestamp|time:"H:i:s" }}</span>
+                        </div>
+                        {% else %}
+                        <p class="no-data">No CPU data available</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Interface Status -->
+            <div class="interfaces-section">
+                <h2>Interface Status</h2>
+                <div class="table-container">
+                    <table class="interfaces-table">
+                        <thead>
+                            <tr>
+                                <th>Interface</th>
+                                <th>Status</th>
+                                <th>MAC Address</th>
+                                <th>In Bandwidth</th>
+                                <th>Out Bandwidth</th>
+                                <th>Error Rate</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for interface in interfaces %}
+                            <tr>
+                                <td>{{ interface.name }}</td>
+                                <td>
+                                    <span class="status-badge status-{{ interface.oper_status|lower }}">
+                                        {{ interface.oper_status }}
+                                    </span>
+                                </td>
+                                <td>{{ interface.mac_address }}</td>
+                                <td>{{ interface.in_bandwidth|floatformat:2 }} Mbps</td>
+                                <td>{{ interface.out_bandwidth|floatformat:2 }} Mbps</td>
+                                <td>{{ interface.error_rate|floatformat:3 }}%</td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="6" class="no-data-cell">No interface data available</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Recent Alerts -->
+            <div class="alerts-section">
+                <h2>Recent Alerts</h2>
+                <div class="alerts-container">
+                    {% for alert in alerts %}
+                    <div class="alert-card severity-{{ alert.severity|lower }}">
+                        <div class="alert-icon">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                        <div class="alert-details">
+                            <h3>{{ alert.metric_name }}</h3>
+                            <p>Current value: {{ alert.metric_value|floatformat:2 }}% (Threshold: {{ alert.threshold_value }}%)</p>
+                            <p class="alert-time">{{ alert.created_at|date:"M d, Y H:i" }}</p>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <p class="no-data">No alerts for this device</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="{% static 'login/js/device_details.js' %}"></script>
+</body>
+</html>

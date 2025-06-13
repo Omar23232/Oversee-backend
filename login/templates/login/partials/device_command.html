@@ -1,0 +1,60 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Execute Command - {{ device.hostname }}</title>
+   
+    <link rel="stylesheet" href="{% static 'login/css/device_command.css' %}" />
+    <link rel="stylesheet" href="{% static 'login/css/dashboard.css' %}" />
+    <link rel="stylesheet" href="{% static 'login/css/devices.css' %}" />
+    <link rel="stylesheet" href="{% static 'login/css/sidebar.css' %}" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+</head>
+<body>
+    {% include 'login/partials/sidebar.html' %}
+    
+    <main class="main-content">
+        <div class="command-container">
+            <div class="command-header">
+                <h2>Execute Command</h2>
+                <div class="device-info">
+                    <p><strong>Device:</strong> {{ device.hostname }}</p>
+                    <p><strong>IP:</strong> {{ device.device_ip }}</p>
+                </div>
+            </div>
+
+            <div class="command-form-wrapper">
+                <form id="commandForm" class="command-form">
+                    {% csrf_token %}
+                    <input type="hidden" name="device_ip" value="{{ device.device_ip }}">
+                    <div class="form-group">
+                        <label for="command">Enter Command:</label>
+                        <input type="text" 
+                               id="command" 
+                               name="command" 
+                               placeholder="Enter Cisco IOS command..."
+                               required>
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-execute">
+                            <i class="fas fa-terminal"></i> Execute
+                        </button>
+                        <a href="{% url 'devices' %}" class="btn btn-cancel">Cancel</a>
+                    </div>
+                </form>
+            </div>
+
+            <div class="output-section">
+                <h3>Command Output</h3>
+                <div id="outputDisplay" class="command-output">
+                    <p class="output-placeholder">Output will appear here...</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="{% static 'login/js/device_command.js' %}"></script>
+</body>
+</html>

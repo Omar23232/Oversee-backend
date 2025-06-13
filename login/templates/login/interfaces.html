@@ -1,0 +1,137 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Interfaces</title>
+    <link rel="stylesheet" href="{% static 'login/css/sidebar.css' %}" />
+    <link rel="stylesheet" href="{% static 'login/css/interfaces.css' %}">
+</head>
+
+<body>
+    {% include 'login/partials/sidebar.html' %}
+    
+    <main class="main-content">
+        <div class="content-area">
+            <h2>Interfaces Detailed</h2>
+            
+            <div class="refresh-indicator">
+                <span class="dot"></span>
+                <span id="last-updated">Last updated: Just now</span>
+            </div>
+            
+            <div class="table-container">
+                <div id="loading-overlay" class="loading-overlay">
+                    <div class="spinner"></div>
+                </div>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Status</th>
+                            <th>MAC</th>
+                            <th>Bandwidth In/Out</th>
+                            <th>Error Rate</th>
+                            <th>Packet Loss</th>
+                            <th>Last Change</th>
+                        </tr>
+                    </thead>
+                    <tbody id="interfaces-table-body">
+                        <!-- Will be filled by JS -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const loadingOverlay = document.getElementById('loading-overlay');
+        const lastUpdatedElement = document.getElementById('last-updated');
+        
+        // Function to update timestamp
+        function updateTimestamp() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString();
+            lastUpdatedElement.textContent = `Last updated: ${timeString}`;
+        }
+        
+        // Function to fetch interface data
+        function fetchInterfaceData() {
+            loadingOverlay.style.display = 'flex';
+            
+            fetch('/interface-api/')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    loadingOverlay.style.display = 'none';
+                    updateTimestamp();
+                    
+                    if (data.status === 'success' && Array.isArray(data.interfaces)) {
+                        const tbody = document.getElementById('interfaces-table-body');
+                        if (data.interfaces.length === 0) {
+                            tbody.innerHTML = '<tr><td colspan="7" class="empty-row">No interfaces found</td></tr>';
+                            return;
+                        }
+                        
+                        tbody.innerHTML = data.interfaces.map(intf => `
+                            <tr>
+                                <td data-label="Name">${intf.name}</td>
+                                <td data-label="Status" class="status-${intf.status.replace(/_/g, '-').toLowerCase()}">${intf.status}</td>
+                                <td data-label="MAC">${intf.mac || 'N/A'}</td>
+                                <td data-label="Bandwidth">
+                                    <div class="bandwidth-info">
+                                        <span class="bandwidth-in">In: ${intf.in_bandwidth.toFixed(2)} Mbps</span>
+                                        <span class="bandwidth-out">Out: ${intf.out_bandwidth.toFixed(2)} Mbps</span>
+                                    </div>
+                                </td>
+                                <td data-label="Error Rate" class="${intf.error_rate > 0.1 ? 'warning' : ''}">
+                                    ${intf.error_rate.toFixed(3)}%
+
+                                    {% comment %} <div class="tooltip">
+                                        In Errors: ${intf.in_errors}, Out Errors: ${intf.out_errors}
+                                    </div> {% endcomment %}
+                                    
+                                </td>
+                                <td data-label="Packet Loss" class="${intf.packet_loss > 0.5 ? 'warning' : ''}">
+                                    ${intf.packet_loss.toFixed(3)}%
+
+                                    {% comment %} <div class="tooltip">
+                                        In Discards: ${intf.in_discards}, Out Discards: ${intf.out_discards}
+                                    </div> {% endcomment %}
+
+
+                                </td>
+                                <td data-label="Last Change">${intf.last_change}</td>
+                            </tr>
+                        `).join('');
+                    } else if (data.status === 'error') {
+                        document.getElementById('interfaces-table-body').innerHTML = 
+                            `<tr><td colspan="7" class="empty-row">${data.message || 'Error loading interfaces'}</td></tr>`;
+                    } else {
+                        document.getElementById('interfaces-table-body').innerHTML = 
+                            '<tr><td colspan="7" class="empty-row">No data available</td></tr>';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching interface data:', error);
+                    loadingOverlay.style.display = 'none';
+                    document.getElementById('interfaces-table-body').innerHTML = 
+                        '<tr><td colspan="7" class="empty-row">Error connecting to server</td></tr>';
+                });
+        }
+        
+        // Initial fetch
+        fetchInterfaceData();
+        
+        // Set up auto-refresh every 60 seconds
+        setInterval(fetchInterfaceData, 60000);
+    });
+    </script>
+</body>
+</html>

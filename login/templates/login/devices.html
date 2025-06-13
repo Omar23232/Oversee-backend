@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />    
+    <title>Network Devices - Management Dashboard</title>
+    <meta name="description" content="Network devices management dashboard showing device status, information and commands">
+    <link rel="stylesheet" href="{% static 'login/css/dashboard.css' %}" />
+    <link rel="stylesheet" href="{% static 'login/css/devices.css' %}" />
+    <link rel="stylesheet" href="{% static 'login/css/sidebar.css' %}" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+</head>
+
+<body>
+    {% include 'login/partials/sidebar.html' %}    <main class="main-content">
+        <section class="content-area">
+            <div class="page-header">
+                <h1 id="devices-heading">
+                    <i class="fas fa-server"></i> Network Devices
+                </h1>
+            </div>
+
+            <div class="button-container" role="toolbar" >                <a href="{% url 'add_device_auto' %}" 
+                   class="btn btn-primary" 
+                   role="button">
+                    <i class="fas fa-magic" aria-hidden="true"></i>
+                    <span>Add Device Automatically</span>
+                </a>                <a href="{% url 'add_device_manual' %}" 
+                   class="btn btn-secondary"
+                   role="button">
+                    <i class="fas fa-plus" aria-hidden="true"></i>
+                    <span>Add Device Manually</span>
+                </a>
+            </div>
+
+            <div class="table-container" role="region">
+                <table class="devices-table" 
+                       role="grid">
+                    <thead>
+                        <tr role="row">
+                            <th scope="col" role="columnheader">Hostname</th>
+                            <th scope="col" role="columnheader">Uptime</th>
+                            <th scope="col" role="columnheader">System Description</th>
+                            <th scope="col" role="columnheader">Location</th>
+                            <th scope="col" role="columnheader">Status</th>
+                            <th scope="col" role="columnheader">IP Address</th>
+                            <th scope="col" role="columnheader">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="devicesTableBody">
+                        {% for device in devices %}
+                        <tr tabindex="0" role="row" class="device-row">
+                            <td data-label="Hostname">
+                                <a href="{% url 'device_details' device.id %}" class="device-link">
+                                    {{ device.hostname }}
+                                </a>
+                            </td>
+                            <td data-label="Uptime" title="{{ device.uptime }}">{{ device.uptime }}</td>
+                            <td data-label="System Description" title="{{ device.system_description }}">
+                                {{ device.system_description }}
+                            </td>
+                            <td data-label="Location">{{ device.location }}</td>
+                            <td data-label="Status">
+                                <span class="status-{{ device.status|lower }}" role="status">
+                                    {{ device.status }}
+                                </span>
+                            </td>
+                            <td data-label="IP Address">{{ device.device_ip }}</td>
+                            <td data-label="Actions">
+                                <a href="{% url 'device_command' device.id %}" 
+                                   class="btn btn-command"
+                                   role="button">
+                                    <i class="fas fa-terminal" aria-hidden="true"></i>
+                                    <span>Execute Command</span>
+                                </a>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="7" class="empty-row" role="cell">
+                                <div class="empty-state">
+                                    <i class="fas fa-server" aria-hidden="true"></i>
+                                    <p>No devices found</p>
+                                    <p>Add your first device to get started</p>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <script src="{% static 'login/js/devices.js' %}"></script>
+</body>
+</html>
