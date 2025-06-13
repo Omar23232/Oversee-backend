@@ -279,8 +279,6 @@ class switch_command_executor:
                 interfaces_text = result['output']['raw_output']
                 
                 # Split the output by interface sections
-                # Each interface section starts with the interface name followed by 'is'
-                # Restrict to only GigabitEthernet or Vlan interfaces
                 interface_pattern = r'((GigabitEthernet\d+/\d+|Vlan\d+)) is ([\w/()-]+).*?(?=(?:(GigabitEthernet\d+/\d+|Vlan\d+) is|\Z))'
                 interface_sections = re.findall(interface_pattern, interfaces_text, re.DOTALL)
                 
