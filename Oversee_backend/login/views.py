@@ -92,7 +92,7 @@ def alerts_view(request):
 def memory_stats_api(request):
     
     device = DeviceInfo.objects.filter(device_type='router', hostname='Main Router').first()
-    if device :
+    if device:
         device_ip = device.device_ip
     else:
         return JsonResponse({'status': 'error', 'message': 'Device not found'}, status=404)
@@ -110,13 +110,23 @@ def memory_stats_api(request):
             thresholds = NetworkThreshold.objects.filter(metric='memory')
             for threshold in thresholds:
                 if used_percentage >= threshold.threshold_value:
-                    NetworkAlert.objects.create(
+                    # Check if an unacknowledged alert already exists for this metric and severity
+                    existing_alert = NetworkAlert.objects.filter(
                         device_ip=latest_stat.device_ip,
                         metric_name='Memory Usage',
-                        metric_value=used_percentage,
-                        threshold_value=threshold.threshold_value,
-                        severity=threshold.severity
-                    )
+                        severity=threshold.severity,
+                        is_acknowledged=False
+                    ).first()
+                    
+                    if not existing_alert:
+                        # Create new alert only if no unacknowledged alert exists
+                        NetworkAlert.objects.create(
+                            device_ip=latest_stat.device_ip,
+                            metric_name='Memory Usage',
+                            metric_value=used_percentage,
+                            threshold_value=threshold.threshold_value,
+                            severity=threshold.severity
+                        )
             
             data = {
                 'used_percentage': round(used_percentage, 2),
@@ -142,7 +152,7 @@ def memory_stats_api(request):
 def cpu_stats_api(request):
     
     device = DeviceInfo.objects.filter(device_type='router', hostname='Main Router').first()
-    if device :
+    if device:
         device_ip = device.device_ip
     else:
         return JsonResponse({'status': 'error', 'message': 'Device not found'}, status=404)
@@ -166,13 +176,23 @@ def cpu_stats_api(request):
                 thresholds = NetworkThreshold.objects.filter(metric=metric_name)
                 for threshold in thresholds:
                     if value >= threshold.threshold_value:
-                        NetworkAlert.objects.create(
+                        # Check if an unacknowledged alert already exists for this metric and severity
+                        existing_alert = NetworkAlert.objects.filter(
                             device_ip=latest_stat.device_ip,
                             metric_name=f"CPU Usage ({metric_name})",
-                            metric_value=value,
-                            threshold_value=threshold.threshold_value,
-                            severity=threshold.severity
-                        )
+                            severity=threshold.severity,
+                            is_acknowledged=False
+                        ).first()
+                        
+                        if not existing_alert:
+                            # Create new alert only if no unacknowledged alert exists
+                            NetworkAlert.objects.create(
+                                device_ip=latest_stat.device_ip,
+                                metric_name=f"CPU Usage ({metric_name})",
+                                metric_value=value,
+                                threshold_value=threshold.threshold_value,
+                                severity=threshold.severity
+                            )
             
             data = {
                 'five_seconds': latest_stat.five_seconds,
@@ -296,7 +316,15 @@ def add_device_manual(request):
 # API endpoint to fetch network alerts
 @login_required
 def alerts_api(request):
-    alerts = NetworkAlert.objects.all().order_by('-created_at')
+    # Get the 'show_acknowledged' parameter from the request
+    show_acknowledged = request.GET.get('show_acknowledged', 'false').lower() == 'true'
+    
+    # Filter alerts based on acknowledgment status
+    if not show_acknowledged:
+        alerts_queryset = NetworkAlert.objects.filter(is_acknowledged=False).order_by('-created_at')
+    else:
+        alerts_queryset = NetworkAlert.objects.all().order_by('-created_at')
+    
     data = [{
         'id': alert.id,
         'metric_name': alert.metric_name,
@@ -306,7 +334,8 @@ def alerts_api(request):
         'device_ip': alert.device_ip,
         'created_at': alert.created_at.isoformat(),
         'is_acknowledged': alert.is_acknowledged
-    } for alert in alerts]
+    } for alert in alerts_queryset]
+    
     return JsonResponse({'status': 'success', 'alerts': data})
 
 
@@ -514,3 +543,16 @@ def custom_403(request, exception=None):
     """
     return render(request, 'login/403.html', status=403)
 
+
+# view to acknowledge an alert
+@login_required
+def acknowledge_alert(request, alert_id):
+    try:
+        alert = NetworkAlert.objects.get(id=alert_id)
+        alert.is_acknowledged = True
+        alert.save()
+        return JsonResponse({'status': 'success'})
+    except NetworkAlert.DoesNotExist:
+        return JsonResponse({'status': 'error', 'message': 'Alert not found'}, status=404)
+    except Exception as e:
+        return JsonResponse({'status': 'error', 'message': str(e)}, status=500)

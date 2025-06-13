@@ -40,6 +40,41 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
+
+    // Add to alerts.js in the DOMContentLoaded function
+const showAcknowledgedCheckbox = document.getElementById('showAcknowledgedCheckbox');
+let showAcknowledged = false;
+
+if (showAcknowledgedCheckbox) {
+    showAcknowledgedCheckbox.addEventListener('change', () => {
+        showAcknowledged = showAcknowledgedCheckbox.checked;
+        fetchAlerts();
+    });
+}
+
+// Update fetchAlerts function
+function fetchAlerts() {
+    showLoading();
+    fetch(`/alerts-api/?show_acknowledged=${showAcknowledged}`)
+        .then(response => {
+            if (!response.ok) throw new Error('Network response was not ok');
+            return response.json();
+        })
+        .then(data => {
+            if (data.status === 'success') {
+                alerts = data.alerts;
+                applyFilters();
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching alerts:', error);
+            showError('Failed to load alerts. Please try again later.');
+        })
+        .finally(() => {
+            hideLoading();
+        });
+}
+
     function showLoading() {
         loadingSpinner.style.display = 'flex';
         alertsContainer.classList.add('loading');
@@ -50,27 +85,6 @@ document.addEventListener('DOMContentLoaded', function() {
         alertsContainer.classList.remove('loading');
     }
 
-    function fetchAlerts() {
-        showLoading();
-        fetch('/alerts-api/')
-            .then(response => {
-                if (!response.ok) throw new Error('Network response was not ok');
-                return response.json();
-            })
-            .then(data => {
-                if (data.status === 'success') {
-                    alerts = data.alerts;
-                    applyFilters();
-                }
-            })
-            .catch(error => {
-                console.error('Error fetching alerts:', error);
-                showError('Failed to load alerts. Please try again later.');
-            })
-            .finally(() => {
-                hideLoading();
-            });
-    }
 
     function applyFilters() {
         let filteredAlerts = [...alerts];
