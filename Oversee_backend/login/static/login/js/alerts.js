@@ -4,8 +4,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const loadingSpinner = document.getElementById('loadingSpinner');
     const emptyState = document.getElementById('emptyState');
     const tableBody = document.getElementById('alertsTableBody');
-    const filterToggle = document.getElementById('toggleFilters');
-    const filterOptions = document.getElementById('filterOptions');
     const severityFilter = document.getElementById('severityFilter');
     const dateFilter = document.getElementById('dateFilter');
 
@@ -15,16 +13,6 @@ document.addEventListener('DOMContentLoaded', function() {
         severity: '',
         timeRange: '24h'
     };
-
-    // Initialize filters
-    if (filterToggle) {
-        filterToggle.addEventListener('click', () => {
-            const isExpanded = filterToggle.getAttribute('aria-expanded') === 'true';
-            filterToggle.setAttribute('aria-expanded', !isExpanded);
-            filterOptions.hidden = isExpanded;
-            filterToggle.innerHTML = `<i class="fas fa-filter"></i> ${isExpanded ? 'Show' : 'Hide'} Filters`;
-        });
-    }
 
     if (severityFilter) {
         severityFilter.addEventListener('change', () => {
