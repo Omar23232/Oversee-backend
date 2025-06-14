@@ -36,12 +36,13 @@ class CiscoCommandExecutor:
             print(response.status_code)
             print(response.json())
             
-            ExecutedCommand.objects.create(
-                device_ip=self.device_ip,
-                command=cli_command,
-                output=response.json(),
-                user=user
-            )
+            if user is not None:
+                ExecutedCommand.objects.create(
+                    device_ip=self.device_ip,
+                    command=cli_command,
+                    output=response.json(),
+                    user=user
+                )
             
             return {
                 'status': 'success',

@@ -1,16 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // Toggle filters
-    const toggleFilters = document.getElementById('toggleFilters');
-    const filterOptions = document.getElementById('filterOptions');
-    
-    if (toggleFilters && filterOptions) {
-        toggleFilters.addEventListener('click', function() {
-            const isExpanded = toggleFilters.getAttribute('aria-expanded') === 'true';
-            toggleFilters.setAttribute('aria-expanded', !isExpanded);
-            filterOptions.hidden = isExpanded;
-        });
-    }
-
+   
     // Export functionality
     const exportBtn = document.getElementById('exportLogs');
     if (exportBtn) {
