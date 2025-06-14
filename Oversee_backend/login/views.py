@@ -484,7 +484,7 @@ def login_logs_view(request):
     
     if log_type == 'commands':
         # Get command logs
-        logs = ExecutedCommand.objects.all()
+        logs = ExecutedCommand.objects.all().filter(user__isnull=False).order_by('-timestamp')
         paginator = Paginator(logs, 10)
         page = request.GET.get('page')
         commands = paginator.get_page(page)

@@ -54,12 +54,13 @@ class switch_command_executor:
                 output = self._extract_output_from_html(response.text)
                 
                 # Store the command execution in the database
-                ExecutedCommand.objects.create(
-                    device_ip=self.device_ip,
-                    command=cli_command,
-                    output={"raw_output": output},
-                    user=user
-                )
+                if user is not None :
+                    ExecutedCommand.objects.create(
+                        device_ip=self.device_ip,
+                        command=cli_command,
+                        output={"raw_output": output},
+                        user=user
+                    )
                 
                 return {
                     'status': 'success',
