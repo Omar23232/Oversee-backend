@@ -21,9 +21,8 @@
                     <i class="fas fa-bell"></i>
                     Alerts
                 </a>
-            </li>
-            <li class="{% if active_tab == 'settings' %}active{% endif %}">
-                <a href="#">
+            </li>            <li class="{% if active_tab == 'settings' %}active{% endif %}">
+                <a href="{% url 'settings' %}">
                     <i class="fas fa-cog"></i>
                     Settings
                 </a>

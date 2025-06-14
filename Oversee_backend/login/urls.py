@@ -9,6 +9,7 @@ urlpatterns = [
     path('dashboard/', views.dashboard_view, name='dashboard'),
     path('devices/', views.devices_view, name='devices'),
     path('alerts/', views.alerts_view, name='alerts'),
+    path('settings/', views.settings_view, name='settings'),
     path('logout/', LogoutView.as_view(next_page='login'), name='logout'),
     path('memory-stats/', views.memory_stats_api, name='memory-stats'),
     path('cpu-stats/', views.cpu_stats_api, name='cpu-stats'),

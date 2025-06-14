@@ -556,3 +556,27 @@ def acknowledge_alert(request, alert_id):
         return JsonResponse({'status': 'error', 'message': 'Alert not found'}, status=404)
     except Exception as e:
         return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
+
+@login_required
+def settings_view(request):
+    # Get current user
+    user = request.user
+    
+    # Try to get user role
+    try:
+        user_role = UserRole.objects.get(user=user)
+    except UserRole.DoesNotExist:
+        user_role = None
+    
+    # Get all thresholds for network alerts
+    thresholds = NetworkThreshold.objects.all()
+    
+    context = {
+        'active_tab': 'settings',
+        'user': user,
+        'user_role': user_role,
+        'thresholds': thresholds,
+        'now': timezone.now()  # Add current time for cache busting
+    }
+    
+    return render(request, 'settings.html', context)
