@@ -1,24 +1,17 @@
 # Core dependencies
-Django==5.1.6
-psycopg2-binary==2.9.9  # For PostgreSQL database connection
-gunicorn==21.2.0  # For production deployment
+Django==5.2.3
+psycopg2-binary==2.9.10  # For PostgreSQL database connection
 
 # Networking and device monitoring dependencies
-requests==2.31.0  # For making HTTP requests
+requests==2.32.4  # For making HTTP requests
 paramiko==3.4.0  # For SSH connections
 netmiko==4.3.0  # For network device connections
 pysnmp==4.4.12  # For SNMP monitoring
 netifaces==0.11.0  # For network interface information
+beautifulsoup4==4.12.3  # For HTML parsing
 
 # Utilities
-python-dotenv==1.0.0  # For environment variables
-pandas==2.1.1  # For data manipulation (if used in commands)
-schedule==1.2.1  # For scheduled tasks
 pytz==2023.3  # For timezone handling
 
-# Security
-django-axes==6.1.1  # For login attempt tracking/security
-bcrypt==4.0.1  # For password hashing
-
-# Development tools
-django-debug-toolbar==4.2.0  # For development debugging
+# Production (uncomment when deploying)
+# gunicorn==21.2.0  # For production deployment
