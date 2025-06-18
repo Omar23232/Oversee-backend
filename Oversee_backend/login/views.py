@@ -59,6 +59,13 @@ def login_view(request):
     return render(request, 'login/login.html')
 
 @login_required
+def explore_view(request):
+    """
+    View for the explore/about page that explains what the OverSee application does
+    """
+    return render(request, 'login/explore.html', {'active_tab': 'explore'})
+
+@login_required
 def dashboard_view(request):
     # Get only the most recent record
     latest_stat = DeviceMemory.objects.order_by('-timestamp').first()
