@@ -7,7 +7,7 @@
 
 /* Threshold Card */
 .threshold-card {
-    background: rgb(245, 235, 214);
+    background: #6A9AB026;
     border-radius: 12px;
     padding: 1.5rem;
     margin-bottom: 1.5rem;
@@ -15,7 +15,7 @@
 }
 
 .threshold-card h3 {
-    color: #694707;
+    color: #464255;
     font-size: 1.2rem;
     margin-bottom: 1.5rem;
     font-weight: 600;
@@ -29,7 +29,7 @@
 .form-group label {
     display: block;
     margin-bottom: 0.5rem;
-    color: #694707;
+    color: #464255;
     font-weight: 500;
 }
 
@@ -40,14 +40,14 @@
     border: 1px solid #e2e8f0;
     border-radius: 8px;
     background-color: white;
-    color: #2c3e50;
+    color: #464255;
     font-size: 1rem;
 }
 
 .form-group input:focus,
 .form-group select:focus {
     outline: none;
-    border-color: #694707;
+    border-color: #464255;
     box-shadow: 0 0 0 3px rgba(105, 71, 7, 0.1);
 }
 
@@ -57,7 +57,7 @@
 }
 
 .btn-primary {
-    background-color: #694707;
+    background-color: #001F3F;
     color: white;
     border: none;
     padding: 0.75rem 1.5rem;
@@ -68,7 +68,7 @@
 }
 
 .btn-primary:hover {
-    background-color: #523204;
+    background-color: #021b35;
 }
 
 /* Table Styling */
@@ -82,8 +82,8 @@
 .thresholds-table th {
     text-align: left;
     padding: 1rem;
-    background: rgba(105, 71, 7, 0.1);
-    color: #694707;
+    background: #6A9AB026;
+    color: #001F3F;
     font-weight: 600;
     font-size: 0.9rem;
     text-transform: uppercase;
@@ -97,7 +97,7 @@
 
 /* Severity Indicators */
 .severity-warning {
-    color: #b45309;
+    color: #001F3F;
     font-weight: 500;
 }
 
