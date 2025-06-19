@@ -13,7 +13,7 @@
 }
 
 .page-header h1 {
-    color: #694707;
+    color: #464255;
     font-size: 1.8rem;
     margin-bottom: 1.5rem;
     font-weight: 600;
@@ -48,9 +48,10 @@
 }
 
 /* Header Styling */
-.devices-table thead th {
-    background: #f1e7d8;
-    color: #694707;
+.devices-table thead th 
+ {
+    background: #ffffff;
+    color: #464255;
     font-weight: 600;
     font-size: 0.9rem;
     text-transform: uppercase;
@@ -77,7 +78,7 @@
 
 .devices-table td {
     padding: 1rem 1.2rem;
-    color: #3d2c0a;
+    color: #464255;
     font-size: 0.95rem;
     border-bottom: 1px solid #e0e0e0;
 }
@@ -140,39 +141,39 @@
 }
 
 .btn-primary {
-    background: #694707;
+    background: #001F3F;
     color: white;
 }
 
 .btn-primary:hover {
-    background: #523204;
+    background: #011529;
 }
 
 .btn-secondary {
-    background: #f1e7d8;
-    color: #694707;
+    background: #6A9AB0;
+    color: #001F3F;
 }
 
 .btn-secondary:hover {
-    background: #e5d5bc;
+    background: #588194;
 }
 
 .btn-command {
-    background: #694707;
+    background: #001F3F;
     color: white;
     padding: 0.5rem 1rem;
     font-size: 0.875rem;
 }
 
 .btn-command:hover {
-    background: #523204;
+    background: #020f1b;
 }
 
 /* Empty State */
 .empty-row {
     text-align: center;
     padding: 3rem !important;
-    color: #694707;
+    color: #001F3F;
 }
 
 .empty-state {
@@ -184,7 +185,7 @@
 
 .empty-state i {
     font-size: 2rem;
-    color: #cfb286;
+    color: #6A9AB0;
     margin-bottom: 0.5rem;
 }
 
@@ -236,7 +237,7 @@
     .devices-table td::before {
         content: attr(data-label);
         font-weight: 600;
-        color: #694707;
+        color: #22223B;
     }
     
     .btn-command {
@@ -244,31 +245,30 @@
         justify-content: center;
         margin-top: 0.5rem;
     }
-}
-
-/* Accessibility Improvements */
-.btn:focus-visible,
-.devices-table tr:focus-visible {
-    outline: 2px solid #694707;
-    outline-offset: 2px;
-}
-
-/* Additional Interactive States */
-.devices-table tbody tr:focus {
-    background: #f7f3ec;
-    outline: none;
-}
-
-
-/* Add at the end of the file */
-.device-link {
-    color: #694707;
-    text-decoration: none;
-    font-weight: 500;
-    transition: color 0.2s ease;
-}
-
-.device-link:hover {
-    color: #523204;
-    text-decoration: underline;
-}
+    
+    /* Accessibility Improvements */
+    .btn:focus-visible,
+    .devices-table tr:focus-visible {
+        outline: 2px solid #4A4E69;
+        outline-offset: 2px;
+    }
+    
+    /* Additional Interactive States */
+    .devices-table tbody tr:focus {
+        background: #F2E9E4;
+        outline: none;
+    }
+    
+    /* Add at the end of the file */
+    .device-link {
+        color: #22223B;
+        text-decoration: none;
+        font-weight: 500;
+        transition: color 0.2s ease;
+    }
+    
+    .device-link:hover {
+        color: #4A4E69;
+        text-decoration: underline;
+    }
+}    
