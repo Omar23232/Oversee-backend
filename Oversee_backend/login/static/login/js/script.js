@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     labels: ["Used", "Free"],
                     datasets: [{
                         data: [0, 100], // Initial state
-                        backgroundColor: ["#007bff", "#dcdcdc"],
+                        backgroundColor: ["#6A9AB0", "#dcdcdc"],
                     }],
                 },
                 options: {
@@ -41,7 +41,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     datasets: [{
                         label: "CPU",
                         data: [30, 40, 35, 50, 45],
-                        borderColor: "#f39c12",
+                        borderColor: "#6A9AB0",
                         fill: false,
                     }, ],
                 },
