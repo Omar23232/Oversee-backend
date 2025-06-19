@@ -1,16 +1,16 @@
 /* Settings Page Modern Styling */
 /* Base settings */
 :root {
-    --primary-color: #7c4d07;        
-    --primary-hover: #5e3a05;       
-    --secondary-color: #cfb286;      
-    --accent-color: #b38e59;         
-    --text-primary: #333333;         
-    --text-secondary: #7c4d07;       
-    --border-color: rgba(207, 178, 134, 0.2); 
-    --card-shadow: 0 0.25rem 1rem rgba(124, 77, 7, 0.08);
-    --hover-bg: rgba(207, 178, 134, 0.15);
-    --active-bg: rgba(207, 178, 134, 0.3);
+    --primary-color: #0B2748;                  /* Dark blue for main elements */
+    --primary-hover: #09203F;                  /* Darker blue on hover */
+    --secondary-color: #6A9AB0;                /* Accent blue for icons or highlights */
+    --accent-color: #706C6C;                   /* Muted gray for subtle text or borders */
+    --text-primary: #464255;                   /* Main text color */
+    --text-secondary: #706C6C;                 /* Secondary text color */
+    --border-color: #f1e7d8;                   /* Light beige border */
+    --card-shadow: 0 0.25rem 1rem rgba(0, 0, 0, 0.05);
+    --hover-bg: rgba(122, 144, 168, 0.12);     /* Soft hover effect based on secondary color */
+    --active-bg: rgba(122, 144, 168, 0.25);    /* Slightly darker active background */
     --radius-sm: 0.5rem;
     --radius-md: 0.75rem;
     --radius-lg: 1rem;
@@ -22,7 +22,7 @@
     margin-left: 250px;
     padding: 2rem;
     min-height: 100vh;
-    background: #f8f9fa;
+    background: #F1ECE2;
     color: var(--text-primary);
 }
 
@@ -192,16 +192,16 @@
 }
 
 .btn-primary {
-    background-color: var(--primary-color);
-    border-color: var(--primary-color);
+    background-color: #6A9AB0; /* #0B2748 */
+    border-color: #6A9AB0;
     color: white;
 }
 
 .btn-primary:hover, .btn-primary:focus {
-    background-color: var(--primary-hover);
-    border-color: var(--primary-hover);
+    background-color: #6A9AB0; /* #0B2748 */
+    border-color: #6A9AB0;
     transform: translateY(-2px);
-    box-shadow: 0 4px 10px rgba(124, 77, 7, 0.2);
+    box-shadow: 0 4px 10px #6A9AB0;
 }
 
 .btn-outline-primary {
@@ -316,7 +316,7 @@
 
 /* Add a checkmark to the selected theme */
 .form-check-input:checked + label + .theme-preview {
-    border: 2px solid var(--primary-color);
+    border: 2px solid #6A9AB0;
     position: relative;
 }
 
@@ -327,7 +327,7 @@
     right: 15px;
     width: 25px;
     height: 25px;
-    background: var(--primary-color);
+    background: #6A9AB0;
     border-radius: 50%;
     display: flex;
     align-items: center;
