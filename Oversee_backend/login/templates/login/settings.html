@@ -23,11 +23,10 @@
     {% include 'login/partials/sidebar.html' %} 
 
     <!-- Main Content -->
-    <main class="main-content">
-        <div class="container-fluid p-4">
+    <main class="main-content">        <div class="container-fluid p-4">
             <h1 class="mb-4">Settings</h1>
             
-            <div class="row">
+            <div class="row g-4">
                 <div class="col-md-3">
                     <!-- Settings Navigation -->
                     <div class="list-group settings-nav mb-4">
@@ -53,26 +52,31 @@
                 
                 <div class="col-md-9">
                     <!-- Settings Content -->
-                    <div class="tab-content">
-                        <!-- User Profile -->
+                    <div class="tab-content">                        <!-- User Profile -->
                         <div class="tab-pane fade show active" id="user-profile">
                             <div class="card">
                                 <div class="card-header">
-                                    <h4>User Profile</h4>
+                                    <h4><i class="fas fa-user-circle me-2"></i>User Profile</h4>
                                 </div>
                                 <div class="card-body">
                                     <form id="profile-form">
-                                        <div class="row mb-3">
+                                        <div class="row mb-4">
                                             <div class="col-md-6">
                                                 <label for="username" class="form-label">Username</label>
-                                                <input type="text" class="form-control" id="username" value="{{ user.username }}" disabled>
+                                                <div class="input-group">
+                                                    <span class="input-group-text"><i class="fas fa-user"></i></span>
+                                                    <input type="text" class="form-control" id="username" value="{{ user.username }}" disabled>
+                                                </div>
                                             </div>
                                             <div class="col-md-6">
                                                 <label for="email" class="form-label">Email</label>
-                                                <input type="email" class="form-control" id="email" value="{{ user.email }}">
+                                                <div class="input-group">
+                                                    <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                                                    <input type="email" class="form-control" id="email" value="{{ user.email }}">
+                                                </div>
                                             </div>
                                         </div>
-                                        <div class="row mb-3">
+                                        <div class="row mb-4">
                                             <div class="col-md-6">
                                                 <label for="first-name" class="form-label">First Name</label>
                                                 <input type="text" class="form-control" id="first-name" value="{{ user.first_name }}">
@@ -82,43 +86,59 @@
                                                 <input type="text" class="form-control" id="last-name" value="{{ user.last_name }}">
                                             </div>
                                         </div>
-                                        <div class="mb-3">
+                                        <div class="mb-4">
                                             <label for="role" class="form-label">Role</label>
-                                            <input type="text" class="form-control" id="role" value="{{ user_role.role|title }}" disabled>
+                                            <div class="input-group">
+                                                <span class="input-group-text"><i class="fas fa-user-tag"></i></span>
+                                                <input type="text" class="form-control" id="role" value="{{ user_role.role|title }}" disabled>
+                                            </div>
                                         </div>
-                                        <button type="submit" class="btn btn-primary">Save Profile</button>
+                                        <button type="submit" class="btn btn-primary">
+                                            <i class="fas fa-save me-2"></i>Save Profile
+                                        </button>
                                     </form>
                                 </div>
                             </div>
                             
                             <div class="card mt-4">
                                 <div class="card-header">
-                                    <h4>Change Password</h4>
+                                    <h4><i class="fas fa-key me-2"></i>Change Password</h4>
                                 </div>
                                 <div class="card-body">
                                     <form id="password-form">
                                         <div class="mb-3">
                                             <label for="current-password" class="form-label">Current Password</label>
-                                            <input type="password" class="form-control" id="current-password" required>
-                                        </div>                                        <div class="mb-3">
+                                            <div class="input-group">
+                                                <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                                                <input type="password" class="form-control" id="current-password" required>
+                                            </div>
+                                        </div>
+                                        <div class="mb-3">
                                             <label for="change-new-password" class="form-label">New Password</label>
-                                            <input type="password" class="form-control" id="change-new-password" required>
+                                            <div class="input-group">
+                                                <span class="input-group-text"><i class="fas fa-key"></i></span>
+                                                <input type="password" class="form-control" id="change-new-password" required>
+                                            </div>
                                         </div>
                                         <div class="mb-3">
                                             <label for="confirm-password" class="form-label">Confirm New Password</label>
-                                            <input type="password" class="form-control" id="confirm-password" required>
+                                            <div class="input-group">
+                                                <span class="input-group-text"><i class="fas fa-check-double"></i></span>
+                                                <input type="password" class="form-control" id="confirm-password" required>
+                                            </div>
                                         </div>
-                                        <button type="submit" class="btn btn-primary">Change Password</button>
+                                        <button type="submit" class="btn btn-primary">
+                                            <i class="fas fa-key me-2"></i>Change Password
+                                        </button>
                                     </form>
                                 </div>
                             </div>
                         </div>
-                        
-                        <!-- Network Thresholds -->
+                          <!-- Network Thresholds -->
                         <div class="tab-pane fade" id="network-thresholds">
                             <div class="card">
                                 <div class="card-header d-flex justify-content-between align-items-center">
-                                    <h4>Network Thresholds</h4>
+                                    <h4><i class="fas fa-chart-line me-2"></i>Network Thresholds</h4>
                                     <button class="btn btn-primary btn-sm" id="add-threshold-btn">
                                         <i class="fas fa-plus me-1"></i> Add Threshold
                                     </button>
@@ -128,34 +148,52 @@
                                         <table class="table table-hover" id="thresholds-table">
                                             <thead>
                                                 <tr>
-                                                    <th>Metric</th>
-                                                    <th>Threshold Value</th>
-                                                    <th>Severity</th>
-                                                    <th>Actions</th>
+                                                    <th><i class="fas fa-chart-bar me-2"></i>Metric</th>
+                                                    <th><i class="fas fa-percentage me-2"></i>Threshold Value</th>
+                                                    <th><i class="fas fa-exclamation-triangle me-2"></i>Severity</th>
+                                                    <th><i class="fas fa-cogs me-2"></i>Actions</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 {% for threshold in thresholds %}
-                                                <tr data-id="{{ threshold.id }}">
-                                                    <td>{{ threshold.get_metric_display }}</td>
-                                                    <td>{{ threshold.threshold_value }}%</td>
+                                                <tr data-id="{{ threshold.id }}">                                                    <td>{{ threshold.get_metric_display }}</td>
+                                                    <td>
+                                                        <div class="d-flex align-items-center">
+                                                            <div class="progress flex-grow-1 me-2" style="height: 8px;">
+                                                                <div class="progress-bar {% if threshold.severity == 'warning' %}bg-warning{% elif threshold.severity == 'critical' %}bg-danger{% else %}bg-dark{% endif %}" 
+                                                                     role="progressbar" 
+                                                                     style="width: {{ threshold.threshold_value }}%;" 
+                                                                     aria-valuenow="{{ threshold.threshold_value }}" 
+                                                                     aria-valuemin="0" 
+                                                                     aria-valuemax="100"></div>
+                                                            </div>
+                                                            <span>{{ threshold.threshold_value }}%</span>
+                                                        </div>
+                                                    </td>
                                                     <td>
                                                         <span class="badge {% if threshold.severity == 'warning' %}bg-warning{% elif threshold.severity == 'critical' %}bg-danger{% else %}bg-dark{% endif %}">
                                                             {{ threshold.get_severity_display }}
                                                         </span>
+                                                    </td>                                                    <td>
+                                                        <div class="btn-group">
+                                                            <button class="btn btn-sm btn-outline-primary edit-threshold-btn" title="Edit threshold">
+                                                                <i class="fas fa-edit"></i>
+                                                            </button>
+                                                            <button class="btn btn-sm btn-outline-danger delete-threshold-btn" title="Delete threshold">
+                                                                <i class="fas fa-trash"></i>
+                                                            </button>
+                                                        </div>
                                                     </td>
-                                                    <td>
-                                                        <button class="btn btn-sm btn-outline-primary edit-threshold-btn">
-                                                            <i class="fas fa-edit"></i>
-                                                        </button>
-                                                        <button class="btn btn-sm btn-outline-danger delete-threshold-btn">
-                                                            <i class="fas fa-trash"></i>
-                                                        </button>
-                                                    </td>
-                                                </tr>
-                                                {% empty %}
+                                                </tr>                                                {% empty %}
                                                 <tr>
-                                                    <td colspan="4" class="text-center">No thresholds defined</td>
+                                                    <td colspan="4" class="text-center py-4">
+                                                        <div class="text-muted">
+                                                            <i class="fas fa-info-circle me-2"></i>No thresholds defined yet
+                                                        </div>
+                                                        <button class="btn btn-sm btn-primary mt-3" id="add-first-threshold-btn">
+                                                            <i class="fas fa-plus me-1"></i> Add Your First Threshold
+                                                        </button>
+                                                    </td>
                                                 </tr>
                                                 {% endfor %}
                                             </tbody>
@@ -164,16 +202,15 @@
                                 </div>
                             </div>
                         </div>
-                        
-                        <!-- Notification Settings -->
+                          <!-- Notification Settings -->
                         <div class="tab-pane fade" id="notification-settings">
                             <div class="card">
                                 <div class="card-header">
-                                    <h4>Notification Settings</h4>
+                                    <h4><i class="fas fa-bell me-2"></i>Notification Settings</h4>
                                 </div>
                                 <div class="card-body">
                                     <form id="notification-form">
-                                        <div class="form-check form-switch mb-3">
+                                        <div class="form-check form-switch mb-4">
                                             <input class="form-check-input" type="checkbox" id="browser-notifications" checked>
                                             <label class="form-check-label" for="browser-notifications">
                                                 Browser Notifications
@@ -181,7 +218,7 @@
                                             <div class="form-text">Receive notifications directly in your browser</div>
                                         </div>
                                         
-                                        <div class="form-check form-switch mb-3">
+                                        <div class="form-check form-switch mb-4">
                                             <input class="form-check-input" type="checkbox" id="email-notifications" checked>
                                             <label class="form-check-label" for="email-notifications">
                                                 Email Notifications
@@ -189,44 +226,47 @@
                                             <div class="form-text">Receive email alerts for critical events</div>
                                         </div>
                                         
-                                        <div class="mb-3">
+                                        <div class="mb-4">
                                             <label class="form-label">Notification Frequency</label>
                                             <div class="form-check">
                                                 <input class="form-check-input" type="radio" name="notification-frequency" id="notify-immediately" checked>
                                                 <label class="form-check-label" for="notify-immediately">
-                                                    Immediately
+                                                    <i class="fas fa-bolt me-2"></i>Immediately
                                                 </label>
+                                                <div class="form-text">Send notifications as events occur</div>
                                             </div>
-                                            <div class="form-check">
+                                            <div class="form-check mt-2">
                                                 <input class="form-check-input" type="radio" name="notification-frequency" id="notify-digest">
                                                 <label class="form-check-label" for="notify-digest">
-                                                    Daily Digest
+                                                    <i class="fas fa-calendar-day me-2"></i>Daily Digest
                                                 </label>
+                                                <div class="form-text">Receive a summary of all events once per day</div>
                                             </div>
                                         </div>
                                         
-                                        <button type="submit" class="btn btn-primary">Save Notification Settings</button>
+                                        <button type="submit" class="btn btn-primary">
+                                            <i class="fas fa-save me-2"></i>Save Notification Settings
+                                        </button>
                                     </form>
                                 </div>
                             </div>
                         </div>
-                        
-                        <!-- Appearance -->
+                          <!-- Appearance -->
                         <div class="tab-pane fade" id="appearance">
                             <div class="card">
                                 <div class="card-header">
-                                    <h4>Appearance Settings</h4>
+                                    <h4><i class="fas fa-palette me-2"></i>Appearance Settings</h4>
                                 </div>
                                 <div class="card-body">
                                     <form id="appearance-form">
                                         <div class="mb-4">
                                             <label class="form-label">Theme</label>
-                                            <div class="row g-3">
+                                            <div class="row g-4">
                                                 <div class="col-md-4">
                                                     <div class="form-check">
                                                         <input class="form-check-input" type="radio" name="theme" id="theme-light" checked>
                                                         <label class="form-check-label" for="theme-light">
-                                                            Light
+                                                            <i class="fas fa-sun me-2"></i>Light
                                                         </label>
                                                     </div>
                                                     <div class="theme-preview light-theme mb-2"></div>
@@ -235,7 +275,7 @@
                                                     <div class="form-check">
                                                         <input class="form-check-input" type="radio" name="theme" id="theme-dark">
                                                         <label class="form-check-label" for="theme-dark">
-                                                            Dark
+                                                            <i class="fas fa-moon me-2"></i>Dark
                                                         </label>
                                                     </div>
                                                     <div class="theme-preview dark-theme mb-2"></div>
@@ -244,7 +284,7 @@
                                                     <div class="form-check">
                                                         <input class="form-check-input" type="radio" name="theme" id="theme-system">
                                                         <label class="form-check-label" for="theme-system">
-                                                            System Default
+                                                            <i class="fas fa-desktop me-2"></i>System Default
                                                         </label>
                                                     </div>
                                                     <div class="theme-preview system-theme mb-2"></div>
@@ -252,28 +292,32 @@
                                             </div>
                                         </div>
                                         
-                                        <div class="mb-3">
+                                        <div class="mb-4">
                                             <label for="dashboard-refresh" class="form-label">Dashboard Refresh Rate</label>
-                                            <select class="form-select" id="dashboard-refresh">
-                                                <option value="15">15 seconds</option>
-                                                <option value="30" selected>30 seconds</option>
-                                                <option value="60">1 minute</option>
-                                                <option value="300">5 minutes</option>
-                                            </select>
+                                            <div class="input-group">
+                                                <span class="input-group-text"><i class="fas fa-sync-alt"></i></span>
+                                                <select class="form-select" id="dashboard-refresh">
+                                                    <option value="15">15 seconds</option>
+                                                    <option value="30" selected>30 seconds</option>
+                                                    <option value="60">1 minute</option>
+                                                    <option value="300">5 minutes</option>
+                                                </select>
+                                            </div>
                                         </div>
                                         
-                                        <button type="submit" class="btn btn-primary">Save Appearance Settings</button>
+                                        <button type="submit" class="btn btn-primary">
+                                            <i class="fas fa-save me-2"></i>Save Appearance Settings
+                                        </button>
                                     </form>
                                 </div>
                             </div>
                         </div>
-                        
-                        <!-- Admin Settings (Only visible to admins) -->
+                          <!-- Admin Settings (Only visible to admins) -->
                         {% if user_role and user_role.role == 'admin' %}
                         <div class="tab-pane fade" id="admin-settings">
                             <div class="card">
                                 <div class="card-header">
-                                    <h4>User Management</h4>
+                                    <h4><i class="fas fa-users-cog me-2"></i>User Management</h4>
                                 </div>
                                 <div class="card-body">
                                     <div class="d-flex justify-content-end mb-3">
@@ -285,11 +329,11 @@
                                         <table class="table table-hover" id="users-table">
                                             <thead>
                                                 <tr>
-                                                    <th>Username</th>
-                                                    <th>Email</th>
-                                                    <th>Role</th>
-                                                    <th>Last Login</th>
-                                                    <th>Actions</th>
+                                                    <th><i class="fas fa-user me-2"></i>Username</th>
+                                                    <th><i class="fas fa-envelope me-2"></i>Email</th>
+                                                    <th><i class="fas fa-user-tag me-2"></i>Role</th>
+                                                    <th><i class="fas fa-clock me-2"></i>Last Login</th>
+                                                    <th><i class="fas fa-cogs me-2"></i>Actions</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -308,14 +352,13 @@
             </div>
         </div>
     </main>
-    
-    <!-- Modals -->
+      <!-- Modals -->
     <!-- Add/Edit Threshold Modal -->
     <div class="modal fade" id="threshold-modal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="threshold-modal-title">Add Network Threshold</h5>
+                    <h5 class="modal-title" id="threshold-modal-title"><i class="fas fa-chart-line me-2"></i>Add Network Threshold</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -323,30 +366,43 @@
                         <input type="hidden" id="threshold-id">
                         <div class="mb-3">
                             <label for="metric" class="form-label">Metric</label>
-                            <select class="form-select" id="metric" required>
-                                <option value="memory">Memory Usage</option>
-                                <option value="cpu_5s">CPU 5 Seconds</option>
-                                <option value="cpu_1m">CPU 1 Minute</option>
-                                <option value="cpu_5m">CPU 5 Minutes</option>
-                            </select>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-chart-bar"></i></span>
+                                <select class="form-select" id="metric" required>
+                                    <option value="memory">Memory Usage</option>
+                                    <option value="cpu_5s">CPU 5 Seconds</option>
+                                    <option value="cpu_1m">CPU 1 Minute</option>
+                                    <option value="cpu_5m">CPU 5 Minutes</option>
+                                </select>
+                            </div>
                         </div>
                         <div class="mb-3">
                             <label for="threshold-value" class="form-label">Threshold Value (%)</label>
-                            <input type="number" class="form-control" id="threshold-value" min="1" max="100" required>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-percentage"></i></span>
+                                <input type="number" class="form-control" id="threshold-value" min="1" max="100" required>
+                            </div>
                         </div>
                         <div class="mb-3">
                             <label for="severity" class="form-label">Severity</label>
-                            <select class="form-select" id="severity" required>
-                                <option value="warning">Warning</option>
-                                <option value="critical">Critical</option>
-                                <option value="emergency">Emergency</option>
-                            </select>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-exclamation-triangle"></i></span>
+                                <select class="form-select" id="severity" required>
+                                    <option value="warning">Warning</option>
+                                    <option value="critical">Critical</option>
+                                    <option value="emergency">Emergency</option>
+                                </select>
+                            </div>
                         </div>
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-primary" id="save-threshold-btn">Save</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="fas fa-times me-2"></i>Cancel
+                    </button>
+                    <button type="button" class="btn btn-primary" id="save-threshold-btn">
+                        <i class="fas fa-save me-2"></i>Save
+                    </button>
                 </div>
             </div>
         </div>
@@ -354,44 +410,82 @@
     
     <!-- Add User Modal -->
     <div class="modal fade" id="user-modal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Add New User</h5>
+                    <h5 class="modal-title"><i class="fas fa-user-plus me-2"></i>Add New User</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>                </div>
                 <div class="modal-body">
                     <form id="user-form">
                         <div class="mb-3">
                             <label for="new-username" class="form-label">Username</label>
-                            <input type="text" class="form-control" id="new-username" name="username" required>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-user"></i></span>
+                                <input type="text" class="form-control" id="new-username" name="username" required>
+                            </div>
                         </div>
                         <div class="mb-3">
                             <label for="new-email" class="form-label">Email</label>
-                            <input type="email" class="form-control" id="new-email" name="email" required>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                                <input type="email" class="form-control" id="new-email" name="email" required>
+                            </div>
                         </div>
                         <div class="mb-3">
                             <label for="new-password" class="form-label">Password</label>
-                            <input type="password" class="form-control" id="new-password" name="password" required>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-key"></i></span>
+                                <input type="password" class="form-control" id="new-password" name="password" required>
+                            </div>
                         </div>
                         <div class="mb-3">
                             <label for="new-role" class="form-label">Role</label>
-                            <select class="form-select" id="new-role" name="role" required>
-                                <option value="user">Normal User</option>
-                                <option value="admin">Administrator</option>
-                            </select>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-user-tag"></i></span>
+                                <select class="form-select" id="new-role" name="role" required>
+                                    <option value="user">Normal User</option>
+                                    <option value="admin">Administrator</option>
+                                </select>
+                            </div>
                         </div>
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-primary" id="save-user-btn">Save</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="fas fa-times me-2"></i>Cancel
+                    </button>
+                    <button type="button" class="btn btn-primary" id="save-user-btn">
+                        <i class="fas fa-save me-2"></i>Save
+                    </button>
                 </div>
             </div>
         </div>
     </div>
-    
-    <!-- JavaScript -->
+      <!-- JavaScript -->
     <script src="{% static 'login/js/settings.js' %}?v={{ now|date:'U' }}"></script>
+    
+    <!-- Custom color overrides -->
+    <style>
+        /* Override any hardcoded colors to match our gold/brown theme */
+        .btn-primary {
+            background-color: #7c4d07;
+            border-color: #7c4d07;
+        }
+        .btn-primary:hover, .btn-primary:focus {
+            background-color: #5e3a05;
+            border-color: #5e3a05;
+        }
+        .form-check-input:checked {
+            background-color: #7c4d07;
+            border-color: #7c4d07;
+        }
+        a {
+            color: #7c4d07;
+        }
+        a:hover {
+            color: #5e3a05;
+        }
+    </style>
 </body>
 </html>
 
