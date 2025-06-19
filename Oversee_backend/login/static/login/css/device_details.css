@@ -14,7 +14,7 @@
 }
 
 .page-header h1 {
-    color: #694707;
+    color:#464255;
     font-size: 1.8rem;
     font-weight: 600;
     display: flex;
@@ -25,7 +25,7 @@
 .device-type-badge {
     font-size: 0.9rem;
     background-color: #f1e7d8;
-    color: #694707;
+    color: #464255;
     padding: 0.25rem 0.75rem;
     border-radius: 20px;
     margin-left: 0.75rem;
@@ -49,7 +49,7 @@
 }
 
 .device-info-card h2 {
-    color: #694707;
+    color: #464255;
     font-size: 1.3rem;
     margin-bottom: 1.2rem;
     border-bottom: 1px solid #f1e7d8;
@@ -111,7 +111,7 @@
 }
 
 .metric-card h2 {
-    color: #694707;
+    color: #464255;
     font-size: 1.3rem;
     margin-bottom: 1rem;
 }
@@ -129,7 +129,7 @@
     transform: translate(-50%, -50%);
     font-size: 1.5rem;
     font-weight: 600;
-    color: #694707;
+    color: #464255;
 }
 
 .metric-details {
@@ -159,7 +159,7 @@
 }
 
 .interfaces-section h2 {
-    color: #694707;
+    color: #464255;
     font-size: 1.3rem;
     margin-bottom: 1rem;
 }
@@ -178,7 +178,7 @@
 
 .interfaces-table th {
     background: #f1e7d8;
-    color: #694707;
+    color: #464255;
     font-weight: 600;
     font-size: 0.9rem;
     text-transform: uppercase;
@@ -220,7 +220,7 @@
 }
 
 .alerts-section h2 {
-    color: #694707;
+    color: #464255;
     font-size: 1.3rem;
     margin-bottom: 1rem;
 }
@@ -326,24 +326,25 @@
 }
 
 .btn-primary {
-    background-color: #694707;
+    background-color: #22223B;
     color: white;
     border: none;
 }
 
 .btn-primary:hover {
-    background-color: #523204;
+    background-color: #4A4E69;
 }
 
 .btn-secondary {
-    background-color: #f1e7d8;
-    color: #694707;
-    border: 1px solid #e0d5c5;
+    background-color: #C9ADA7;
+    color: #22223B;
+    border: 1px solid #B8A29C;
 }
 
 .btn-secondary:hover {
-    background-color: #e0d5c5;
+    background-color: #B8A29C;
 }
+
 
 /* Responsive Design */
 @media (max-width: 1200px) {
