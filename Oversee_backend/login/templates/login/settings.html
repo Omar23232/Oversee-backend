@@ -100,10 +100,9 @@
                                         <div class="mb-3">
                                             <label for="current-password" class="form-label">Current Password</label>
                                             <input type="password" class="form-control" id="current-password" required>
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="new-password" class="form-label">New Password</label>
-                                            <input type="password" class="form-control" id="new-password" required>
+                                        </div>                                        <div class="mb-3">
+                                            <label for="change-new-password" class="form-label">New Password</label>
+                                            <input type="password" class="form-control" id="change-new-password" required>
                                         </div>
                                         <div class="mb-3">
                                             <label for="confirm-password" class="form-label">Confirm New Password</label>
@@ -301,36 +300,7 @@
                                 </div>
                             </div>
                             
-                            <div class="card mt-4">
-                                <div class="card-header">
-                                    <h4>System Settings</h4>
-                                </div>
-                                <div class="card-body">
-                                    <form id="system-settings-form">
-                                        <div class="mb-3">
-                                            <label for="backup-frequency" class="form-label">Backup Frequency</label>
-                                            <select class="form-select" id="backup-frequency">
-                                                <option value="daily">Daily</option>
-                                                <option value="weekly" selected>Weekly</option>
-                                                <option value="monthly">Monthly</option>
-                                            </select>
-                                        </div>
-                                        
-                                        <div class="mb-3">
-                                            <label for="log-retention" class="form-label">Log Retention Period</label>
-                                            <select class="form-select" id="log-retention">
-                                                <option value="30">30 days</option>
-                                                <option value="60">60 days</option>
-                                                <option value="90" selected>90 days</option>
-                                                <option value="180">6 months</option>
-                                                <option value="365">1 year</option>
-                                            </select>
-                                        </div>
-                                        
-                                        <button type="submit" class="btn btn-primary">Save System Settings</button>
-                                    </form>
-                                </div>
-                            </div>
+                            
                         </div>
                         {% endif %}
                     </div>
@@ -388,25 +358,24 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Add New User</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>                </div>
                 <div class="modal-body">
                     <form id="user-form">
                         <div class="mb-3">
                             <label for="new-username" class="form-label">Username</label>
-                            <input type="text" class="form-control" id="new-username" required>
+                            <input type="text" class="form-control" id="new-username" name="username" required>
                         </div>
                         <div class="mb-3">
                             <label for="new-email" class="form-label">Email</label>
-                            <input type="email" class="form-control" id="new-email" required>
+                            <input type="email" class="form-control" id="new-email" name="email" required>
                         </div>
                         <div class="mb-3">
                             <label for="new-password" class="form-label">Password</label>
-                            <input type="password" class="form-control" id="new-password" required>
+                            <input type="password" class="form-control" id="new-password" name="password" required>
                         </div>
                         <div class="mb-3">
                             <label for="new-role" class="form-label">Role</label>
-                            <select class="form-select" id="new-role" required>
+                            <select class="form-select" id="new-role" name="role" required>
                                 <option value="user">Normal User</option>
                                 <option value="admin">Administrator</option>
                             </select>

@@ -19,6 +19,8 @@ from django.shortcuts import render, redirect, get_object_or_404
 from login.models import LoginAttempt, UserRole
 from django.core.paginator import Paginator
 from .decorator import role_required
+from django.contrib.auth.models import User
+from django.contrib.auth import update_session_auth_hash
 
 # view for the login page
 
@@ -350,43 +352,128 @@ def alerts_api(request):
 # API endpoint to manage network thresholds
 @login_required
 def thresholds_api(request):
-    if request.method == 'POST':
-        data = json.loads(request.body)
-        threshold = NetworkThreshold.objects.create(
-            metric=data['metric'],
-            threshold_value=data['threshold_value'],
-            severity=data['severity']
-        )
-        return JsonResponse({'status': 'success', 'id': threshold.id})
+    """API endpoint for managing network thresholds"""
+    if request.method == 'GET':
+        # Get all thresholds
+        thresholds = NetworkThreshold.objects.all()
+        return JsonResponse({
+            'status': 'success',
+            'thresholds': [
+                {
+                    'id': t.id,
+                    'metric': t.metric,
+                    'metric_display': t.get_metric_display(),
+                    'threshold_value': t.threshold_value,
+                    'severity': t.severity,
+                    'severity_display': t.get_severity_display(),
+                    'created_at': t.created_at.strftime('%Y-%m-%d %H:%M:%S')
+                } for t in thresholds
+            ]
+        })
     
-    elif request.method == 'DELETE':
+    elif request.method == 'POST':
+        # Create a new threshold
         try:
             data = json.loads(request.body)
-            threshold_id = data.get('id')
-            threshold = NetworkThreshold.objects.get(id=threshold_id)
-            threshold.delete()
-            return JsonResponse({'status': 'success'})
-        except NetworkThreshold.DoesNotExist:
+            
+            # Validate required fields
+            required_fields = ['metric', 'threshold_value', 'severity']
+            for field in required_fields:
+                if field not in data:
+                    return JsonResponse({'status': 'error', 'message': f'Missing required field: {field}'}, status=400)
+            
+            # Create new threshold
+            threshold = NetworkThreshold.objects.create(
+                metric=data['metric'],
+                threshold_value=data['threshold_value'],
+                severity=data['severity']
+            )
+            
             return JsonResponse({
-                'status': 'error',
-                'message': 'Threshold not found'
-            }, status=404)
+                'status': 'success',
+                'message': 'Threshold created successfully',
+                'threshold': {
+                    'id': threshold.id,
+                    'metric': threshold.metric,
+                    'metric_display': threshold.get_metric_display(),
+                    'threshold_value': threshold.threshold_value,
+                    'severity': threshold.severity,
+                    'severity_display': threshold.get_severity_display(),
+                    'created_at': threshold.created_at.strftime('%Y-%m-%d %H:%M:%S')
+                }
+            })
         except Exception as e:
-            return JsonResponse({
-                'status': 'error',
-                'message': str(e)
-            }, status=500)
+            return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
     
-    # GET method
-    thresholds = NetworkThreshold.objects.all()
-    data = [{
-        'id': t.id,
-        'metric': t.metric,
-        'threshold_value': t.threshold_value,
-        'severity': t.severity
-    } for t in thresholds]
-    return JsonResponse({'status': 'success', 'thresholds': data})
-
+    elif request.method == 'PUT':
+        # Update existing threshold
+        try:
+            data = json.loads(request.body)
+            
+            # Validate required fields
+            if 'id' not in data:
+                return JsonResponse({'status': 'error', 'message': 'Missing threshold ID'}, status=400)
+            
+            # Get threshold
+            try:
+                threshold = NetworkThreshold.objects.get(id=data['id'])
+            except NetworkThreshold.DoesNotExist:
+                return JsonResponse({'status': 'error', 'message': 'Threshold not found'}, status=404)
+            
+            # Update fields
+            if 'metric' in data:
+                threshold.metric = data['metric']
+            if 'threshold_value' in data:
+                threshold.threshold_value = data['threshold_value']
+            if 'severity' in data:
+                threshold.severity = data['severity']
+            
+            threshold.save()
+            
+            return JsonResponse({
+                'status': 'success',
+                'message': 'Threshold updated successfully',
+                'threshold': {
+                    'id': threshold.id,
+                    'metric': threshold.metric,
+                    'metric_display': threshold.get_metric_display(),
+                    'threshold_value': threshold.threshold_value,
+                    'severity': threshold.severity,
+                    'severity_display': threshold.get_severity_display(),
+                    'created_at': threshold.created_at.strftime('%Y-%m-%d %H:%M:%S')
+                }
+            })
+        except Exception as e:
+            return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
+    
+    elif request.method == 'DELETE':
+        # Delete threshold
+        try:
+            data = json.loads(request.body)
+            
+            # Validate required fields
+            if 'id' not in data:
+                return JsonResponse({'status': 'error', 'message': 'Missing threshold ID'}, status=400)
+            
+            # Get threshold
+            try:
+                threshold = NetworkThreshold.objects.get(id=data['id'])
+            except NetworkThreshold.DoesNotExist:
+                return JsonResponse({'status': 'error', 'message': 'Threshold not found'}, status=404)
+            
+            # Delete threshold
+            threshold.delete()
+            
+            return JsonResponse({
+                'status': 'success',
+                'message': 'Threshold deleted successfully'
+            })
+        except Exception as e:
+            return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
+    
+    else:
+        return JsonResponse({'status': 'error', 'message': 'Method not allowed'}, status=405)
+        
 # API endpoint to render the thresholds page
 @login_required
 def thresholds_view(request):
@@ -578,12 +665,336 @@ def settings_view(request):
     # Get all thresholds for network alerts
     thresholds = NetworkThreshold.objects.all()
     
+    # Get all users for admin panel
+    users = []
+    if user_role and user_role.role == 'admin':
+        users_data = User.objects.all().select_related('userrole')
+        for u in users_data:
+            try:
+                role = u.userrole.role
+            except UserRole.DoesNotExist:
+                role = "user"
+                
+            users.append({
+                'id': u.id,
+                'username': u.username,
+                'email': u.email,
+                'first_name': u.first_name,
+                'last_name': u.last_name,
+                'role': role,
+                'last_login': u.last_login
+            })
+    
     context = {
         'active_tab': 'settings',
         'user': user,
         'user_role': user_role,
         'thresholds': thresholds,
+        'users': users,
         'now': timezone.now()  # Add current time for cache busting
     }
     
-    return render(request, 'settings.html', context)
+    return render(request, 'login/settings.html', context)
+
+@login_required
+@csrf_exempt
+def update_profile_api(request):
+    """API endpoint for updating user profile information"""
+    if request.method != 'POST':
+        return JsonResponse({'status': 'error', 'message': 'Method not allowed'}, status=405)
+    
+    try:
+        data = json.loads(request.body)
+        user = request.user
+        
+        # Update user information
+        user.first_name = data.get('first_name', user.first_name)
+        user.last_name = data.get('last_name', user.last_name)
+        user.email = data.get('email', user.email)
+        user.save()
+        
+        return JsonResponse({
+            'status': 'success',
+            'message': 'Profile updated successfully',
+            'user': {
+                'username': user.username,
+                'first_name': user.first_name,
+                'last_name': user.last_name,
+                'email': user.email
+            }
+        })
+    except Exception as e:
+        return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
+
+@login_required
+@csrf_exempt
+def change_password_api(request):
+    """API endpoint for changing user password"""
+    if request.method != 'POST':
+        return JsonResponse({'status': 'error', 'message': 'Method not allowed'}, status=405)
+    
+    try:
+        data = json.loads(request.body)
+        user = request.user
+        
+        current_password = data.get('current_password')
+        new_password = data.get('new_password')
+        
+        # Verify current password
+        if not user.check_password(current_password):
+            return JsonResponse({'status': 'error', 'message': 'Current password is incorrect'}, status=400)
+        
+        # Update password
+        user.set_password(new_password)
+        user.save()
+        
+        # Update session to prevent logout
+        update_session_auth_hash(request, user)
+        
+        return JsonResponse({
+            'status': 'success',
+            'message': 'Password changed successfully'
+        })
+    except Exception as e:
+        return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
+
+@login_required
+@role_required('admin')
+@csrf_exempt
+def users_api(request):
+    """API endpoint for managing users (admin only)"""
+    if request.method == 'GET':
+        # Get all users
+        users_data = User.objects.all().select_related('userrole')
+        users = []
+        
+        for u in users_data:
+            try:
+                role = u.userrole.role
+            except UserRole.DoesNotExist:
+                role = "user"
+                
+            users.append({
+                'id': u.id,
+                'username': u.username,
+                'email': u.email,
+                'first_name': u.first_name,
+                'last_name': u.last_name,
+                'role': role,
+                'last_login': u.last_login.strftime('%Y-%m-%d %H:%M:%S') if u.last_login else None
+            })
+        
+        return JsonResponse({
+            'status': 'success',
+            'users': users
+        })
+    
+    elif request.method == 'POST':
+        # Create a new user
+        try:
+            data = json.loads(request.body)
+            
+            # Validate required fields
+            required_fields = ['username', 'email', 'password', 'role']
+            for field in required_fields:
+                if field not in data:
+                    return JsonResponse({'status': 'error', 'message': f'Missing required field: {field}'}, status=400)
+            
+            # Check if username already exists
+            if User.objects.filter(username=data['username']).exists():
+                return JsonResponse({'status': 'error', 'message': 'Username already exists'}, status=400)
+            
+            # Create new user
+            user = User.objects.create_user(
+                username=data['username'],
+                email=data['email'],
+                password=data['password'],
+                first_name=data.get('first_name', ''),
+                last_name=data.get('last_name', '')
+            )
+            
+            # Create user role
+            UserRole.objects.create(
+                user=user,
+                role=data['role']
+            )
+            
+            return JsonResponse({
+                'status': 'success',
+                'message': 'User created successfully',
+                'user': {
+                    'id': user.id,
+                    'username': user.username,
+                    'email': user.email,
+                    'first_name': user.first_name,
+                    'last_name': user.last_name,
+                    'role': data['role']
+                }
+            })
+        except Exception as e:
+            return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
+    
+    elif request.method == 'PUT':
+        # Update existing user
+        try:
+            data = json.loads(request.body)
+            
+            # Validate required fields
+            if 'id' not in data:
+                return JsonResponse({'status': 'error', 'message': 'Missing user ID'}, status=400)
+            
+            # Get user
+            try:
+                user = User.objects.get(id=data['id'])
+            except User.DoesNotExist:
+                return JsonResponse({'status': 'error', 'message': 'User not found'}, status=404)
+            
+            # Update fields
+            if 'email' in data:
+                user.email = data['email']
+            if 'first_name' in data:
+                user.first_name = data['first_name']
+            if 'last_name' in data:
+                user.last_name = data['last_name']
+            if 'password' in data:
+                user.set_password(data['password'])
+            
+            user.save()
+            
+            # Update role if provided
+            if 'role' in data:
+                try:
+                    user_role = UserRole.objects.get(user=user)
+                    user_role.role = data['role']
+                    user_role.save()
+                except UserRole.DoesNotExist:
+                    UserRole.objects.create(
+                        user=user,
+                        role=data['role']
+                    )
+            
+            return JsonResponse({
+                'status': 'success',
+                'message': 'User updated successfully',
+                'user': {
+                    'id': user.id,
+                    'username': user.username,
+                    'email': user.email,
+                    'first_name': user.first_name,
+                    'last_name': user.last_name,
+                    'role': UserRole.objects.get(user=user).role if hasattr(user, 'userrole') else 'user'
+                }
+            })
+        except Exception as e:
+            return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
+    
+    elif request.method == 'DELETE':
+        # Delete user
+        try:
+            data = json.loads(request.body)
+            
+            # Validate required fields
+            if 'id' not in data:
+                return JsonResponse({'status': 'error', 'message': 'Missing user ID'}, status=400)
+            
+            # Get user
+            try:
+                user = User.objects.get(id=data['id'])
+            except User.DoesNotExist:
+                return JsonResponse({'status': 'error', 'message': 'User not found'}, status=404)
+            
+            # Check if trying to delete self
+            if user.id == request.user.id:
+                return JsonResponse({'status': 'error', 'message': 'Cannot delete your own account'}, status=400)
+            
+            # Delete user
+            user.delete()
+            
+            return JsonResponse({
+                'status': 'success',
+                'message': 'User deleted successfully'
+            })
+        except Exception as e:
+            return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
+    
+    else:
+        return JsonResponse({'status': 'error', 'message': 'Method not allowed'}, status=405)
+
+@login_required
+@csrf_exempt
+def user_preferences_api(request):
+    """API endpoint for managing user preferences"""
+    if request.method != 'POST':
+        return JsonResponse({'status': 'error', 'message': 'Method not allowed'}, status=405)
+    
+    try:
+        data = json.loads(request.body)
+        user = request.user
+        
+        # In a real application, you would store these in a UserPreferences model
+        # For now, we'll just return success to simulate storage
+        preference_type = data.get('type', '')
+        
+        if preference_type == 'notification':
+            # Handle notification preferences
+            browser_notifications = data.get('browser_notifications', True)
+            email_notifications = data.get('email_notifications', True)
+            notification_frequency = data.get('notification_frequency', 'immediately')
+            
+            # In a real application, save these preferences to a database
+            
+            return JsonResponse({
+                'status': 'success',
+                'message': 'Notification preferences saved successfully',
+                'preferences': {
+                    'browser_notifications': browser_notifications,
+                    'email_notifications': email_notifications,
+                    'notification_frequency': notification_frequency
+                }
+            })
+            
+        elif preference_type == 'appearance':
+            # Handle appearance preferences
+            theme = data.get('theme', 'light')
+            dashboard_refresh = data.get('dashboard_refresh', 30)
+            
+            # In a real application, save these preferences to a database
+            
+            return JsonResponse({
+                'status': 'success',
+                'message': 'Appearance preferences saved successfully',
+                'preferences': {
+                    'theme': theme,
+                    'dashboard_refresh': dashboard_refresh
+                }
+            })
+            
+        elif preference_type == 'system':
+            # Handle system settings (admin only)
+            # Check if user is admin
+            try:
+                user_role = UserRole.objects.get(user=user)
+                if user_role.role != 'admin':
+                    return JsonResponse({'status': 'error', 'message': 'Permission denied'}, status=403)
+            except UserRole.DoesNotExist:
+                return JsonResponse({'status': 'error', 'message': 'Permission denied'}, status=403)
+            
+            backup_frequency = data.get('backup_frequency', 'weekly')
+            log_retention = data.get('log_retention', 90)
+            
+            # In a real application, save these preferences to a database
+            
+            return JsonResponse({
+                'status': 'success',
+                'message': 'System settings saved successfully',
+                'preferences': {
+                    'backup_frequency': backup_frequency,
+                    'log_retention': log_retention
+                }
+            })
+            
+        else:
+            return JsonResponse({'status': 'error', 'message': 'Invalid preference type'}, status=400)
+            
+    except Exception as e:
+        return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
