@@ -7,8 +7,8 @@
 
 body {
     font-family: 'Poppins', sans-serif;
-    background-color: #f8f9fa;
-    color: #3d2c0a;
+    background-color: #F2E9E4;
+    color: #22223B;
 }
 
 .command-container {
@@ -22,24 +22,24 @@ body {
 }
 
 .command-header h2 {
-    color: #694707;
+    color: #22223B;
     margin-bottom: 0.5rem;
 }
 
 .device-info {
-    background: #f7f3ec;
+    background: #E0E1DD;
     padding: 1rem;
     border-radius: 8px;
-    border: 1px solid #e0d5c5;
+    border: 1px solid #C9ADA7;
 }
 
 .device-info p {
     margin: 0.25rem 0;
-    color: #3d2c0a;
+    color: #22223B;
 }
 
 .command-form-wrapper {
-    background: #fff;
+    background: #ffffff;
     padding: 1.5rem;
     border-radius: 10px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
@@ -53,26 +53,26 @@ body {
 .form-group label {
     display: block;
     margin-bottom: 0.5rem;
-    color: #694707;
+    color: #4A4E69;
     font-weight: 500;
 }
 
 .form-group input {
     width: 100%;
     padding: 0.75rem;
-    border: 1px solid #e0d5c5;
+    border: 1px solid #C9ADA7;
     border-radius: 6px;
     font-family: monospace;
     font-size: 0.95rem;
     background-color: #fff;
-    color: #3d2c0a;
+    color: #22223B;
     transition: all 0.2s ease;
 }
 
 .form-group input:focus {
     outline: none;
-    border-color: #694707;
-    box-shadow: 0 0 0 3px rgba(105, 71, 7, 0.1);
+    border-color: #4A4E69;
+    box-shadow: 0 0 0 3px rgba(154, 140, 152, 0.2);
 }
 
 .form-actions {
@@ -90,23 +90,23 @@ body {
 }
 
 .btn-execute {
-    background: #694707;
+    background: #22223B;
     color: white;
     border: none;
 }
 
 .btn-execute:hover {
-    background: #523204;
+    background: #4A4E69;
 }
 
 .btn-cancel {
-    background: #f1e7d8;
-    color: #694707;
-    border: 1px solid #e0d5c5;
+    background: #C9ADA7;
+    color: #22223B;
+    border: 1px solid #B8A29C;
 }
 
 .btn-cancel:hover {
-    background: #e5d5bc;
+    background: #B8A29C;
 }
 
 .output-section {
@@ -114,13 +114,13 @@ body {
 }
 
 .output-section h3 {
-    color: #694707;
+    color: #4A4E69;
     margin-bottom: 1rem;
 }
 
 .command-output {
-    background: #3d2c0a;
-    color: #f7f3ec;
+    background: #22223B;
+    color: #F2E9E4;
     padding: 1.5rem;
     border-radius: 8px;
     font-family: monospace;
@@ -129,7 +129,7 @@ body {
 }
 
 .output-placeholder {
-    color: #cfb286;
+    color: #C9ADA7;
     font-style: italic;
     margin: 0;
 }
@@ -149,7 +149,7 @@ body {
     width: 1.5rem;
     height: 1.5rem;
     border-radius: 50%;
-    border: 2px solid #694707;
+    border: 2px solid #9A8C98;
     border-top-color: transparent;
     animation: spinner 0.8s linear infinite;
 }
