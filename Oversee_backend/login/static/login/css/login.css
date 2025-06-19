@@ -1,26 +1,30 @@
-
-body {
-    font-family: Arial, sans-serif;
-    text-align: center;
-    background-color: #f8f5ec;
+/* Reset and base styles */
+html, body {
     margin: 0;
     padding: 0;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    position: relative;
+    height: 94vh;
+    font-family: Arial, sans-serif;
+    background-color: #f8f5ec;
 }
 
+/* Flex layout for full-page center content and bottom wave */
+body {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    text-align: center;
+}
+
+/* Login container centered vertically */
 .login-container {
-    background: transparent;
-    padding: 20px;
+   
     border-radius: 10px;
     width: 300px;
-    position: relative;
-    /* for content over waves  */
-    z-index: 2; 
+    z-index: 2;
+    background: transparent;
+    margin-top: auto;
+    margin-bottom: auto;
 }
 
 h1 {
@@ -34,9 +38,9 @@ p {
     font-size: 14px;
 }
 
+/* Input fields */
 input[type="text"], 
-input[type="password"]
-{
+input[type="password"] {
     width: 100%;
     padding: 10px;
     margin: 10px 0;
@@ -51,6 +55,7 @@ input::placeholder {
     color: white;
 }
 
+/* Remember me and forgot password row */
 .remember-forgot {
     display: flex;
     justify-content: space-between; 
@@ -59,7 +64,6 @@ input::placeholder {
     margin-top: 10px;
     margin-bottom: 10px;
     font-weight: normal;
-
 }
 
 .remember-forgot label {
@@ -74,8 +78,7 @@ input::placeholder {
     font-weight: normal;
 }
 
-
-
+/* Login button */
 button {
     width: 150px;
     padding: 10px;
@@ -91,17 +94,34 @@ button:hover {
     background: #09203F;
 }
 
-.waves {
+/* Waves wrapper sticks to bottom */
+.svg-wrapper {
+    position: relative;
+    width: 100%;
+    height: 111px;
+}
+
+/* Ensure SVGs inside waves are layered correctly */
+.svg-wrapper svg {
     position: absolute;
     bottom: 0;
     left: 0;
     width: 100%;
+    height: auto;
 }
 
+.svg-wrapper svg:last-child {
+    z-index: 2;
+}
 
+.svg-wrapper svg:first-child {
+    z-index: 1;
+}
+
+/* Optional if you use sidebar and tables in another page */
 .sidebar {
     width: 250px;
-    background: #cfb286;
+    background: #0B2748;
     min-height: 100vh;
     box-shadow: 2px 0 5px rgba(0,0,0,0.07);
     padding: 20px 0;
