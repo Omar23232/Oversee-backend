@@ -29,10 +29,11 @@ urlpatterns = [
     path('devices/<int:device_id>/details/', views.device_details_view, name='device_details'),
     path('acknowledge-alert/<int:alert_id>/', views.acknowledge_alert, name='acknowledge_alert'),
     
-    # Settings API endpoints
     path('api/update-profile/', views.update_profile_api, name='update_profile_api'),
     path('api/change-password/', views.change_password_api, name='change_password_api'),
     path('api/thresholds/', views.thresholds_api, name='thresholds_api'),
-    path('api/users/', views.users_api, name='users_api'),
-    path('api/user-preferences/', views.user_preferences_api, name='user_preferences_api'),
+    path('api/users/', views.users_api, name='users_api'),    path('api/user-preferences/', views.user_preferences_api, name='user_preferences_api'),
+
+    path('ddos-alerts/', views.ddos_alerts_view, name='ddos_alerts'),
+    path('ddos-model/', views.ddos_model_api, name='ddos_model_api'),
     ]

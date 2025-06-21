@@ -9,7 +9,7 @@ from django.utils import timezone
 import logging
 from login.services.network_client import fetch_and_store_memory_stats
 from django.conf import settings
-from .models import DeviceCPU, DeviceInfo, NetworkAlert, NetworkThreshold
+from .models import DeviceCPU, DeviceInfo, NetworkAlert, NetworkThreshold, DDoSAlert
 from login.services.cpu_client import fetch_and_store_cpu_stats
 from login.services.execute_command import CiscoCommandExecutor
 from login.services.switch_command_executer import switch_command_executor
@@ -21,6 +21,8 @@ from django.core.paginator import Paginator
 from .decorator import role_required
 from django.contrib.auth.models import User
 from django.contrib.auth import update_session_auth_hash
+from .services.ddos_detection_service import DDoSDetectionService
+import datetime
 
 # view for the login page
 
@@ -998,3 +1000,87 @@ def user_preferences_api(request):
             
     except Exception as e:
         return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
+
+
+def ddos_model_api(request):
+   
+    # Create an instance of the DDoS detection service
+    ddos_service = DDoSDetectionService()
+    
+    # Get the  response
+    response_data = ddos_service.check_for_attacks()
+    
+    # Return the result directly as JSON
+    return JsonResponse(response_data)
+
+# DDoS Alerts view
+@login_required
+def ddos_alerts_view(request):
+    # Create an instance of the DDoS detection service
+    ddos_service = DDoSDetectionService()
+    
+    # Get recent alerts (last 24 hours)
+    recent_alerts = DDoSAlert.objects.filter(
+        detection_time__gte=timezone.now() - datetime.timedelta(hours=24)
+    ).order_by('-detection_time')[:10]
+    
+    # Format alert data for the template
+    alert_data = []
+    now = timezone.now()
+    
+    for alert in recent_alerts:
+        # Calculate duration
+        if alert.duration:
+            duration_str = str(alert.duration).split('.')[0]  # Remove microseconds
+
+        else:
+            duration = now - alert.detection_time
+            duration_str = str(duration).split('.')[0]
+            
+        alert_data.append({
+            'id': alert.id,
+            'attack_type': dict(DDoSAlert.ATTACK_TYPE_CHOICES).get(alert.attack_type, alert.attack_type),
+            'source_ip': alert.source_ip,
+            'target_ip': alert.target_ip,
+            'target_service': getattr(alert, 'target_service', 'Unknown'),
+            'severity': alert.severity,
+            'status': alert.status,
+            'detection_time': alert.detection_time.strftime('%Y-%m-%d %H:%M:%S'),
+            'duration': duration_str,
+            'ai_confidence': round(alert.ai_confidence * 100, 2),  # Convert to percentage
+            'blocked': alert.blocked
+        })
+    
+    # Get statistics
+    stats = {
+        'total_attacks_today': DDoSAlert.objects.filter(
+            detection_time__gte=now.replace(hour=0, minute=0, second=0)
+        ).count(),
+        'active_attacks': DDoSAlert.objects.filter(status='active').count(),
+        'mitigated_attacks': DDoSAlert.objects.filter(status='mitigated').count(),
+        'resolved_attacks': DDoSAlert.objects.filter(status='resolved').count(),
+        'protection_status': 'Active'  # This could be dynamic in a real app
+    }
+    
+    # Check if we have any sample data from the AI model
+    try:
+        model_response = ddos_service.check_for_attacks()
+        model_data = {
+            'status': model_response.get('status', 'Unknown'),
+            'source_ip': model_response.get('source_ip', 'Unknown'),
+            'result': model_response.get('result', 'Unknown')
+        }
+    except:
+        model_data = {
+            'status': 'error',
+            'source_ip': 'Unknown',
+            'result': 'Unknown'
+        }
+    
+    return render(request, 'login/ddos_alerts.html', {
+        'active_tab': 'ddos_alerts',
+        'alerts': alert_data,
+        'stats': stats,
+        'model_data': model_data
+    })
+
