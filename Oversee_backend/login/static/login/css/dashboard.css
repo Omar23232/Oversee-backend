@@ -4,6 +4,8 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+     
+    
 }
 
 
@@ -11,8 +13,8 @@
 
 body {
     font-family: 'Poppins', sans-serif;
-    background-color: #f8f9fa;
-    color: #212529;
+    background-color: #F1ECE2;
+    color: #464255;
     min-height: 100vh;
 }
 
@@ -31,10 +33,12 @@ body {
     padding: 2rem;
     max-width: 1400px;
     margin: 0 auto;
+        background-color: #F1ECE2;
+
 }
 
 .content-area h2 {
-    color: #694707;
+    color: #464255;
     font-size: 1.8rem;
     margin-bottom: 1.5rem;
     font-weight: 600;
@@ -50,7 +54,7 @@ body {
 }
 
 .card {
-    background: rgb(245, 235, 214);
+    background: #FFFFFF;
     border-radius: 12px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
     padding: 1.5rem;
@@ -69,7 +73,7 @@ body {
 }
 
 .metric-card h3 {
-    color: #694707;
+    color: #464255;
     font-size: 1.2rem;
     font-weight: 600;
     margin-bottom: 1.2rem;
@@ -94,7 +98,7 @@ body {
     transform: translate(-50%, -50%);
     font-size: 1.6rem;
     font-weight: 600;
-    color: #694707;
+    color: #000000;
     text-align: center;
     width: auto;
     min-width: 60px;
@@ -118,7 +122,7 @@ body {
     display: flex;
     justify-content: space-between;
     margin-bottom: 0.5rem;
-    color: #555;
+    color: #706C6C;
     font-size: 0.95rem;
 }
 
@@ -131,7 +135,7 @@ body {
     display: flex;
     justify-content: space-between;
     margin-bottom: 0.5rem;
-    color: #555;
+    color: #706C6C;
 }
 
 /* Interface Summary Card */
@@ -150,7 +154,7 @@ body {
 
 #show-interfaces-btn {
     margin-top: auto;
-    background-color: #694707;
+    background-color: #001F3F;
     border: none;
     padding: 0.75rem;
     border-radius: 8px;
@@ -160,7 +164,8 @@ body {
 }
 
 #show-interfaces-btn:hover {
-    background-color: #523204;
+    background-color: #011325;
+
 }
 
 
@@ -175,7 +180,7 @@ body {
 }
 
 .interface-detail-card {
-    border-left: 4px solid #694707;
+    border-left: 4px solid #464255;
     padding: 1rem;
     background-color: #fff;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
@@ -183,7 +188,7 @@ body {
 }
 
 .interface-detail-card h4 {
-    color: #694707;
+    color: #464255;
     margin-bottom: 0.75rem;
     font-size: 1.1rem;
     font-weight: 600;
@@ -201,7 +206,7 @@ body {
     font-size: 1rem;
     font-weight: 600;
     margin-bottom: 0.3rem;
-    color: #4a3200;
+    color: #464255;
 }
 
 .interface-metrics p {
@@ -214,7 +219,7 @@ body {
 }
 
 .warning-text {
-    color: #d35400;
+    color: #6A9AB0;
     font-weight: 500;
 }
 
@@ -269,7 +274,7 @@ body {
     50% { opacity: 0.7; }
     100% { opacity: 1; }
 }
-
+/* 
 /* Uptime Display Styling */
 .uptime-container {
     display: flex;
@@ -312,4 +317,5 @@ body {
 /* Add a subtle animation for when uptime values update */
 .uptime-value.updating {
     animation: pulse 1s ease;
-}
+} */
+
