@@ -68,17 +68,27 @@
                         <p>5m: <span id="cpu-5m">0%</span></p>
                         <p class="update-time" id="cpu-timestamp">-</p>
                     </div>
-                </div>
-
-                <!-- Uptime -->
+                </div>                <!-- Uptime -->
                 <div class="card metric-card">
                     <h3><i class="bi bi-clock-history me-2"></i>System Uptime</h3>
-                    <ul id="uptime-list" class="list-unstyled mb-1">
-                        <li><strong>Days:</strong> <span id="uptime-days">-</span></li>
-                        <li><strong>Hours:</strong> <span id="uptime-hours">-</span></li>
-                        <li><strong>Minutes:</strong> <span id="uptime-minutes">-</span></li>
-                        <li><strong>Seconds:</strong> <span id="uptime-seconds">-</span></li>
-                    </ul>
+                    <div class="uptime-container">
+                        <div class="uptime-box">
+                            <div class="uptime-value" id="uptime-days">-</div>
+                            <div class="uptime-label">Days</div>
+                        </div>
+                        <div class="uptime-box">
+                            <div class="uptime-value" id="uptime-hours">-</div>
+                            <div class="uptime-label">Hours</div>
+                        </div>
+                        <div class="uptime-box">
+                            <div class="uptime-value" id="uptime-minutes">-</div>
+                            <div class="uptime-label">Minutes</div>
+                        </div>
+                        <div class="uptime-box">
+                            <div class="uptime-value" id="uptime-seconds">-</div>
+                            <div class="uptime-label">Seconds</div>
+                        </div>
+                    </div>
                     <small class="text-muted" id="uptime-timestamp">Last checked: -</small>
                 </div>
 
