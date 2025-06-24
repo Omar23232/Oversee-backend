@@ -22,7 +22,7 @@ body {
     top: 0;
     padding: 1.5rem 0;
     z-index: 1000;
-    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
 }
 
 /* Logo */
@@ -31,7 +31,7 @@ body {
     font-weight: 700;
     letter-spacing: 1px;
     padding: 0 1.5rem 1.5rem;
-    color: #333333;
+    color: #001F3F;
     margin-bottom: 1.5rem;
 }
 
@@ -62,14 +62,14 @@ body {
 }
 
 .sidebar nav a:hover {
-    background: #6a9ab04a;
-    color: #6A9AB0;
+    background: rgba(106, 154, 176, 0.15);
+    color: #001F3F;
 }
 
 /* Active state */
 .sidebar nav li.active a {
-    background: #6a9ab04a;
-    color: #6A9AB0;
+    background: rgba(106, 154, 176, 0.15);
+    color: #001F3F;
     font-weight: 600;
 }
 
@@ -80,7 +80,7 @@ body {
     top: 0;
     height: 100%;
     width: 4px;
-    background: #6A9AB0;
+    background: #001F3F;
 }
 
 /* Icons */
@@ -95,7 +95,7 @@ body {
 }
 
 .sidebar nav li.active a i {
-    color: #6A9AB0;
+    color: #001F3F;
 }
 
 /* Logout button */
@@ -117,7 +117,7 @@ body {
 }
 
 .logout-link:hover {
-    background: #6a9ab04a;
+    background: rgba(106, 154, 176, 0.15);
 }
 
 .logout-link i {
