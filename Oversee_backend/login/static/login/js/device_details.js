@@ -5,11 +5,10 @@ document.addEventListener('DOMContentLoaded', function() {
         const memoryPercentage = parseFloat(document.getElementById('memory-percentage').textContent);
         const memoryChart = new Chart(memoryCanvas, {
             type: 'doughnut',
-            data: {
-                labels: ['Used', 'Free'],
+            data: {                labels: ['Used', 'Free'],
                 datasets: [{
                     data: [memoryPercentage, 100 - memoryPercentage],
-                    backgroundColor: ['#694707', '#f1e7d8'],
+                    backgroundColor: ['#001F3F', '#6A9AB0'],
                     borderWidth: 0,
                     cutout: '75%'
                 }]
@@ -58,11 +57,10 @@ document.addEventListener('DOMContentLoaded', function() {
             const cpuChart = new Chart(cpuCanvas, {
                 type: 'bar',
                 data: {
-                    labels: cpuLabels,
-                    datasets: [{
+                    labels: cpuLabels,                    datasets: [{
                         label: 'CPU Usage',
                         data: cpuValues,
-                        backgroundColor: '#694707',
+                        backgroundColor: '#001F3F',
                         borderRadius: 6
                     }]
                 },

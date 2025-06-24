@@ -6,9 +6,9 @@
 }
 
 body {
-    font-family: 'Poppins', Arial, sans-serif;
-    background: #f8f9fa;
-    color: #001F3F;
+    font-family: 'Poppins', sans-serif;
+    background: #F1ECE2;
+    color: #464255;
     min-height: 100vh;
 }
 
@@ -19,10 +19,48 @@ body {
 }
 
 .content-area h2 {
-    color: #001F3F;
+    color: #464255;
     font-size: 1.8rem;
     margin-bottom: 1.5rem;
     font-weight: 600;
+}
+
+/* Header section */
+.header-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+/* Back button styling */
+.btn-back {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.75rem 1.25rem;
+    background-color: #001F3F;
+    color: white;
+    text-decoration: none;
+    border-radius: 6px;
+    font-weight: 500;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+}
+
+.btn-back:hover {
+    background-color: #001429;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 31, 63, 0.3);
+}
+
+.arrow-left {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border-top: 2px solid white;
+    border-left: 2px solid white;
+    transform: rotate(-45deg);
+    margin-right: 8px;
 }
 
 /* Table Container */
@@ -79,9 +117,11 @@ body {
     
 }
 
+
+
 .table th {
     background-color: #ffffff;
-    color: #001F3F;
+    color: #464255;
     font-weight: 600;
     font-size: 0.85rem;
     text-transform: uppercase;
@@ -98,7 +138,7 @@ body {
 }
 
 .table tbody tr:hover {
-    background-color: #f9f6f0;
+    background-color: #f7f3ec;
     transform: translateY(-1px);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
@@ -110,7 +150,7 @@ body {
 .empty-row {
     text-align: center;
     padding: 2rem !important;
-    color: #999;
+    color: #6A9AB0;
     font-style: italic;
 }
 /* Status indicators - specifically targeting the centering issue */
@@ -125,19 +165,16 @@ body {
 .status-dormant {
     display: inline-flex;
     align-items: center;
-    justify-content: center; /* Center the text inside */
+    justify-content: center; 
     gap: 0.5rem;
     padding: 0.5rem 1rem;
     border-radius: 30px;
     font-weight: 500;
     font-size: 0.85rem;
-    min-width: 150px; /* Fixed width for better alignment */
-    margin: 0 auto; /* Center the element */
+    min-width: 170px; 
+    margin: 0 auto; 
     transform: translateY(12px);
-    
-   
 }
-
 
 .status-up {
     background-color: rgba(16, 185, 129, 0.1);
@@ -178,17 +215,18 @@ body {
 }
 
 .bandwidth-in::before {
-    background-color: #3b82f6; 
+    background-color: #001F3F; 
 }
 
 .bandwidth-out::before {
-    background-color: #10b981; 
+    background-color: #6A9AB0; 
 }
 
 /* Warning indicators */
 .warning {
-    background-color: #fff3cd;
+    background-color: rgba(255, 215, 0, 0.1);
     position: relative;
+    color: #464255;
 }
 
 .warning::after {
@@ -248,14 +286,14 @@ td[data-label="Packet Loss"]:hover .tooltip {
     justify-content: flex-end;
     gap: 8px;
     margin-bottom: 1rem;
-    color: #001F3F;
+    color: #464255;
     font-size: 0.85rem;
 }
 
 .refresh-indicator .dot {
     width: 8px;
     height: 8px;
-    background-color: #10b981;
+    background-color: #3D9970;
     border-radius: 50%;
     animation: pulse 2s infinite;
 }
@@ -316,14 +354,12 @@ td[data-label="Packet Loss"]:hover .tooltip {
 
     .table td:last-child {
         border-bottom: none;
-    }
-
-    .table td::before {
+    }    .table td::before {
         content: attr(data-label);
         position: absolute;
         left: 0.75rem;
         font-weight: 600;
-        color: #001F3F;
+        color: #464255;
     }
 
     /* Reset the centered columns on mobile */

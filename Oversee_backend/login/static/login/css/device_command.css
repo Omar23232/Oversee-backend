@@ -7,8 +7,8 @@
 
 body {
     font-family: 'Poppins', sans-serif;
-    background-color: #F2E9E4;
-    color: #22223B;
+    background-color: #F1ECE2;
+    color: #464255;
 }
 
 .command-container {
@@ -22,24 +22,25 @@ body {
 }
 
 .command-header h2 {
-    color: #22223B;
+    color: #464255;
     margin-bottom: 0.5rem;
+    font-weight: 600;
 }
 
 .device-info {
-    background: #E0E1DD;
+    background: #FFFFFF;
     padding: 1rem;
     border-radius: 8px;
-    border: 1px solid #C9ADA7;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
 }
 
 .device-info p {
     margin: 0.25rem 0;
-    color: #22223B;
+    color: #464255;
 }
 
 .command-form-wrapper {
-    background: #ffffff;
+    background: #FFFFFF;
     padding: 1.5rem;
     border-radius: 10px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
@@ -53,26 +54,26 @@ body {
 .form-group label {
     display: block;
     margin-bottom: 0.5rem;
-    color: #4A4E69;
+    color: #464255;
     font-weight: 500;
 }
 
 .form-group input {
     width: 100%;
     padding: 0.75rem;
-    border: 1px solid #C9ADA7;
+    border: 1px solid #E1DFE9;
     border-radius: 6px;
     font-family: monospace;
     font-size: 0.95rem;
     background-color: #fff;
-    color: #22223B;
+    color: #464255;
     transition: all 0.2s ease;
 }
 
 .form-group input:focus {
     outline: none;
-    border-color: #4A4E69;
-    box-shadow: 0 0 0 3px rgba(154, 140, 152, 0.2);
+    border-color: #001F3F;
+    box-shadow: 0 0 0 3px rgba(0, 31, 63, 0.2);
 }
 
 .form-actions {
@@ -90,23 +91,23 @@ body {
 }
 
 .btn-execute {
-    background: #22223B;
+    background: #001F3F;
     color: white;
     border: none;
 }
 
 .btn-execute:hover {
-    background: #4A4E69;
+    background: #011529;
 }
 
 .btn-cancel {
-    background: #C9ADA7;
-    color: #22223B;
-    border: 1px solid #B8A29C;
+    background: #6A9AB0;
+    color: #001F3F;
+    border: none;
 }
 
 .btn-cancel:hover {
-    background: #B8A29C;
+    background: #588194;
 }
 
 .output-section {
@@ -114,13 +115,14 @@ body {
 }
 
 .output-section h3 {
-    color: #4A4E69;
+    color: #464255;
     margin-bottom: 1rem;
+    font-weight: 600;
 }
 
 .command-output {
-    background: #22223B;
-    color: #F2E9E4;
+    background: #001F3F;
+    color: white;
     padding: 1.5rem;
     border-radius: 8px;
     font-family: monospace;
@@ -129,7 +131,7 @@ body {
 }
 
 .output-placeholder {
-    color: #C9ADA7;
+    color: #6A9AB0;
     font-style: italic;
     margin: 0;
 }
@@ -149,7 +151,7 @@ body {
     width: 1.5rem;
     height: 1.5rem;
     border-radius: 50%;
-    border: 2px solid #9A8C98;
+    border: 2px solid #6A9AB0;
     border-top-color: transparent;
     animation: spinner 0.8s linear infinite;
 }

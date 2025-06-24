@@ -1,4 +1,10 @@
 /* Modern Alerts Page Styling */
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #F1ECE2;
+    color: #464255;
+}
+
 .main-content {
     padding: 2rem;
     max-width: 100%;
@@ -15,26 +21,27 @@
 
 .alerts-header h2 {
     font-size: 1.8rem;
-    color: #2c3e50;
+    color: #464255;
     margin: 0;
+    font-weight: 600;
 }
 
 .primary-btn {
-    background-color: #6A9AB0;
+    background-color: #001F3F;
     color: white;
     border: none;
     padding: 0.75rem 1.5rem;
-    border-radius: 8px;
+    border-radius: 6px;
     cursor: pointer;
-    font-weight: 600;
-    transition: background-color 0.3s ease;
+    font-weight: 500;
+    transition: all 0.2s ease;
     display: flex;
     align-items: center;
     gap: 0.5rem;
 }
 
 .primary-btn:hover {
-    background-color: #6A9AB0;
+    background-color: #011529;
 }
 
 .primary-btn i {
@@ -43,9 +50,9 @@
 
 /* Alerts Table Styling */
 .alerts-container {
-    background: white;
-    border-radius: 12px;
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+    background: #FFFFFF;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
     overflow: hidden;
     margin-bottom: 2rem;
 }
@@ -64,14 +71,14 @@
     padding: 1rem;
     text-align: left;
     font-weight: 600;
-    color: #4a5568;
+    color: #464255;
     border-bottom: 2px solid #edf2f7;
 }
 
 .alerts-table td {
     padding: 1rem;
     border-bottom: 1px solid #edf2f7;
-    color: #2d3748;
+    color: #464255;
 }
 
 .alerts-table tbody tr {
@@ -91,13 +98,13 @@
     border-left: 4px solid #ecc94b;
 }
 .filter-panel {
-    background-color: #fff;
-    border-radius: 1rem;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-    padding: 1rem;
-    max-width:100%;
-    margin: 1rem auto;
-    font-family: 'Segoe UI', sans-serif;
+    background-color: #FFFFFF;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    padding: 1.5rem;
+    max-width: 100%;
+    margin: 1.5rem auto;
+    font-family: 'Poppins', sans-serif;
 }
 
 .secondary-btn {
@@ -106,20 +113,23 @@
     gap: 0.5rem;
     background: transparent;
     color: #001F3F;
-    font-weight: 600;
-    border: 2px solid #001F3F;
-    padding: 0.5rem 1rem;
-    border-radius: 0.5rem;
+    font-weight: 500;
+    border: 1px solid #001F3F;
+    padding: 0.75rem 1.5rem;
+    border-radius: 6px;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: all 0.2s ease;
 }
 
 .secondary-btn:hover {
-    background-color: #eff6ff;
+    background-color: rgba(0, 31, 63, 0.05);
 }
 
 .filter-options {
-    margin-top: 1rem;
+    margin-top: 1.5rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
 }
 
 .filter-group {
@@ -128,24 +138,27 @@
 
 .filter-group label {
     display: block;
-    font-size: 0.9rem;
+    font-size: 0.95rem;
     margin-bottom: 0.5rem;
-    color: #374151;
+    color: #464255;
+    font-weight: 500;
 }
 
 .filter-group select {
     width: 100%;
-    padding: 0.5rem;
-    border: 1px solid #d1d5db;
-    border-radius: 0.5rem;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
-    transition: border 0.2s;
+    padding: 0.75rem;
+    border: 1px solid #E1DFE9;
+    border-radius: 6px;
+    box-shadow: none;
+    transition: all 0.2s ease;
+    color: #464255;
+    background-color: #FFFFFF;
 }
 
 .filter-group select:focus {
     border-color: #001F3F;
     outline: none;
-    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+    box-shadow: 0 0 0 3px rgba(0, 31, 63, 0.2);
 }
 
 .severity-info {
@@ -160,11 +173,11 @@
 }
 
 .metric-value {
-    background-color: #edf2f7;
+    background-color: #F1ECE2;
     padding: 0.25rem 0.75rem;
     border-radius: 6px;
     font-size: 0.875rem;
-    color: #4a5568;
+    color: #464255;
 }
 
 .acknowledge-btn {
@@ -174,8 +187,9 @@
     padding: 0.5rem 1rem;
     border-radius: 6px;
     cursor: pointer;
-    transition: background-color 0.2s ease;
+    transition: all 0.2s ease;
     font-size: 0.875rem;
+    font-weight: 500;
 }
 
 .acknowledge-btn:disabled {
@@ -205,7 +219,7 @@
     border: 4px solid #f3f3f3;
     border-top: 4px solid #6A9AB0;
     border-radius: 50%;
-    animation: spin 1s linear infinite;
+    animation: spin 0.8s linear infinite;
 }
 
 @keyframes spin {
@@ -218,13 +232,14 @@
     display: none;
     text-align: center;
     padding: 3rem 1rem;
-    color: #718096;
+    color: #464255;
+    font-family: 'Poppins', sans-serif;
 }
 
 .empty-state i {
     font-size: 3rem;
     margin-bottom: 1rem;
-    color: #a0aec0;
+    color: #6A9AB0;
 }
 
 /* Responsive Design */

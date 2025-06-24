@@ -38,12 +38,12 @@
     margin: 0 0 0.5rem 0;
     font-size: 1.2rem;
     font-weight: 600;
-    color: #2d3748;
+    color: #464255;
 }
 
 .status-content p {
     margin: 0;
-    color: #718096;
+    color: #464255;
 }
 
 /* Stats Container */
@@ -58,7 +58,7 @@
     border-radius: 12px;
     padding: 1.5rem;
     text-align: center;
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
     transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
@@ -70,12 +70,12 @@
 .stat-value {
     font-size: 2rem;
     font-weight: 700;
-    color: #4a3200;
+    color: #001F3F;
     margin-bottom: 0.5rem;
 }
 
 .stat-label {
-    color: #718096;
+    color: #464255;
     font-size: 0.9rem;
 }
 

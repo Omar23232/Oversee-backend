@@ -274,7 +274,7 @@ body {
     50% { opacity: 0.7; }
     100% { opacity: 1; }
 }
-/* 
+
 /* Uptime Display Styling */
 .uptime-container {
     display: flex;
@@ -314,8 +314,7 @@ body {
     letter-spacing: 0.5px;
 }
 
-/* Add a subtle animation for when uptime values update */
+
 .uptime-value.updating {
     animation: pulse 1s ease;
-} */
-
+} 

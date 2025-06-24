@@ -1,16 +1,17 @@
 /* Settings Page Modern Styling */
 /* Base settings */
 :root {
-    --primary-color: #0B2748;                  /* Dark blue for main elements */
-    --primary-hover: #09203F;                  /* Darker blue on hover */
-    --secondary-color: #6A9AB0;                /* Accent blue for icons or highlights */
-    --accent-color: #706C6C;                   /* Muted gray for subtle text or borders */
+    --primary-color: #001F3F;                  /* Dark navy for main elements */
+    --primary-hover: #001429;                  /* Darker navy on hover */
+    --secondary-color: #6A9AB0;                /* Teal accent for icons or highlights */
+    --accent-color: #464255;                   /* Dark gray for subtle text or borders */
     --text-primary: #464255;                   /* Main text color */
     --text-secondary: #706C6C;                 /* Secondary text color */
-    --border-color: #f1e7d8;                   /* Light beige border */
+    --background-color: #F1ECE2;               /* Light beige background */
+    --border-color: #E5DFD6;                   /* Light beige border */
     --card-shadow: 0 0.25rem 1rem rgba(0, 0, 0, 0.05);
-    --hover-bg: rgba(122, 144, 168, 0.12);     /* Soft hover effect based on secondary color */
-    --active-bg: rgba(122, 144, 168, 0.25);    /* Slightly darker active background */
+    --hover-bg: rgba(106, 154, 176, 0.12);     /* Soft hover effect based on secondary color */
+    --active-bg: rgba(106, 154, 176, 0.25);    /* Slightly darker active background */
     --radius-sm: 0.5rem;
     --radius-md: 0.75rem;
     --radius-lg: 1rem;
@@ -22,8 +23,9 @@
     margin-left: 250px;
     padding: 2rem;
     min-height: 100vh;
-    background: #F1ECE2;
+    background: var(--background-color);
     color: var(--text-primary);
+    font-family: 'Poppins', sans-serif;
 }
 
 /* Page title */
@@ -154,8 +156,8 @@
 }
 
 .form-control:focus, .form-select:focus {
-    border-color: var(--accent-color);
-    box-shadow: 0 0 0 0.25rem rgba(207, 178, 134, 0.25);
+    border-color: var(--secondary-color);
+    box-shadow: 0 0 0 0.25rem rgba(106, 154, 176, 0.25);
 }
 
 .form-label {
@@ -192,16 +194,16 @@
 }
 
 .btn-primary {
-    background-color: #6A9AB0; /* #0B2748 */
-    border-color: #6A9AB0;
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
     color: white;
 }
 
 .btn-primary:hover, .btn-primary:focus {
-    background-color: #6A9AB0; /* #0B2748 */
-    border-color: #6A9AB0;
+    background-color: var(--primary-hover);
+    border-color: var(--primary-hover);
     transform: translateY(-2px);
-    box-shadow: 0 4px 10px #6A9AB0;
+    box-shadow: 0 4px 10px rgba(0, 31, 63, 0.3);
 }
 
 .btn-outline-primary {
@@ -316,7 +318,7 @@
 
 /* Add a checkmark to the selected theme */
 .form-check-input:checked + label + .theme-preview {
-    border: 2px solid #6A9AB0;
+    border: 2px solid var(--primary-color);
     position: relative;
 }
 
@@ -327,7 +329,7 @@
     right: 15px;
     width: 25px;
     height: 25px;
-    background: #6A9AB0;
+    background: var(--primary-color);
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -345,6 +347,10 @@
     margin-bottom: 1rem;
     color: var(--text-primary);
     font-size: 0.95rem;
+    background-color: white;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    box-shadow: var(--card-shadow);
 }
 
 .table th {
@@ -374,7 +380,7 @@
 
 .table th i {
     margin-right: 6px;
-    color: var(--accent-color);
+    color: var(--secondary-color);
 }
 
 /* Badge styling */
@@ -389,22 +395,22 @@
 }
 
 .badge.bg-warning {
-    background-color: #ffc107 !important;
-    color: #212529;
+    background-color: #FFD700 !important;
+    color: #464255;
 }
 
 .badge.bg-danger {
-    background-color: #dc3545 !important;
+    background-color: #FF4136 !important;
     color: white;
 }
 
 .badge.bg-success {
-    background-color: #28a745 !important;
+    background-color: #3D9970 !important;
     color: white;
 }
 
 .badge.bg-info {
-    background-color: #17a2b8 !important;
+    background-color: #6A9AB0 !important;
     color: white;
 }
 
@@ -451,7 +457,7 @@
 }
 
 .form-check-input:focus {
-    box-shadow: 0 0 0 0.25rem rgba(124, 77, 7, 0.25);
+    box-shadow: 0 0 0 0.25rem rgba(0, 31, 63, 0.25);
 }
 
 .form-check-label {
@@ -570,7 +576,7 @@
 }
 
 ::-webkit-scrollbar-thumb {
-    background: var(--accent-color);
+    background: var(--secondary-color);
     border-radius: 10px;
 }
 

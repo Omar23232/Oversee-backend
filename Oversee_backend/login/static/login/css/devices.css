@@ -5,6 +5,13 @@
     box-sizing: border-box;
 }
 
+/* Body Style */
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #F1ECE2;
+    color: #464255;
+}
+
 /* Content Area */
 .content-area {
     padding: 2rem;
@@ -71,7 +78,7 @@
 }
 
 .devices-table tbody tr:hover {
-    background: #f7f3ec;
+    background: #ffffff;
     transform: translateY(-1px);
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
 }
@@ -271,4 +278,4 @@
         color: #4A4E69;
         text-decoration: underline;
     }
-}    
+}

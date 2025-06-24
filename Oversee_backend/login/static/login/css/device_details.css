@@ -1,3 +1,10 @@
+/* Base Styles */
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #F1ECE2;
+    color: #464255;
+}
+
 /* Main Layout */
 .content-area {
     padding: 2rem;
@@ -177,7 +184,7 @@
 }
 
 .interfaces-table th {
-    background: #f1e7d8;
+    background: #FFFFFF;
     color: #464255;
     font-weight: 600;
     font-size: 0.9rem;
@@ -185,33 +192,65 @@
     letter-spacing: 0.5px;
     padding: 1rem;
     text-align: left;
+    border-bottom: 1px solid #e0d5c5;
 }
 
 .interfaces-table td {
     padding: 1rem;
-    border-bottom: 1px solid #f1f1f1;
+    border-bottom: 1px solid #e0e0e0;
+    color: #464255;
+    font-size: 0.95rem;
 }
 
 .interfaces-table tr:last-child td {
     border-bottom: none;
 }
 
+.interfaces-table tr {
+    transition: all 0.2s ease;
+}
+
+.interfaces-table tr:hover {
+    background: #F1ECE2;
+}
+
 .status-badge {
-    display: inline-block;
-    padding: 0.3rem 0.6rem;
-    border-radius: 20px;
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.75rem;
+    border-radius: 12px;
     font-size: 0.85rem;
     font-weight: 500;
 }
 
 .status-badge.status-up {
-    background-color: #dcfce7;
-    color: #166534;
+    background: rgba(34, 197, 94, 0.1);
+    color: rgb(21, 128, 61);
+}
+
+.status-badge.status-up::before {
+    content: '';
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    margin-right: 6px;
+    border-radius: 50%;
+    background: #22c55e;
 }
 
 .status-badge.status-down {
-    background-color: #fee2e2;
-    color: #b91c1c;
+    background: rgba(239, 68, 68, 0.1);
+    color: rgb(185, 28, 28);
+}
+
+.status-badge.status-down::before {
+    content: '';
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    margin-right: 6px;
+    border-radius: 50%;
+    background: #ef4444;
 }
 
 /* Alerts Section */
@@ -318,7 +357,7 @@
     align-items: center;
     gap: 0.5rem;
     padding: 0.75rem 1.25rem;
-    border-radius: 8px;
+    border-radius: 6px;
     font-weight: 500;
     cursor: pointer;
     transition: all 0.2s ease;
@@ -326,23 +365,23 @@
 }
 
 .btn-primary {
-    background-color: #22223B;
+    background-color: #001F3F;
     color: white;
     border: none;
 }
 
 .btn-primary:hover {
-    background-color: #4A4E69;
+    background-color: #011529;
 }
 
 .btn-secondary {
-    background-color: #C9ADA7;
-    color: #22223B;
-    border: 1px solid #B8A29C;
+    background-color: #6A9AB0;
+    color: #001F3F;
+    border: none;
 }
 
 .btn-secondary:hover {
-    background-color: #B8A29C;
+    background-color: #588194;
 }
 
 
