@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     labels: ["Used", "Free"],
                     datasets: [{
                         data: [0, 100], // Initial state
-                        backgroundColor: ["#007bff", "#dcdcdc"],
+                        backgroundColor: ["#6A9AB0", "#dcdcdc"],
                     }],
                 },
                 options: {
@@ -41,7 +41,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     datasets: [{
                         label: "CPU",
                         data: [30, 40, 35, 50, 45],
-                        borderColor: "#f39c12",
+                        borderColor: "#6A9AB0",
                         fill: false,
                     }, ],
                 },
@@ -95,21 +95,90 @@ document.addEventListener("DOMContentLoaded", function() {
                     ]);
                 }
             });
-    }
-    // 3) Fetch and update uptime data
+    }    // 3) Fetch and update uptime data
     function pollUptime() {
-    fetch('/uptime-api/')
-        .then(response => response.json())
-        .then(data => {
-            if (data.status === 'success' && typeof data.output === 'object') {
-                document.getElementById('uptime-days').textContent = data.output.days ?? '-';
-                document.getElementById('uptime-hours').textContent = data.output.hours ?? '-';
-                document.getElementById('uptime-minutes').textContent = data.output.minutes ?? '-';
-                document.getElementById('uptime-seconds').textContent = data.output.seconds ?? '-';
-                document.getElementById('uptime-timestamp').textContent = `Last checked: ${data.timestamp}`;
-            }
-        })
-        .catch(console.error);
+        fetch('/uptime-api/')
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success' && Array.isArray(data.output)) {
+                    // Get the result text from the output array
+                    const uptimeText = data.output[0]?.result || '';
+                    
+                    // Parse the uptime text (e.g., "Router uptime is 13 hours, 3 minutes")
+                    const uptimeInfo = parseUptimeText(uptimeText);
+                    
+                    // Update the DOM elements with animation
+                    updateUptimeElement('uptime-days', uptimeInfo.days || '-');
+                    updateUptimeElement('uptime-hours', uptimeInfo.hours || '-');
+                    updateUptimeElement('uptime-minutes', uptimeInfo.minutes || '-');
+                    updateUptimeElement('uptime-seconds', uptimeInfo.seconds || '-');
+                    
+                    document.getElementById('uptime-timestamp').textContent = `Last checked: ${data.timestamp}`;
+                }
+            })
+            .catch(console.error);
+    }
+    
+    // Helper function to update uptime elements with animation
+    function updateUptimeElement(id, value) {
+        const element = document.getElementById(id);
+        if (!element) return;
+        
+        // Only animate if the value has changed
+        if (element.textContent !== value) {
+            // Add animation class
+            element.classList.add('updating');
+            
+            // Update the value
+            element.textContent = value;
+            
+            // Remove animation class after animation completes
+            setTimeout(() => {
+                element.classList.remove('updating');
+            }, 1000);
+        }
+    }
+
+    // Helper function to parse uptime text
+    function parseUptimeText(text) {
+        const result = {
+            days: '-',
+            hours: '-',
+            minutes: '-',
+            seconds: '-'
+        };
+        
+        // Check if the text contains uptime information
+        if (!text.includes('uptime is')) return result;
+        
+        // Extract the uptime part (after "uptime is")
+        const uptimePart = text.split('uptime is')[1].trim();
+        
+        // Parse days
+        if (uptimePart.includes('day') || uptimePart.includes('days')) {
+            const daysMatch = uptimePart.match(/(\d+)\s+days?/);
+            if (daysMatch) result.days = daysMatch[1];
+        }
+        
+        // Parse hours
+        if (uptimePart.includes('hour') || uptimePart.includes('hours')) {
+            const hoursMatch = uptimePart.match(/(\d+)\s+hours?/);
+            if (hoursMatch) result.hours = hoursMatch[1];
+        }
+        
+        // Parse minutes
+        if (uptimePart.includes('minute') || uptimePart.includes('minutes')) {
+            const minutesMatch = uptimePart.match(/(\d+)\s+minutes?/);
+            if (minutesMatch) result.minutes = minutesMatch[1];
+        }
+        
+        // Parse seconds
+        if (uptimePart.includes('second') || uptimePart.includes('seconds')) {
+            const secondsMatch = uptimePart.match(/(\d+)\s+seconds?/);
+            if (secondsMatch) result.seconds = secondsMatch[1];
+        }
+        
+        return result;
     }
 
     // 4) Polling for interface states

@@ -15,12 +15,12 @@
 
 .alerts-header h2 {
     font-size: 1.8rem;
-    color: #4a3200;
+    color: #2c3e50;
     margin: 0;
 }
 
 .primary-btn {
-    background-color: #4a3200;
+    background-color: #6A9AB0;
     color: white;
     border: none;
     padding: 0.75rem 1.5rem;
@@ -34,7 +34,7 @@
 }
 
 .primary-btn:hover {
-    background-color: #5d4000;
+    background-color: #6A9AB0;
 }
 
 .primary-btn i {
@@ -57,14 +57,14 @@
 }
 
 .alerts-table thead {
-    background-color: #f3f0ea;
+    background-color: #f8f9fa;
 }
 
 .alerts-table th {
     padding: 1rem;
     text-align: left;
     font-weight: 600;
-    color: #4a3200;
+    color: #4a5568;
     border-bottom: 2px solid #edf2f7;
 }
 
@@ -90,34 +90,66 @@
 .severity-warning {
     border-left: 4px solid #ecc94b;
 }
+.filter-panel {
+    background-color: #fff;
+    border-radius: 1rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    padding: 1rem;
+    max-width:100%;
+    margin: 1rem auto;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.secondary-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: transparent;
+    color: #001F3F;
+    font-weight: 600;
+    border: 2px solid #001F3F;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.secondary-btn:hover {
+    background-color: #eff6ff;
+}
+
+.filter-options {
+    margin-top: 1rem;
+}
+
+.filter-group {
+    margin-bottom: 1rem;
+}
+
+.filter-group label {
+    display: block;
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+    color: #374151;
+}
+
+.filter-group select {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #d1d5db;
+    border-radius: 0.5rem;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    transition: border 0.2s;
+}
+
+.filter-group select:focus {
+    border-color: #001F3F;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+}
 
 .severity-info {
-    border-left: 4px solid #4299e1;
-}
-
-/* Severity Badge Styles */
-.severity-badge {
-    display: inline-block;
-    padding: 0.2rem 0.6rem;
-    border-radius: 12px;
-    font-size: 0.75rem;
-    font-weight: 600;
-    text-transform: uppercase;
-}
-
-.severity-badge.critical {
-    background-color: #fed7d7;
-    color: #c53030;
-}
-
-.severity-badge.warning {
-    background-color: #fefcbf;
-    color: #b7791f;
-}
-
-.severity-badge.info {
-    background-color: #bee3f8;
-    color: #2b6cb0;
+    border-left: 4px solid #001F3F;
 }
 
 /* Alert Details */
@@ -127,21 +159,12 @@
     gap: 1rem;
 }
 
-.alert-name {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-}
-
 .metric-value {
     background-color: #edf2f7;
     padding: 0.25rem 0.75rem;
     border-radius: 6px;
     font-size: 0.875rem;
     color: #4a5568;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4rem;
 }
 
 .acknowledge-btn {
@@ -151,11 +174,8 @@
     padding: 0.5rem 1rem;
     border-radius: 6px;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: background-color 0.2s ease;
     font-size: 0.875rem;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4rem;
 }
 
 .acknowledge-btn:disabled {
@@ -172,7 +192,7 @@
     display: none;
     justify-content: center;
     align-items: center;
-    padding: 3rem;
+    padding: 2rem;
 }
 
 .loading .loading-spinner {
@@ -183,7 +203,7 @@
     width: 40px;
     height: 40px;
     border: 4px solid #f3f3f3;
-    border-top: 4px solid #4a3200;
+    border-top: 4px solid #6A9AB0;
     border-radius: 50%;
     animation: spin 1s linear infinite;
 }
@@ -197,67 +217,14 @@
 .empty-state {
     display: none;
     text-align: center;
-    padding: 3.5rem 1rem;
+    padding: 3rem 1rem;
     color: #718096;
-    background-color: #f8f9fa;
-    border-radius: 8px;
 }
 
 .empty-state i {
     font-size: 3rem;
     margin-bottom: 1rem;
-    color: #4a3200;
-    opacity: 0.7;
-}
-
-.empty-state h3 {
-    color: #4a3200;
-    font-size: 1.3rem;
-    margin-bottom: 0.5rem;
-}
-
-.empty-state p {
-    font-size: 1rem;
-    color: #718096;
-}
-
-/* Filter Panel Styling */
-.filter-panel {
-    background-color: white;
-    border-radius: 12px;
-    padding: 1.25rem;
-    margin-bottom: 1.5rem;
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
-}
-
-.filter-options {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1.2rem;
-}
-
-.filter-group {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    min-width: 180px;
-}
-
-.filter-group label {
-    font-weight: 500;
-    color: #4a5568;
-}
-
-.filter-group select {
-    padding: 0.5rem;
-    border-radius: 4px;
-    border: 1px solid #e2e8f0;
-    background-color: #fff;
-    color: #4a5568;
-}
-
-.filter-group input[type="checkbox"] {
-    margin-right: 0.5rem;
+    color: #a0aec0;
 }
 
 /* Responsive Design */

@@ -175,3 +175,56 @@ class LoginAttempt(models.Model):
         status = "Success" if self.success else "Failed"
         return f"{self.username} - {status} - {self.timestamp}"
     
+# Model for DDoS attack alerts
+class DDoSAlert(models.Model):
+    ATTACK_TYPE_CHOICES = [
+        ('ddos_attack', 'DDoS Attack'),
+    ]
+    
+    STATUS_CHOICES = [
+        ('active', 'Active'),
+        ('mitigated', 'Mitigated'),
+        ('resolved', 'Resolved')
+    ]
+    
+    SEVERITY_CHOICES = [
+        ('critical', 'Critical'),
+    ]
+    
+    attack_type = models.CharField(max_length=20, choices=ATTACK_TYPE_CHOICES)
+    source_ip = models.GenericIPAddressField()
+    target_ip = models.GenericIPAddressField()
+    
+    # Detection and status
+    detection_time = models.DateTimeField(auto_now_add=True)
+    duration = models.DurationField(null=True, blank=True)  # Will be updated when attack is resolved
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='active')
+    severity = models.CharField(max_length=10, choices=SEVERITY_CHOICES)
+    ai_confidence = models.FloatField(default=1.0)  # Confidence score from AI model (0.0 to 1.0)
+    
+    # Response tracking
+    blocked = models.BooleanField(default=False)
+    
+    class Meta:
+        ordering = ['-detection_time']
+        verbose_name = 'DDoS Alert'
+        verbose_name_plural = 'DDoS Alerts'
+    
+    def __str__(self):
+        return f"{self.attack_type} attack from {self.source_ip} to {self.target_ip} ({self.status})"
+    
+    @property
+    def is_active(self):
+        return self.status == 'active'
+    
+    @property
+    def is_recent(self):
+        """Returns True if the alert is less than 24 hours old"""
+        if not self.detection_time:
+            return False
+        
+        import datetime
+        from django.utils import timezone
+        
+        time_threshold = timezone.now() - datetime.timedelta(hours=24)
+        return self.detection_time >= time_threshold

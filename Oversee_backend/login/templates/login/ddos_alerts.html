@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+{% load static %}
+{% block content %}
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DDoS Attack Alerts - Oversee</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+    <link rel="stylesheet" href="{% static 'login/css/dashboard.css' %}" />
+    <link rel="stylesheet" href="{% static 'login/css/alerts.css' %}" />
+    <link rel="stylesheet" href="{% static 'login/css/ddos_alerts.css' %}" />
+    <link rel="stylesheet" href="{% static 'login/css/sidebar.css' %}" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <!-- Sidebar -->
+    {% include 'login/partials/sidebar.html' %}
+    
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="alerts-header">
+            <h2><i class="fas fa-shield-alt"></i> DDoS Attack Detection</h2>
+            <div class="header-actions">
+                <div class="status-indicator" id="protectionStatus">
+                    <span class="status-dot active"></span>
+                    <span class="status-text">{{ stats.protection_status }}</span>
+                </div>
+                
+            </div>
+        </div>
+        
+        <!-- Status Panel -->
+        <div class="status-panel">
+            <div class="status-card">
+                <div class="status-icon safe">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <div class="status-content">
+                    <h3 id="currentThreatLevel">Current Threat Level: {% if stats.active_attacks > 0 %}high{% else %}Low{% endif %}</h3>
+                    <p>Last scan: <span id="lastScanTime">Just now</span></p>
+                </div>
+            </div>
+            
+            <div class="stats-container">
+                <div class="stat-card">
+                    <div class="stat-value" id="totalAttacksBlocked">{{ stats.total_attacks_today }}</div>
+                    <div class="stat-label">Attacks Detected Today</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="activeAttacks">{{ stats.active_attacks }}</div>
+                    <div class="stat-label">Active Attacks</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="mitigatedAttacks">{{ stats.mitigated_attacks }}</div>
+                    <div class="stat-label">Mitigated Attacks</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="resolvedAttacks">{{ stats.resolved_attacks }}</div>
+                    <div class="stat-label">Resolved Attacks</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filter Panel -->
+        <div class="filter-panel">
+            <div class="filter-options">
+                <div class="filter-group">
+                    <label for="timeRangeFilter">Time Range:</label>
+                    <select id="timeRangeFilter" aria-label="Filter by time range">
+                        <option value="24h">Last 24 Hours</option>
+                        <option value="7d">Last 7 Days</option>
+                        <option value="30d">Last 30 Days</option>
+                        <option value="all">All Time</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="showResolvedCheckbox">
+                        <input type="checkbox" id="showResolvedCheckbox">
+                        Show Resolved Attacks
+                    </label>
+                </div>
+            </div>
+        </div>        <div class="alerts-container" role="region" aria-label="DDoS Attack Alerts">
+            {% if alerts %}
+            <table class="alerts-table" role="table" style="display: table;">
+                <thead>
+                    <tr>
+                        <th scope="col">Attack Type</th>
+                        <th scope="col">Severity</th>
+                        <th scope="col">Source</th>
+                        <th scope="col">Target</th>
+                        <th scope="col">Timestamp</th>
+                        <th scope="col">Duration</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="ddosAlertsTableBody">
+                    {% for alert in alerts %}
+                    <tr class="severity-{% if alert.severity == 'critical' %}critical{% elif alert.severity == 'high' %}warning{% else %}info{% endif %}">
+                        <td>{{ alert.attack_type }}</td>
+                        <td class="severity-label">{{ alert.severity|title }}</td>
+                        <td>{{ alert.source_ip }}</td>
+                        <td>{{ alert.target_ip }} {% if alert.target_service != 'Unknown' %}({{ alert.target_service }}){% endif %}</td>
+                        <td>{{ alert.detection_time }}</td>
+                        <td>{{ alert.duration }}</td>
+                        
+                        <td>
+                            <span class="status-badge {{ alert.status }}">{{ alert.status|title }}</span>
+                        </td>
+                        <td>
+                            <button class="action-btn view-details-btn" data-alert-id="{{ alert.id }}" title="View Details">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            {% if alert.status == 'active' and not alert.blocked %}
+                            <button class="action-btn block-btn" data-alert-id="{{ alert.id }}" title="Block Source">
+                                <i class="fas fa-ban"></i>
+                            </button>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <div id="emptyState" class="empty-state" style="display: none;">
+                <i class="fas fa-shield-alt"></i>
+                <h3>All Protected!</h3>
+                <p>No DDoS attacks detected.</p>
+            </div>
+            {% else %}
+            <table class="alerts-table" role="table" style="display: none;">
+                <thead>
+                    <tr>
+                        <th scope="col">Attack Type</th>
+                        <th scope="col">Severity</th>
+                        <th scope="col">Source</th>
+                        <th scope="col">Target</th>
+                        <th scope="col">Timestamp</th>
+                        <th scope="col">Duration</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="ddosAlertsTableBody"></tbody>
+            </table>
+            <div id="emptyState" class="empty-state">
+                <i class="fas fa-shield-alt"></i>
+                <h3>All Protected!</h3>
+                <p>No DDoS attacks detected.</p>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- DDoS Attack Details Modal (Initially Hidden) -->
+        {% comment %} <div id="attackDetailsModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>DDoS Attack Details</h2>
+                    <button class="close-btn" id="closeModalBtn">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="attack-summary">
+                        <h3>Attack Summary</h3>
+                        <div class="summary-grid">
+                            <div class="summary-item">
+                                <span class="label">Attack Type:</span>
+                                <span class="value" id="modalAttackType">UDP Flood</span>
+                            </div>
+                            <div class="summary-item">
+                                <span class="label">Source IP:</span>
+                                <span class="value" id="modalSourceIP">192.168.1.155</span>
+                            </div>
+                            <div class="summary-item">
+                                <span class="label">Target:</span>
+                                <span class="value" id="modalTarget">Web Server (10.0.0.5)</span>
+                            </div>
+                            <div class="summary-item">
+                                <span class="label">Start Time:</span>
+                                <span class="value" id="modalStartTime">June 21, 2025, 09:15 AM</span>
+                            </div>
+                            <div class="summary-item">
+                                <span class="label">Duration:</span>
+                                <span class="value" id="modalDuration">15 minutes, 22 seconds</span>
+                            </div>
+                            <div class="summary-item">
+                                <span class="label">Status:</span>
+                                <span class="value status-badge active" id="modalStatus">Active</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="attack-metrics">
+                        <h3>Attack Metrics</h3>
+                        <div class="metrics-grid">
+                            <div class="metric-card">
+                                <div class="metric-value" id="modalPacketRate">45,000</div>
+                                <div class="metric-label">Packets/sec</div>
+                            </div>
+                            <div class="metric-card">
+                                <div class="metric-value" id="modalBandwidth">1.2</div>
+                                <div class="metric-label">Gbps</div>
+                            </div>
+                            <div class="metric-card">
+                                <div class="metric-value" id="modalConnections">12,500</div>
+                                <div class="metric-label">Connections</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="attack-visualization">
+                        <h3>Traffic Visualization</h3>
+                        <div class="visualization-placeholder">
+                            <!-- Traffic graph would be rendered here by the JavaScript -->
+                            <div class="placeholder-text">Traffic visualization graph</div>
+                        </div>
+                    </div>
+                    
+                    <div class="attack-actions">
+                        <button class="action-btn block-btn large">
+                            <i class="fas fa-ban"></i> Block Source IP
+                        </button>
+                        <button class="action-btn alert-btn large">
+                            <i class="fas fa-bell"></i> Alert Security Team
+                        </button>
+                        <button class="action-btn report-btn large">
+                            <i class="fas fa-file-export"></i> Generate Report
+                        </button>
+                    </div>
+                </div>
+            </div> {% endcomment %}
+        </div>
+    </main>
+
+    <script src="{% static 'login/js/ddos_alerts.js' %}"></script>
+</body>
+</html>
+{% endblock %}
