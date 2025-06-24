@@ -27,12 +27,38 @@ body {
 
 /* Logo */
 .logo {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0 1.5rem 1.5rem;
+    margin-bottom: 1.5rem;
+    position: relative;
+    height: 40px; /* Fixed height to match the icon */
+}
+
+.logo-icon {
+    color: #001F3F;
+    font-size: 1.25rem;
+    background: #E9EFF2; /* Light blue-gray to match the image */
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    margin-bottom: 3px; /* Adjust vertical alignment */
+}
+
+.logo-text {
     font-size: 1.5rem;
     font-weight: 700;
     letter-spacing: 1px;
-    padding: 0 1.5rem 1.5rem;
     color: #001F3F;
-    margin-bottom: 1.5rem;
+    background: linear-gradient(135deg, #001F3F, #6A9AB0);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1;
 }
 
 /* Navigation */
@@ -166,10 +192,19 @@ body {
         margin-left: 200px;
         padding: 1.25rem;
     }
-    
     .logo {
-        font-size: 1.2rem;
         padding: 0 1rem 1rem;
+        height: 35px;
+    }
+    
+    .logo-text {
+        font-size: 1.2rem;
+    }
+      .logo-icon {
+        font-size: 1.1rem;
+        width: 35px;
+        height: 35px;
+        margin-bottom: 2px;
     }
     
     .sidebar nav a {
@@ -186,10 +221,19 @@ body {
         margin-left: 180px;
         padding: 1rem;
     }
-    
     .logo {
-        font-size: 1.1rem;
         padding: 0 0.875rem 0.875rem;
+        height: 30px;
+    }
+    
+    .logo-text {
+        font-size: 1.1rem;
+    }
+      .logo-icon {
+        font-size: 0.9rem;
+        width: 30px;
+        height: 30px;
+        margin-bottom: 2px;
     }
     
     .sidebar nav a {
