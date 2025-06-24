@@ -196,6 +196,36 @@ body {
     margin-bottom: 0.5rem;
 }
 
+/* Device Links Styling */
+.device-link {
+    color: #001F3F;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    position: relative;
+    display: inline-block;
+    padding-bottom: 2px;
+}
+
+.device-link:hover {
+    color: #6A9AB0;
+}
+
+.device-link::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: 0;
+    left: 0;
+    background-color: #6A9AB0;
+    transition: width 0.3s ease;
+}
+
+.device-link:hover::after {
+    width: 100%;
+}
+
 /* Responsive Design */
 @media (max-width: 1024px) {
     .content-area {
@@ -264,18 +294,5 @@ body {
     .devices-table tbody tr:focus {
         background: #F2E9E4;
         outline: none;
-    }
-    
-    /* Add at the end of the file */
-    .device-link {
-        color: #22223B;
-        text-decoration: none;
-        font-weight: 500;
-        transition: color 0.2s ease;
-    }
-    
-    .device-link:hover {
-        color: #4A4E69;
-        text-decoration: underline;
     }
 }
