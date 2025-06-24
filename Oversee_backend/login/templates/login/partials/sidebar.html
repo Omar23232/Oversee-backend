@@ -1,7 +1,12 @@
 {% load static %}
 {% block content %}
 <aside class="sidebar">
-    <div class="logo">MONITORING</div>
+    <div class="logo">
+        <div class="logo-icon">
+            <i class="fas fa-eye"></i>
+        </div>
+        <span class="logo-text">OVERSEE</span>
+    </div>
     <nav>
         <ul>
             <li class="{% if active_tab == 'dashboard' %}active{% endif %}">
