@@ -12,7 +12,7 @@ class DDoSDetectionService:
             try:
                 response = requests.get(
                     self.api_url, 
-                    timeout=5)
+                    timeout=3)
                 
                 print(f"API call made to {self.api_url}, status: {response.status_code}")
             except requests.exceptions.RequestException as e:

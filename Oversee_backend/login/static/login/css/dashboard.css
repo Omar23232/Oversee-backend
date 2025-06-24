@@ -269,3 +269,47 @@ body {
     50% { opacity: 0.7; }
     100% { opacity: 1; }
 }
+
+/* Uptime Display Styling */
+.uptime-container {
+    display: flex;
+    justify-content: space-around;
+    margin: 1rem 0;
+    flex-wrap: wrap;
+}
+
+.uptime-box {
+    text-align: center;
+    padding: 0.8rem;
+    border-radius: 10px;
+    min-width: 60px;
+    background: linear-gradient(to bottom, #f8f3e5, #e5d5b0);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    margin: 0.3rem;
+    transition: all 0.3s ease;
+}
+
+.uptime-box:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+}
+
+.uptime-value {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #694707;
+    margin-bottom: 0.3rem;
+}
+
+.uptime-label {
+    font-size: 0.85rem;
+    color: #836538;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Add a subtle animation for when uptime values update */
+.uptime-value.updating {
+    animation: pulse 1s ease;
+}
