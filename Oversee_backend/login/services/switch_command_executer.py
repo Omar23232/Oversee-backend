@@ -397,3 +397,20 @@ class switch_command_executor:
                 }
         
         return result
+    
+    def ip_blocking(self, ip, user=None):
+        
+        commands = [
+            f"access-list 100 deny ip host {ip} any",
+            "access-list 100 permit ip any any",
+            "interface GigabitEthernet0/1",
+            "ip access-group 100 in"
+        ]
+
+        results = []
+
+        for command in commands:
+            result = self.execute(command, user=user)
+            results.append(result)
+
+        return results

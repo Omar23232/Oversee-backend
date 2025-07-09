@@ -64,9 +64,6 @@ document.addEventListener('DOMContentLoaded', function() {
             });
     }
 
-   
-    
-
     // Update the last scan time
     function updateLastScanTime() {
         lastUpdateTime = new Date();
@@ -80,7 +77,43 @@ document.addEventListener('DOMContentLoaded', function() {
         return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
     }
 
+    // Add event listener for Block button
+    const blockButtons = document.querySelectorAll('.block-btn');
 
+    blockButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const alertId = this.dataset.alertId;
+
+            // Send request to backend to update alert status
+            fetch(`/update-alert-status/${alertId}/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ status: 'resolved' }),
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Failed to update alert status');
+                }
+                return response.json();
+            })
+            .then(data => {
+                // Update UI to reflect resolved status
+                const row = this.closest('tr');
+                const statusBadge = row.querySelector('.status-badge');
+                statusBadge.textContent = 'Resolved';
+                statusBadge.classList.remove('active');
+                statusBadge.classList.add('resolved');
+
+                // Remove Block button
+                this.remove();
+            })
+            .catch(error => {
+                console.error('Error updating alert status:', error);
+            });
+        });
+    });
 
     // Cleanup interval when page is unloaded
     window.addEventListener('beforeunload', function() {
