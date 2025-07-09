@@ -37,4 +37,5 @@ urlpatterns = [
 
     path('ddos-alerts/', views.ddos_alerts_view, name='ddos_alerts'),
     path('ddos-model/', views.ddos_model_api, name='ddos_model_api'),
+    path('update-alert-status/<int:alert_id>/', views.update_alert_status, name='update_alert_status'),
     ]

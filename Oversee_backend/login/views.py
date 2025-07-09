@@ -313,11 +313,12 @@ def add_device_manual(request):
     if request.method == 'POST':
         device = DeviceInfo.objects.create(
             hostname=request.POST['hostname'],
-            uptime="New Device",
+            uptime="Not recorded",
             system_description=request.POST['system_description'],
             location=request.POST['location'],
             status=request.POST['status'],
-            device_ip=request.POST['device_ip']
+            device_ip=request.POST['device_ip'],
+            device_type=request.POST['device_type']
         )
         return redirect('devices')
     return render(request, 'login/partials/add-device-manual.html', {'active_tab': 'devices'})
@@ -1021,7 +1022,7 @@ def ddos_alerts_view(request):
     
     # Get recent alerts (last 24 hours)
     recent_alerts = DDoSAlert.objects.filter(
-        detection_time__gte=timezone.now() - datetime.timedelta(hours=24)
+        detection_time__gte=timezone.now() - datetime.timedelta(hours=9999999)
     ).order_by('-detection_time')[:10]
     
     # Format alert data for the template
@@ -1059,7 +1060,7 @@ def ddos_alerts_view(request):
         'active_attacks': DDoSAlert.objects.filter(status='active').count(),
         'mitigated_attacks': DDoSAlert.objects.filter(status='mitigated').count(),
         'resolved_attacks': DDoSAlert.objects.filter(status='resolved').count(),
-        'protection_status': 'Active'  # This could be dynamic in a real app
+        'protection_status': 'Active'  
     }
     
     # Check if we have any sample data from the AI model
@@ -1083,4 +1084,20 @@ def ddos_alerts_view(request):
         'stats': stats,
         'model_data': model_data
     })
+
+@csrf_exempt
+@login_required
+def update_alert_status(request, alert_id):
+    if request.method == 'POST':
+        try:
+            alert = DDoSAlert.objects.get(id=alert_id)
+            alert.status = 'resolved'
+            alert.save()
+            return JsonResponse({'status': 'success', 'message': 'Alert status updated successfully'})
+        except DDoSAlert.DoesNotExist:
+            return JsonResponse({'status': 'error', 'message': 'Alert not found'}, status=404)
+        except Exception as e:
+            return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
+    else:
+        return JsonResponse({'status': 'error', 'message': 'Invalid request method'}, status=405)
 

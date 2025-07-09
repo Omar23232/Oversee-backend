@@ -11,8 +11,8 @@ class CiscoCommandExecutor:
     def __init__(self, device_ip):
         self.device_ip = device_ip
         self.base_url = f"https://{device_ip}/webui/rest/execCliCommand"
-        self.csrf_token = "1381a81f9b146261af250c29f1f8a5f4093de1ad" 
-        self.auth_cookie = "Auth=cisco:1750694188:0:15:4294967295:815e2f9b5a1953982ba7d8826da35146071d53b7676378c0990065872dda23ede0932c979a811b94e9009901b3cd3538dd97e2c80db07d8cb09bb1aff3c6fe2ae48d8e3501df746f4cace63a6cde10595b25ece58c1c50d35b30c14beef122e8:cd0120db88002e3c8fa22001b07ffe476bace9160ae0c3417fb1202ad13ceaba"
+        self.csrf_token = "d88e92ebe4644e359f797ae8c5ad64cdb8caac3c" 
+        self.auth_cookie = "Auth=cisco:1751311216:0:15:4294967295:67ca36cd7bf1431ba64a70abcae6368b43e4dab1ad06b834691caa7a18d9d471059a998a510e9e3f49493f504396f0581d166446207458f05949e2a6f01e3cec868f957972ff3df85744005ffe10f9d64943ae3863b409d91a0beb45591fb4a4:f543b03afdd11e7226eba87412193abee9f590cca8437eb45cd66e28209f4b97"
     def execute(self, cli_command, user=None):
         try:
             # Encode command

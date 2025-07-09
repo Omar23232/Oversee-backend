@@ -53,10 +53,7 @@
                     <div class="stat-value" id="activeAttacks">{{ stats.active_attacks }}</div>
                     <div class="stat-label">Active Attacks</div>
                 </div>
-                <div class="stat-card">
-                    <div class="stat-value" id="mitigatedAttacks">{{ stats.mitigated_attacks }}</div>
-                    <div class="stat-label">Mitigated Attacks</div>
-                </div>
+                
                 <div class="stat-card">
                     <div class="stat-value" id="resolvedAttacks">{{ stats.resolved_attacks }}</div>
                     <div class="stat-label">Resolved Attacks</div>
@@ -112,9 +109,7 @@
                             <span class="status-badge {{ alert.status }}">{{ alert.status|title }}</span>
                         </td>
                         <td>
-                            <button class="action-btn view-details-btn" data-alert-id="{{ alert.id }}" title="View Details">
-                                <i class="fas fa-eye"></i>
-                            </button>
+                        
                             {% if alert.status == 'active' and not alert.blocked %}
                             <button class="action-btn block-btn" data-alert-id="{{ alert.id }}" title="Block Source">
                                 <i class="fas fa-ban"></i>
